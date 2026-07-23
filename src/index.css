@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Tutaj moje zmienne jak normalnie w CSS */
+@theme {
+  /* --color-  */ /* text, bg, border, itd. */
+  /* --font-  */ /* rozmiary, itd. */
+  /* --spacing-  */ /* margin, padding, itd. */
+}
