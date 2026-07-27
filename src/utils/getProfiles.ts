@@ -12,3 +12,13 @@ export const getProfiles = (): Profile[] | null => {
   const profiles: Profile[] = JSON.parse(raw); // string parsowany do Profile
   return profiles;
 };
+
+export const getProfile = (profileId: string): Profile | null => {
+  const profiles = getProfiles();
+  if (!profiles) return null;
+
+  const profile = profiles.find((p) => p.id === profileId);
+  if (!profile) return null;
+
+  return profile;
+};
