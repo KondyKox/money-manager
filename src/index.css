@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
+/* WSZELKIE KOLORY SĄ BRANE LOSOWO LUB PO PROSTU BEZ PRZEMYŚLANIA */
+/* PROJEKT NIE MA NA CELU DOBRZE WYGLĄDAĆ A, JEŚLI JUŻ TO CIEKAWIE */
+
 /* Tutaj moje zmienne jak normalnie w CSS */
 @theme {
   /* --color-  */ /* text, bg, border, itd. */
   /* --font-  */ /* rozmiary, itd. */
   /* --spacing-  */ /* margin, padding, itd. */
+}
+
+.profile-icon {
+  @apply border-2 rounded-xl p-4 text-center flex justify-center items-center transition-all duration-150 hover:border-green-400 shadow-md hover:shadow-green-400 cursor-pointer active:border-green-600 w-full font-bold;
 }
