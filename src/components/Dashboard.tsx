@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Profile } from "../types/Profile";
 import { getProfile } from "../utils/getProfiles";
-import EditPanel from "./EditPanel";
+import ShiftTracker from "./ShiftTracker";
 
 const Dashboard = ({ profileId }: { profileId: string }) => {
   const profile = getProfile(profileId);
@@ -15,24 +15,24 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
         {editedProfile.name}
       </h1>
       <div className="border-t-2 flex flex-col justify-between items-stretch gap-4 py-2 w-full">
-        {/* Edit panel */}
-        <EditPanel
+        {/* Shift Tracker */}
+        <ShiftTracker
           editedProfile={editedProfile}
           setEditedProfile={setEditedProfile}
         />
 
         <div className="flex justify-between items-stretch gap-2">
-          {/* Expenses panel */}
+          {/* Income panel */}
           <div className="rounded-lg px-3 py-4 flex-1 border-orange-400 border-2 text-white bg-orange-400">
             <h3 className="text-center font-bold mb-4 text-xl">
-              sigmastyczne wydatki
+              sigmastyczne przychody
             </h3>
           </div>
 
-          {/* Income panel */}
+          {/* Expenses panel */}
           <div className="rounded-lg px-3 py-4 flex-1 text-orange-950 border-green-400 border-2">
             <h3 className="text-center font-bold mb-4 text-xl">
-              sigmastyczne przychody
+              sigmastyczne wydatki
             </h3>
           </div>
         </div>
