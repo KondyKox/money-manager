@@ -14,18 +14,27 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
       <h1 className="text-4xl font-bold p-4 text-gray-800">
         {editedProfile.name}
       </h1>
-      <div className="border-t-2 flex justify-between items-stretch gap-2 py-2 w-full">
+      <div className="border-t-2 flex flex-col justify-between items-stretch gap-4 py-2 w-full">
         {/* Edit panel */}
         <EditPanel
           editedProfile={editedProfile}
           setEditedProfile={setEditedProfile}
         />
 
-        {/* Data panel */}
-        <div className="rounded-lg px-3 py-4 flex-1 border-green-400 border-2">
-          <h3 className="text-center font-bold text-orange-950 mb-4 text-xl">
-            sigmastyczne dane
-          </h3>
+        <div className="flex justify-between items-stretch gap-2">
+          {/* Expenses panel */}
+          <div className="rounded-lg px-3 py-4 flex-1 border-orange-400 border-2 text-white bg-orange-400">
+            <h3 className="text-center font-bold mb-4 text-xl">
+              sigmastyczne wydatki
+            </h3>
+          </div>
+
+          {/* Income panel */}
+          <div className="rounded-lg px-3 py-4 flex-1 text-orange-950 border-green-400 border-2">
+            <h3 className="text-center font-bold mb-4 text-xl">
+              sigmastyczne przychody
+            </h3>
+          </div>
         </div>
       </div>
     </div>

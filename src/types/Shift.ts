@@ -8,4 +8,5 @@ export interface CompletedShift {
 export interface ActiveShift {
   clockIn: string;
   rate: number;
+  clockOut?: string;
 }

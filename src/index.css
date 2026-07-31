@@ -42,5 +42,5 @@ h6 {
 }
 
 .btn {
-  @apply uppercase cursor-pointer hover:bg-green-200 hover:shadow-orange-800 shadow-md transition duration-200 rounded-2xl py-2 active:scale-90 text-white/90;
+  @apply uppercase cursor-pointer hover:bg-green-200 hover:shadow-orange-800 shadow-md transition duration-200 rounded-2xl py-2 active:scale-90 text-white/90 hover:text-black/90;
 }

@@ -1,7 +1,8 @@
 import { useRef, type Dispatch, type SetStateAction } from "react";
 import type { Profile } from "../types/Profile";
 import { saveProfile } from "../utils/saveProfile";
-import type { ActiveShift } from "../types/Shift";
+import type { ActiveShift, CompletedShift } from "../types/Shift";
+import { toDatetimeLocal } from "../utils/toDatetimeLocal";
 
 interface EditPanelProps {
   editedProfile: Profile;
@@ -10,10 +11,20 @@ interface EditPanelProps {
 
 const EditPanel = ({ editedProfile, setEditedProfile }: EditPanelProps) => {
   const clockInRef = useRef<HTMLInputElement>(null);
+  const clockOutRef = useRef<HTMLInputElement>(null);
 
+  const handleBtnClick = () => {
+    !editedProfile.activeShift
+      ? handleStartShift()
+      : !editedProfile.activeShift.clockOut
+        ? handleStopShift()
+        : handleSaveShift();
+  };
+
+  // start shift and enter to input
   const handleStartShift = () => {
     const newActiveShift: ActiveShift = {
-      clockIn: new Date().toISOString(),
+      clockIn: toDatetimeLocal(new Date()),
       rate: editedProfile.hourlyRate,
     };
 
@@ -22,6 +33,43 @@ const EditPanel = ({ editedProfile, setEditedProfile }: EditPanelProps) => {
     );
 
     clockInRef.current?.focus();
+  };
+
+  // stop shift and enter to input
+  const handleStopShift = () => {
+    setEditedProfile((prev) =>
+      prev && prev.activeShift
+        ? {
+            ...prev,
+            activeShift: {
+              ...prev.activeShift,
+              clockOut: toDatetimeLocal(new Date()),
+            },
+          }
+        : prev,
+    );
+    clockOutRef.current?.focus();
+  };
+
+  // Handle saving edited profile
+  const handleSaveShift = () => {
+    if (!editedProfile.activeShift) return;
+
+    const newCompletedShift: CompletedShift = {
+      id: crypto.randomUUID(),
+      clockIn: editedProfile.activeShift.clockIn,
+      clockOut: editedProfile.activeShift.clockOut!,
+      rate: editedProfile.activeShift.rate,
+    };
+
+    const updatedProfile: Profile = {
+      ...editedProfile,
+      completedShifts: [...editedProfile.completedShifts, newCompletedShift],
+      activeShift: null,
+    };
+
+    setEditedProfile(updatedProfile);
+    saveProfile(updatedProfile);
   };
 
   return (
@@ -57,6 +105,7 @@ const EditPanel = ({ editedProfile, setEditedProfile }: EditPanelProps) => {
         <label htmlFor="activeShift">Zmiana w pracy</label>
         <div className="flex flex-col gap-4" id="activeShift">
           <div className="flex flex-col gap-2">
+            {/* START */}
             <input
               ref={clockInRef}
               type="datetime-local"
@@ -77,12 +126,36 @@ const EditPanel = ({ editedProfile, setEditedProfile }: EditPanelProps) => {
                 )
               }
             />
+            {/* STOP */}
             {editedProfile.activeShift && (
-              <input type="datetime-local" id="clockOut" name="clockOut" />
+              <input
+                ref={clockOutRef}
+                type="datetime-local"
+                id="clockOut"
+                name="clockOut"
+                value={editedProfile.activeShift.clockOut ?? ""}
+                onChange={(e) =>
+                  setEditedProfile((prev) =>
+                    prev && prev.activeShift
+                      ? {
+                          ...prev,
+                          activeShift: {
+                            ...prev.activeShift,
+                            clockOut: e.target.value,
+                          },
+                        }
+                      : prev,
+                  )
+                }
+              />
             )}
           </div>
-          <button className="btn" onClick={() => handleStartShift()}>
-            {!editedProfile.activeShift ? "Start" : "Stop"}
+          <button className="btn" onClick={() => handleBtnClick()}>
+            {!editedProfile.activeShift
+              ? "Start"
+              : !editedProfile.activeShift.clockOut
+                ? "Stop"
+                : "Zapisz"}
           </button>
         </div>
       </div>
