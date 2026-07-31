@@ -24,7 +24,11 @@ h6 {
 }
 
 .input-group {
-  @apply w-full;
+  @apply w-full mb-6;
+}
+
+.input-group div {
+  @apply relative;
 }
 
 .input-group label {
@@ -35,4 +39,8 @@ h6 {
 }
 .input-group span {
   @apply absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm;
+}
+
+.btn {
+  @apply uppercase cursor-pointer hover:bg-green-200 hover:shadow-orange-800 shadow-md transition duration-200 rounded-2xl py-2 active:scale-90 text-white/90;
 }
