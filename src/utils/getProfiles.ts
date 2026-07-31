@@ -10,7 +10,7 @@ export const getProfiles = (): Profile[] | null => {
   }
 
   const profiles: Profile[] = JSON.parse(raw); // string parsowany do Profile
-  return profiles;
+  return profiles.filter((p) => p && p.id);
 };
 
 export const getProfile = (profileId: string): Profile | null => {
