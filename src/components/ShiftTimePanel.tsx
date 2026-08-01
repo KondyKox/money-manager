@@ -4,6 +4,7 @@ import { toDatetimeLocal } from "../utils/toDatetimeLocal";
 import { saveProfile } from "../utils/saveProfile";
 import type { ShiftTrackerProps } from "../types/ShiftTracker";
 import type { Profile } from "../types/Profile";
+import { Pause, Play } from "lucide-react";
 
 const ShiftTimePanel = ({
   editedProfile,
@@ -73,38 +74,17 @@ const ShiftTimePanel = ({
 
   return (
     <div className="input-group">
-      <label htmlFor="activeShift">Zmiana w pracy</label>
+      <label htmlFor="activeShift">Czas pracy</label>
       <div className="flex flex-col gap-4" id="activeShift">
         <div className="flex flex-col gap-2">
           {/* START */}
-          <input
-            ref={clockInRef}
-            type="datetime-local"
-            id="clockIn"
-            name="clockIn"
-            value={editedProfile.activeShift?.clockIn ?? ""}
-            onChange={(e) =>
-              setEditedProfile((prev) =>
-                prev && prev.activeShift
-                  ? {
-                      ...prev,
-                      activeShift: {
-                        ...prev.activeShift,
-                        clockIn: e.target.value,
-                      },
-                    }
-                  : prev,
-              )
-            }
-          />
-          {/* STOP */}
-          {editedProfile.activeShift && (
+          <div className="group">
             <input
-              ref={clockOutRef}
+              ref={clockInRef}
               type="datetime-local"
-              id="clockOut"
-              name="clockOut"
-              value={editedProfile.activeShift.clockOut ?? ""}
+              id="clockIn"
+              name="clockIn"
+              value={editedProfile.activeShift?.clockIn ?? ""}
               onChange={(e) =>
                 setEditedProfile((prev) =>
                   prev && prev.activeShift
@@ -112,13 +92,50 @@ const ShiftTimePanel = ({
                         ...prev,
                         activeShift: {
                           ...prev.activeShift,
-                          clockOut: e.target.value,
+                          clockIn: e.target.value,
                         },
                       }
                     : prev,
                 )
               }
             />
+            <span>
+              <Play
+                size={20}
+                className="transition-colors duration-200 group-hover:text-green-500"
+              />
+            </span>
+          </div>
+          {/* STOP */}
+          {editedProfile.activeShift && (
+            <div className="group">
+              <input
+                ref={clockOutRef}
+                type="datetime-local"
+                id="clockOut"
+                name="clockOut"
+                value={editedProfile.activeShift.clockOut ?? ""}
+                onChange={(e) =>
+                  setEditedProfile((prev) =>
+                    prev && prev.activeShift
+                      ? {
+                          ...prev,
+                          activeShift: {
+                            ...prev.activeShift,
+                            clockOut: e.target.value,
+                          },
+                        }
+                      : prev,
+                  )
+                }
+              />
+              <span>
+                <Pause
+                  size={20}
+                  className="transition-colors duration-200 group-hover:text-green-500"
+                />
+              </span>
+            </div>
           )}
         </div>
         <button className="btn" onClick={() => handleBtnClick()}>
