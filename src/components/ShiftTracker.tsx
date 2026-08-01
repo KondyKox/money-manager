@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { saveProfile } from "../utils/saveProfile";
 import ShiftTimePanel from "./ShiftTimePanel";
-import type { ShiftTrackerProps } from "../types/ShiftTracker";
 import { ChevronDown } from "lucide-react";
+import type { ShiftTrackerProps } from "../types/Shift";
 
 const ShiftTracker = ({
   editedProfile,

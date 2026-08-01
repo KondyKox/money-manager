@@ -7,6 +7,7 @@ export const newProfiles: Profile[] = [
     hourlyRate: 31.5,
     activeShift: null,
     completedShifts: [],
+    expenses: [],
   },
 
   {
@@ -15,5 +16,6 @@ export const newProfiles: Profile[] = [
     hourlyRate: 33.5,
     activeShift: null,
     completedShifts: [],
+    expenses: [],
   },
 ];

@@ -1,8 +1,11 @@
 import { useRef } from "react";
-import type { ActiveShift, CompletedShift } from "../types/Shift";
+import type {
+  ActiveShift,
+  CompletedShift,
+  ShiftTrackerProps,
+} from "../types/Shift";
 import { toDatetimeLocal } from "../utils/toDatetimeLocal";
 import { saveProfile } from "../utils/saveProfile";
-import type { ShiftTrackerProps } from "../types/ShiftTracker";
 import type { Profile } from "../types/Profile";
 import { Pause, Play } from "lucide-react";
 
@@ -138,7 +141,7 @@ const ShiftTimePanel = ({
             </div>
           )}
         </div>
-        <button className="btn" onClick={() => handleBtnClick()}>
+        <button className="btn-primary" onClick={() => handleBtnClick()}>
           {!editedProfile.activeShift
             ? "Start"
             : !editedProfile.activeShift.clockOut

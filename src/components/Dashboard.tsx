@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Profile } from "../types/Profile";
 import { getProfile } from "../utils/getProfiles";
 import ShiftTracker from "./ShiftTracker";
+import ExpensePanel from "./ExpensePanel";
 
 const Dashboard = ({ profileId }: { profileId: string }) => {
   const profile = getProfile(profileId);
@@ -30,11 +31,7 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
           </div>
 
           {/* Expenses panel */}
-          <div className="rounded-lg px-3 py-4 flex-1 text-orange-950 border-green-400 border-2">
-            <h3 className="text-center font-bold mb-4 text-xl">
-              sigmastyczne wydatki
-            </h3>
-          </div>
+          <ExpensePanel />
         </div>
       </div>
     </div>
