@@ -22,17 +22,15 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
           setEditedProfile={setEditedProfile}
         />
 
-        <div className="flex justify-between items-stretch gap-2">
-          {/* Income panel */}
-          <div className="rounded-lg px-3 py-4 flex-1 border-orange-400 border-2 text-white bg-orange-400">
-            <h3 className="text-center font-bold mb-4 text-xl">
-              sigmastyczne przychody
-            </h3>
-          </div>
-
-          {/* Expenses panel */}
-          <ExpensePanel />
+        {/* Income panel */}
+        <div className="rounded-lg px-3 py-4 flex-1 border-orange-400 border-2 text-white bg-orange-400">
+          <h3 className="text-center font-bold mb-4 text-xl">
+            sigmastyczne przychody
+          </h3>
         </div>
+
+        {/* Expenses panel */}
+        <ExpensePanel />
       </div>
     </div>
   );

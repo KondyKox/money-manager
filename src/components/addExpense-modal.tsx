@@ -63,7 +63,7 @@ const AddExpenseModal = ({ isOpen, onClose }: AddExpenseModalProps) => {
           <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2">
             {EXPENSE_CATEGORIES.map((category) => (
               <button
-                className={`btn-primary ${newExpense.category === category ? "bg-blue-400" : ""}`}
+                className={`btn-primary ${newExpense.category === category ? "bg-blue-400 pointer-events-none" : ""}`}
                 onClick={() =>
                   setNewExpense((prev) =>
                     prev ? { ...prev, category: category } : prev,
