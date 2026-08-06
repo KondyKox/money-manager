@@ -1,4 +1,4 @@
-import type { Profile } from "../types/Profile";
+import type { Profile } from "../../types/Profile";
 
 const ProfileIcon = ({
   profile,

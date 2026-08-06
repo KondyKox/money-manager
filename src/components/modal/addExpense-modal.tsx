@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { AddExpenseModalProps } from "../types/Modal";
+import type { AddExpenseModalProps } from "../../types/Modal";
+import type { Expense } from "../../types/Expense";
+import { EXPENSE_CATEGORIES } from "../../constants/expenseCategories";
+import type { Profile } from "../../types/Profile";
+import { saveProfile } from "../../utils/saveProfile";
 import Modal from "./Modal";
-import type { Expense } from "../types/Expense";
-import { EXPENSE_CATEGORIES } from "../constants/expenseCategories";
-import type { Profile } from "../types/Profile";
-import { saveProfile } from "../utils/saveProfile";
 
 const AddExpenseModal = ({
   isOpen,

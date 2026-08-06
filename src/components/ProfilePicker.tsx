@@ -1,5 +1,5 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
-import ProfileIcon from "./ProfileIcon";
+import ProfileIcon from "./ui/ProfileIcon";
 import type { Profile } from "../types/Profile";
 import { newProfiles } from "../constants/newProfiles";
 import { getProfiles } from "../utils/getProfiles";

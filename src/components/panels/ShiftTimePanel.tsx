@@ -1,10 +1,10 @@
 import { useRef } from "react";
-import type { ActiveShift, CompletedShift } from "../types/Shift";
-import { toDatetimeLocal } from "../utils/toDatetimeLocal";
-import { saveProfile } from "../utils/saveProfile";
-import type { Profile } from "../types/Profile";
+import type { ActiveShift, CompletedShift } from "../../types/Shift";
+import { toDatetimeLocal } from "../../utils/toDatetimeLocal";
+import { saveProfile } from "../../utils/saveProfile";
+import type { Profile } from "../../types/Profile";
 import { Pause, Play } from "lucide-react";
-import type { DashboardElement } from "../types/Dashboard";
+import type { DashboardElement } from "../../types/Dashboard";
 
 const ShiftTimePanel = ({
   editedProfile,

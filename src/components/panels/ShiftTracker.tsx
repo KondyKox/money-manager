@@ -1,7 +1,7 @@
-import { saveProfile } from "../utils/saveProfile";
+import { saveProfile } from "../../utils/saveProfile";
 import ShiftTimePanel from "./ShiftTimePanel";
-import CollapsablePanel from "./CollapsablePanel";
-import type { DashboardElement } from "../types/Dashboard";
+import CollapsablePanel from "../ui/CollapsablePanel";
+import type { DashboardElement } from "../../types/Dashboard";
 
 const ShiftTracker = ({
   editedProfile,

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import AddExpenseModal from "./addExpense-modal";
-import CollapsablePanel from "./CollapsablePanel";
-import type { DashboardElement } from "../types/Dashboard";
+import AddExpenseModal from "../modal/addExpense-modal";
+import CollapsablePanel from "../ui/CollapsablePanel";
+import type { DashboardElement } from "../../types/Dashboard";
 
 const ExpensePanel = ({
   editedProfile,

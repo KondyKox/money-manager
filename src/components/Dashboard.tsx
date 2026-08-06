@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { Profile } from "../types/Profile";
 import { getProfile } from "../utils/getProfiles";
-import ShiftTracker from "./ShiftTracker";
-import ExpensePanel from "./ExpensePanel";
+import ShiftTracker from "./panels/ShiftTracker";
+import ExpensePanel from "./panels/ExpensePanel";
 
 const Dashboard = ({ profileId }: { profileId: string }) => {
   const profile = getProfile(profileId);
