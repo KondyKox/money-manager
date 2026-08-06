@@ -1,18 +1,15 @@
 import { useRef } from "react";
-import type {
-  ActiveShift,
-  CompletedShift,
-  ShiftTrackerProps,
-} from "../types/Shift";
+import type { ActiveShift, CompletedShift } from "../types/Shift";
 import { toDatetimeLocal } from "../utils/toDatetimeLocal";
 import { saveProfile } from "../utils/saveProfile";
 import type { Profile } from "../types/Profile";
 import { Pause, Play } from "lucide-react";
+import type { DashboardElement } from "../types/Dashboard";
 
 const ShiftTimePanel = ({
   editedProfile,
   setEditedProfile,
-}: ShiftTrackerProps) => {
+}: DashboardElement) => {
   const clockInRef = useRef<HTMLInputElement>(null);
   const clockOutRef = useRef<HTMLInputElement>(null);
 

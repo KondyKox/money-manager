@@ -30,7 +30,10 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
         </div>
 
         {/* Expenses panel */}
-        <ExpensePanel />
+        <ExpensePanel
+          editedProfile={editedProfile}
+          setEditedProfile={setEditedProfile}
+        />
       </div>
     </div>
   );

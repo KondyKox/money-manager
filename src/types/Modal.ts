@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
+import type { Profile } from "./Profile";
 
 export interface ModalProps {
   children: ReactNode;
@@ -9,4 +10,6 @@ export interface ModalProps {
 export interface AddExpenseModalProps {
   isOpen: boolean;
   onClose: () => void;
+  editedProfile: Profile;
+  setEditedProfile: Dispatch<SetStateAction<Profile | null>>;
 }

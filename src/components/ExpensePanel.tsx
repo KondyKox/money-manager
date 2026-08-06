@@ -1,8 +1,12 @@
 import { useState } from "react";
 import AddExpenseModal from "./addExpense-modal";
 import CollapsablePanel from "./CollapsablePanel";
+import type { DashboardElement } from "../types/Dashboard";
 
-const ExpensePanel = () => {
+const ExpensePanel = ({
+  editedProfile,
+  setEditedProfile,
+}: DashboardElement) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   return (
@@ -24,6 +28,8 @@ const ExpensePanel = () => {
       <AddExpenseModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        editedProfile={editedProfile}
+        setEditedProfile={setEditedProfile}
       />
     </>
   );

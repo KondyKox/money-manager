@@ -3,11 +3,45 @@ import type { AddExpenseModalProps } from "../types/Modal";
 import Modal from "./Modal";
 import type { Expense } from "../types/Expense";
 import { EXPENSE_CATEGORIES } from "../constants/expenseCategories";
+import type { Profile } from "../types/Profile";
+import { saveProfile } from "../utils/saveProfile";
 
-const AddExpenseModal = ({ isOpen, onClose }: AddExpenseModalProps) => {
+const AddExpenseModal = ({
+  isOpen,
+  onClose,
+  editedProfile,
+  setEditedProfile,
+}: AddExpenseModalProps) => {
   const [newExpense, setNewExpense] = useState<Partial<Expense>>({
     date: new Date().toISOString().slice(0, 10),
   });
+
+  const handleAddExpense = () => {
+    if (!newExpense.category || !newExpense.amount || !newExpense.date) {
+      alert("Kategoria, Koszt i Data nie mogą być puste!");
+      console.warn("Category, Amount & Date cannot be empty!");
+      return;
+    }
+
+    const expenseToAdd: Expense = {
+      id: crypto.randomUUID(),
+      date: newExpense.date,
+      amount: newExpense.amount,
+      category: newExpense.category,
+      note: newExpense.note,
+    };
+
+    const updatedProfile: Profile = {
+      ...editedProfile,
+      expenses: [...editedProfile.expenses, expenseToAdd],
+    };
+
+    setEditedProfile(updatedProfile);
+    saveProfile(updatedProfile);
+    setNewExpense({ date: new Date().toISOString().slice(0, 10) });
+    alert("Dodano wydatek!");
+    onClose();
+  };
 
   if (!isOpen) return null;
 
@@ -63,6 +97,7 @@ const AddExpenseModal = ({ isOpen, onClose }: AddExpenseModalProps) => {
           <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2">
             {EXPENSE_CATEGORIES.map((category) => (
               <button
+                key={category}
                 className={`btn-primary ${newExpense.category === category ? "bg-blue-400 pointer-events-none" : ""}`}
                 onClick={() =>
                   setNewExpense((prev) =>
@@ -91,7 +126,12 @@ const AddExpenseModal = ({ isOpen, onClose }: AddExpenseModalProps) => {
           />
         </div>
 
-        <button className="btn-secondary w-full">Dodaj</button>
+        <button
+          className="btn-secondary w-full"
+          onClick={() => handleAddExpense()}
+        >
+          Dodaj
+        </button>
       </div>
     </Modal>
   );
