@@ -1,4 +1,5 @@
 import type { Expense } from "./Expense";
+import type { Income } from "./Income";
 import type { ActiveShift, CompletedShift } from "./Shift";
 
 export interface Profile {
@@ -8,4 +9,5 @@ export interface Profile {
   completedShifts: CompletedShift[];
   activeShift: ActiveShift | null;
   expenses: Expense[];
+  incomes: Income[];
 }

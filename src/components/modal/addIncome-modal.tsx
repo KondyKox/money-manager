@@ -1,49 +1,48 @@
 import { useState } from "react";
+import { INCOME_CATEGORIES } from "../../constants/incomeCategories";
+import { useToast } from "../../hooks/useToast";
 import type { EditModalProps } from "../../types/Modal";
-import type { Expense } from "../../types/Expense";
-import { EXPENSE_CATEGORIES } from "../../constants/expenseCategories";
+import Modal from "./Modal";
+import type { Income } from "../../types/Income";
 import type { Profile } from "../../types/Profile";
 import { saveProfile } from "../../utils/saveProfile";
-import Modal from "./Modal";
-import { useToast } from "../../hooks/useToast";
 
-const AddExpenseModal = ({
+const AddIncomeModal = ({
   isOpen,
   onClose,
   editedProfile,
   setEditedProfile,
 }: EditModalProps) => {
-  const [newExpense, setNewExpense] = useState<Partial<Expense>>({
+  const [newIncome, setNewIncome] = useState<Partial<Income>>({
     date: new Date().toISOString().slice(0, 10),
   });
-
   const { showToast } = useToast();
 
-  const handleAddExpense = () => {
-    if (!newExpense.category || !newExpense.amount || !newExpense.date) {
-      showToast("Kategoria, Koszt i Data nie mogą być puste!", "error");
-      console.warn("Category, Amount & Date cannot be empty!");
+  const handleAddIncome = () => {
+    if (!newIncome.amount || !newIncome.category || !newIncome.date) {
+      showToast("Zysk, Kategoria i Data nie mogą być puste!", "error");
+      console.warn("Amount, Category & Date cannot be empty!");
       return;
     }
 
-    const expenseToAdd: Expense = {
+    const incomeToAdd: Income = {
       id: crypto.randomUUID(),
-      date: newExpense.date,
-      amount: newExpense.amount,
-      category: newExpense.category,
-      note: newExpense.note,
+      date: newIncome.date,
+      amount: newIncome.amount,
+      category: newIncome.category,
+      note: newIncome.note,
     };
 
     const updatedProfile: Profile = {
       ...editedProfile,
-      expenses: [...editedProfile.expenses, expenseToAdd],
+      incomes: [...editedProfile.incomes, incomeToAdd],
     };
 
     setEditedProfile(updatedProfile);
     saveProfile(updatedProfile);
-    setNewExpense({ date: new Date().toISOString().slice(0, 10) });
+    setNewIncome({ date: new Date().toISOString().slice(0, 10) });
 
-    showToast("Dodano wydatek!", "success");
+    showToast("Dodano przychód!", "success");
     onClose();
   };
 
@@ -52,21 +51,21 @@ const AddExpenseModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <h2 className="text-center font-bold text-xl border-b-2 pb-4">
-        Dodaj wydatek
+        Dodaj przychód
       </h2>
 
       <div className="flex flex-col justify-center items-center gap-2 mt-6">
         {/* Date input */}
         <div className="input-group">
-          <label htmlFor="expense-date">Data wydatku</label>
+          <label htmlFor="income-date">Data przychodu</label>
           <input
             required
             type="date"
-            id="expense-date"
-            name="expense-date"
-            value={newExpense?.date}
+            id="income-date"
+            name="income-date"
+            value={newIncome.date}
             onChange={(e) =>
-              setNewExpense((prev) =>
+              setNewIncome((prev) =>
                 prev ? { ...prev, date: e.target.value } : prev,
               )
             }
@@ -75,18 +74,18 @@ const AddExpenseModal = ({
 
         {/* Money input */}
         <div className="input-group">
-          <label htmlFor="expense-amout">Koszt</label>
+          <label htmlFor="income-amout">Zysk</label>
           <div>
             <input
               required
               type="number"
-              id="expense-amout"
-              name="expense-amout"
-              placeholder="Ile kosztowało..."
-              step={0.5}
-              value={newExpense.amount ?? 0}
+              id="income-amout"
+              name="income-amout"
+              placeholder="Ile zarobione..."
+              step={10}
+              value={newIncome.amount ?? 0}
               onChange={(e) =>
-                setNewExpense((prev) =>
+                setNewIncome((prev) =>
                   prev ? { ...prev, amount: Number(e.target.value) } : prev,
                 )
               }
@@ -99,12 +98,12 @@ const AddExpenseModal = ({
         <div className="input-group">
           <label htmlFor="">Kategoria</label>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2">
-            {EXPENSE_CATEGORIES.map((category) => (
+            {INCOME_CATEGORIES.map((category) => (
               <button
                 key={category}
-                className={`btn-primary ${newExpense.category === category ? "bg-blue-400 pointer-events-none" : ""}`}
+                className={`btn-primary ${newIncome.category === category ? "bg-blue-400 pointer-events-none" : ""}`}
                 onClick={() =>
-                  setNewExpense((prev) =>
+                  setNewIncome((prev) =>
                     prev ? { ...prev, category: category } : prev,
                   )
                 }
@@ -117,13 +116,13 @@ const AddExpenseModal = ({
 
         {/* Note field */}
         <div className="input-group">
-          <label htmlFor="expense-note">Opis (opcjonalnie)</label>
+          <label htmlFor="income-note">Opis (opcjonalnie)</label>
           <textarea
-            name="expense-note"
-            id="expense-note"
-            value={newExpense.note}
+            name="income-note"
+            id="income-note"
+            value={newIncome.note}
             onChange={(e) =>
-              setNewExpense((prev) =>
+              setNewIncome((prev) =>
                 prev ? { ...prev, note: e.target.value } : prev,
               )
             }
@@ -132,7 +131,7 @@ const AddExpenseModal = ({
 
         <button
           className="btn-secondary w-full"
-          onClick={() => handleAddExpense()}
+          onClick={() => handleAddIncome()}
         >
           Dodaj
         </button>
@@ -141,4 +140,4 @@ const AddExpenseModal = ({
   );
 };
 
-export default AddExpenseModal;
+export default AddIncomeModal;

@@ -7,7 +7,7 @@ export interface ModalProps {
   onClose: () => void;
 }
 
-export interface AddExpenseModalProps {
+export interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
   editedProfile: Profile;

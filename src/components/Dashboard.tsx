@@ -3,6 +3,7 @@ import type { Profile } from "../types/Profile";
 import { getProfile } from "../utils/getProfiles";
 import ShiftTracker from "./panels/ShiftTracker";
 import ExpensePanel from "./panels/ExpensePanel";
+import IncomePanel from "./panels/IncomePanel";
 
 const Dashboard = ({ profileId }: { profileId: string }) => {
   const profile = getProfile(profileId);
@@ -23,11 +24,10 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
         />
 
         {/* Income panel */}
-        <div className="rounded-lg px-3 py-4 flex-1 border-orange-400 border-2 text-white bg-orange-400">
-          <h3 className="text-center font-bold mb-4 text-xl">
-            sigmastyczne przychody
-          </h3>
-        </div>
+        <IncomePanel
+          editedProfile={editedProfile}
+          setEditedProfile={setEditedProfile}
+        />
 
         {/* Expenses panel */}
         <ExpensePanel
