@@ -5,6 +5,7 @@ import { saveProfile } from "../../utils/saveProfile";
 import type { Profile } from "../../types/Profile";
 import { Pause, Play } from "lucide-react";
 import type { DashboardElement } from "../../types/Dashboard";
+import { useToast } from "../../hooks/useToast";
 
 const ShiftTimePanel = ({
   editedProfile,
@@ -12,6 +13,8 @@ const ShiftTimePanel = ({
 }: DashboardElement) => {
   const clockInRef = useRef<HTMLInputElement>(null);
   const clockOutRef = useRef<HTMLInputElement>(null);
+
+  const { showToast } = useToast();
 
   const handleBtnClick = () => {
     !editedProfile.activeShift
@@ -33,6 +36,7 @@ const ShiftTimePanel = ({
     );
 
     clockInRef.current?.focus();
+    showToast("Rozpoczęto zmianę.", "success");
   };
 
   // stop shift and enter to input
@@ -48,7 +52,9 @@ const ShiftTimePanel = ({
           }
         : prev,
     );
+
     clockOutRef.current?.focus();
+    showToast("Zakończono zmianę.", "success");
   };
 
   // Handle saving edited profile
@@ -70,6 +76,7 @@ const ShiftTimePanel = ({
 
     setEditedProfile(updatedProfile);
     saveProfile(updatedProfile);
+    showToast("Zapisano zmianę.", "success");
   };
 
   return (
