@@ -7,7 +7,7 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
   return (
     <div
       onClick={onClose}
-      className="absolute top-0 left-0 w-full h-full bg-black/80 flex justify-center items-center"
+      className="fixed inset-0 bg-black/80 flex justify-center items-center"
     >
       <div
         onClick={(e) => e.stopPropagation()}
