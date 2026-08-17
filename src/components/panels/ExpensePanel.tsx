@@ -2,12 +2,19 @@ import { useState } from "react";
 import AddExpenseModal from "../modal/addExpense-modal";
 import CollapsablePanel from "../ui/CollapsablePanel";
 import type { DashboardElement } from "../../types/Dashboard";
+import ExpenseElement from "../ui/ExpenseElement";
+import type { ExpenseCategory } from "../../constants/expenseCategories";
 
 const ExpensePanel = ({
   editedProfile,
   setEditedProfile,
 }: DashboardElement) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] =
+    useState<ExpenseCategory | null>(null);
+
+  const filteredExpenses = editedProfile.expenses;
 
   return (
     <>
@@ -22,6 +29,18 @@ const ExpensePanel = ({
           >
             dodaj wydatek
           </button>
+        </div>
+
+        <div className="flex flex-col justify-center items-center gap-2 mt-4 pt-4 border-t-2">
+          {filteredExpenses ? (
+            filteredExpenses.map((expense) => (
+              <div key={expense.id} className="w-full">
+                <ExpenseElement expense={expense} />
+              </div>
+            ))
+          ) : (
+            <span className="text-center">Brak wydatków</span>
+          )}
         </div>
       </CollapsablePanel>
 
