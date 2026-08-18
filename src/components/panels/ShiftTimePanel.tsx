@@ -80,7 +80,7 @@ const ShiftTimePanel = ({
   };
 
   return (
-    <div className="input-group">
+    <div className="input-group border-b-2 pb-4">
       <label htmlFor="activeShift">Czas pracy</label>
       <div className="flex flex-col gap-4" id="activeShift">
         <div className="flex flex-col gap-2">
