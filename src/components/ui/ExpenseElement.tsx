@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { Expense } from "../../types/Expense";
-import Modal from "../modal/Modal";
 import DetailModal from "../modal/detail-modal";
 
 const ExpenseElement = ({ expense }: { expense: Expense }) => {

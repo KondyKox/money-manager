@@ -11,7 +11,7 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative overflow-hidden bg-green-600 py-8 px-10 rounded-2xl shadow-md shadow-orange-400 text-white/80 w-2/3 lg:w-1/2 min-h-100"
+        className="relative overflow-hidden bg-purple-600 py-8 px-10 rounded-2xl shadow-md shadow-orange-400 text-white/80 w-2/3 lg:w-1/2 min-h-100"
       >
         {children}
         <button

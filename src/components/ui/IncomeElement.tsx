@@ -22,7 +22,7 @@ const IncomeElement = ({ income }: { income: Income }) => {
             })}
           </span>
         </div>
-        <span className="font-mono font-semibold text-green-500 shrink-0 ml-3">
+        <span className="font-mono font-semibold text-green-600 shrink-0 ml-3">
           +{income.amount.toFixed(2)}zł
         </span>
       </button>
