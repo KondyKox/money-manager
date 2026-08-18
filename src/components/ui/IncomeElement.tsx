@@ -1,9 +1,8 @@
 import { useState } from "react";
-import type { Expense } from "../../types/Expense";
-import Modal from "../modal/Modal";
+import type { Income } from "../../types/Income";
 import DetailModal from "../modal/detail-modal";
 
-const ExpenseElement = ({ expense }: { expense: Expense }) => {
+const IncomeElement = ({ income }: { income: Income }) => {
   const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false);
 
   return (
@@ -14,27 +13,27 @@ const ExpenseElement = ({ expense }: { expense: Expense }) => {
       >
         <div className="flex flex-col min-w-0">
           <span className="text-sm font-medium truncate">
-            {expense.category}
+            {income.category}
           </span>
-          <span className="text-xs text-gray-500">
-            {new Date(expense.date).toLocaleDateString("pl-PL", {
+          <span className="text-xs text-gray-800">
+            {new Date(income.date).toLocaleDateString("pl-PL", {
               day: "numeric",
               month: "short",
             })}
           </span>
         </div>
-        <span className="font-mono font-semibold text-red-500 shrink-0 ml-3">
-          -{expense.amount.toFixed(2)}zł
+        <span className="font-mono font-semibold text-green-500 shrink-0 ml-3">
+          +{income.amount.toFixed(2)}zł
         </span>
       </button>
 
       <DetailModal
         isOpen={isDetailOpen}
         onClose={() => setIsDetailOpen(false)}
-        element={expense}
+        element={income}
       />
     </>
   );
 };
 
-export default ExpenseElement;
+export default IncomeElement;

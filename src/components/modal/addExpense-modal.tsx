@@ -28,6 +28,7 @@ const AddExpenseModal = ({
 
     const expenseToAdd: Expense = {
       id: crypto.randomUUID(),
+      kind: "expense",
       date: newExpense.date,
       amount: newExpense.amount,
       category: newExpense.category,

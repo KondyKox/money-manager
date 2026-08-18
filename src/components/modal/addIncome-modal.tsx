@@ -27,6 +27,7 @@ const AddIncomeModal = ({
 
     const incomeToAdd: Income = {
       id: crypto.randomUUID(),
+      kind: "income",
       date: newIncome.date,
       amount: newIncome.amount,
       category: newIncome.category,

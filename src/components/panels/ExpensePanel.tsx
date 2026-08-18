@@ -55,8 +55,8 @@ const ExpensePanel = ({
           </button>
         </div>
 
-        <div className="flex justify-between items-center bg-gray-300 p-2 rounded-lg">
-          <div className="flex justify-center items-center gap-4">
+        <div className="flex flex-col gap-4 md:flex-row justify-between items-center bg-gray-300 p-2 rounded-lg">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4">
             <select
               name="availableMonths"
               id="availableMonths"
@@ -64,14 +64,23 @@ const ExpensePanel = ({
               onChange={(e) => setSelectedMonth(e.target.value)}
               className="select"
             >
-              {availableMonths.map((month) => (
-                <option key={month} value={month} className="px-2">
-                  {new Date(month + "-01").toLocaleDateString("pl-PL", {
+              {availableMonths.length === 0 ? (
+                <option value="">
+                  {new Date().toLocaleDateString("pl-PL", {
                     month: "long",
                     year: "numeric",
                   })}
                 </option>
-              ))}
+              ) : (
+                availableMonths.map((month) => (
+                  <option key={month} value={month} className="px-2">
+                    {new Date(month + "-01").toLocaleDateString("pl-PL", {
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </option>
+                ))
+              )}
             </select>
             <select
               name="categories"
