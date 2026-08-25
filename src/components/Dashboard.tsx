@@ -55,6 +55,10 @@ const Dashboard = ({ editedProfile, setEditedProfile }: DashboardElement) => {
                 className="uppercase px-2 bg-blue-200 w-full"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveProfile();
+                  if (e.key === "Escape") setEdited(false);
+                }}
               />
             ) : (
               editedProfile.name
