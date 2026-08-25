@@ -56,7 +56,7 @@ const ExpensePanel = ({
         </div>
 
         <div className="flex flex-col gap-4 md:flex-row justify-between items-center bg-gray-300 p-2 rounded-lg">
-          <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+          <div className="flex justify-center items-center gap-4">
             <select
               name="availableMonths"
               id="availableMonths"
@@ -106,7 +106,7 @@ const ExpensePanel = ({
             </select>
           </div>
 
-          <span className="text-2xl text-red-600 font-bold font-mono">
+          <span className="text-red-600 totalMoney">
             -{totalSpent.toFixed(2)}zł
           </span>
         </div>

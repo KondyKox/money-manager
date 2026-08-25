@@ -4,6 +4,7 @@ import CollapsablePanel from "../ui/CollapsablePanel";
 import type { DashboardElement } from "../../types/Dashboard";
 import { useState } from "react";
 import ShiftElement from "../ui/ShiftElement";
+import { Calendar, Clock, Timer, Wallet } from "lucide-react";
 
 const ShiftTracker = ({
   editedProfile,
@@ -74,28 +75,52 @@ const ShiftTracker = ({
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
           >
-            {availableMonths.map((month) => (
-              <option key={month} value={month}>
-                {new Date(month + "-01").toLocaleDateString("pl-PL", {
+            {availableMonths.length === 0 ? (
+              <option value="">
+                {new Date().toLocaleDateString("pl-PL", {
                   month: "long",
                   year: "numeric",
                 })}
               </option>
-            ))}
+            ) : (
+              availableMonths.map((month) => (
+                <option key={month} value={month}>
+                  {new Date(month + "-01").toLocaleDateString("pl-PL", {
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </option>
+              ))
+            )}
           </select>
-          <span className="text-green-500 font-bold font-mono text-2xl">
-            +{totalEarned}zł
+          <span className="text-green-500 totalMoney">
+            +{totalEarned.toFixed(2)}zł
           </span>
         </div>
 
         <div className="border-2 rounded-lg px-4 py-2 overflow-x-auto">
           {/* Header row */}
-          <div className="grid grid-cols-5 gap-2 font-bold text-sm border-b-2 pb-2 mb-2">
-            <span>Dzień</span>
-            <span>Start</span>
-            <span>Koniec</span>
-            <span>Godziny</span>
-            <span>Zarobione</span>
+          <div className="hidden md:grid grid-cols-5 gap-2 font-bold text-sm border-b-2 pb-2 mb-2">
+            <div className="min-w-0 flex items-center gap-1">
+              <Calendar size={16} />
+              Dzień
+            </div>
+            <div className="min-w-0 flex items-center gap-1">
+              <Clock size={16} />
+              Start
+            </div>
+            <div className="min-w-0 flex items-center gap-1">
+              <Clock size={16} className="opacity-50" />
+              Koniec
+            </div>
+            <div className="min-w-0 flex items-center gap-1">
+              <Timer size={16} />
+              Godziny
+            </div>
+            <div className="min-w-0 flex items-center gap-1">
+              <Wallet size={16} />
+              Zarobione
+            </div>
           </div>
 
           {/* Data rows */}

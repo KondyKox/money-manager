@@ -11,7 +11,7 @@ function App() {
 
   return (
     <ToastProvider>
-      <main className="flex justify-center items-center flex-col p-2 m-2 relative">
+      <main className="flex justify-center items-center flex-col relative">
         {!selectedProfileId ? (
           <ProfilePicker setSelectedProfileId={setSelectedProfileId} />
         ) : (

@@ -45,7 +45,7 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
         </div>
 
         <div className="flex justify-between items-center flex-col md:flex-row gap-4 bg-orange-300 p-2 rounded-lg">
-          <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+          <div className="flex justify-center items-center gap-4">
             <select
               name="availableMonths"
               id="availableMonths"
@@ -99,7 +99,7 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
             </select>
           </div>
 
-          <span className="text-2xl text-green-600 font-bold font-mono">
+          <span className="text-green-600 totalMoney">
             +{totalIncome.toFixed(2)}zł
           </span>
         </div>

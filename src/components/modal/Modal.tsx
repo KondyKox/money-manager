@@ -7,11 +7,11 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 bg-black/80 flex justify-center items-center z-10"
+      className="fixed inset-0 bg-black/80 flex justify-center items-center z-10 p-2"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative overflow-hidden bg-purple-600 py-8 px-10 rounded-2xl shadow-md shadow-orange-400 text-white/80 w-2/3 lg:w-1/2 min-h-100"
+        className="relative overflow-y-auto bg-purple-600 py-8 px-10 rounded-2xl shadow-md shadow-orange-400 text-white/80 h-full md:h-auto md:w-2/3 lg:w-1/2 md:min-h-1/2"
       >
         {children}
         <button

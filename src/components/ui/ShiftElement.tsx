@@ -10,30 +10,38 @@ const ShiftElement = ({ shift }: { shift: CompletedShift }) => {
   return (
     <div
       key={shift.id}
-      className="grid grid-cols-5 gap-2 text-sm py-1 items-center"
+      className="flex flex-col md:grid md:grid-cols-5 md:gap-2 md:items-center border-b md:border-none py-2 text-sm"
     >
-      <span>
-        {clockInDate.toLocaleDateString("pl-PL", {
-          day: "numeric",
-          month: "short",
-        })}
-      </span>
-      <span className="font-mono">
-        {clockInDate.toLocaleTimeString("pl-PL", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </span>
-      <span className="font-mono">
-        {clockOutDate.toLocaleTimeString("pl-PL", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </span>
-      <span className="font-mono">{hours.toFixed(2)}h</span>
-      <span className="font-mono font-semibold text-green-800">
-        +{pay.toFixed(2)}zł
-      </span>
+      {/* Row 1 on mobile: date + pay */}
+      <div className="flex justify-between md:contents">
+        <span className="font-semibold md:order-1">
+          {clockInDate.toLocaleDateString("pl-PL", {
+            day: "numeric",
+            month: "short",
+          })}
+        </span>
+        <span className="font-mono font-semibold text-green-800 md:order-5">
+          +{pay.toFixed(2)}zł
+        </span>
+      </div>
+
+      {/* Row 2 on mobile: time range + hours */}
+      <div className="flex justify-between text-white/70 md:contents">
+        <span className="font-mono md:order-2">
+          {clockInDate.toLocaleTimeString("pl-PL", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
+        <span className="font-mono md:hidden">–</span>
+        <span className="font-mono md:order-3">
+          {clockOutDate.toLocaleTimeString("pl-PL", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
+        <span className="font-mono md:order-4">{hours.toFixed(2)}h</span>
+      </div>
     </div>
   );
 };
