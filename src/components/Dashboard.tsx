@@ -12,7 +12,7 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
   if (!editedProfile) return null;
 
   return (
-    <div className="flex flex-col justify-center items-center md:w-2/3 px-4">
+    <div className="flex flex-col justify-center items-center md:w-2/3 lg:w-1/2 px-4">
       <h1 className="text-4xl font-bold p-4 text-gray-800">
         {editedProfile.name}
       </h1>
