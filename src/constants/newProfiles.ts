@@ -1,4 +1,5 @@
 import type { Profile } from "../types/Profile";
+import { DEFAULT_BG_COLOR } from "./bgPalette";
 
 export const newProfiles: Profile[] = [
   {
@@ -9,6 +10,7 @@ export const newProfiles: Profile[] = [
     completedShifts: [],
     expenses: [],
     incomes: [],
+    color: DEFAULT_BG_COLOR,
   },
 
   {
@@ -19,5 +21,6 @@ export const newProfiles: Profile[] = [
     completedShifts: [],
     expenses: [],
     incomes: [],
+    color: DEFAULT_BG_COLOR,
   },
 ];

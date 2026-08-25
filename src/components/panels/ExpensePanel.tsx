@@ -44,7 +44,7 @@ const ExpensePanel = ({
     <>
       <CollapsablePanel
         header="Wydatki"
-        colorClass="shadow-black text-orange-950"
+        colorClass="shadow-black text-orange-950 bg-white"
       >
         <div className="flex justify-center items-center gap-2 border-b-2 mb-4 pb-4">
           <button
