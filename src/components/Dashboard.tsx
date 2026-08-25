@@ -1,21 +1,85 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Profile } from "../types/Profile";
 import { getProfile } from "../utils/getProfiles";
 import ShiftTracker from "./panels/ShiftTracker";
 import ExpensePanel from "./panels/ExpensePanel";
 import IncomePanel from "./panels/IncomePanel";
+import { CircleX, Edit, Save } from "lucide-react";
+import { saveProfile } from "../utils/saveProfile";
 
 const Dashboard = ({ profileId }: { profileId: string }) => {
   const profile = getProfile(profileId);
   const [editedProfile, setEditedProfile] = useState<Profile | null>(profile);
+  const [edited, setEdited] = useState<boolean>(false);
+  const [newName, setNewName] = useState<string>("");
+  const editInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (edited) {
+      editInputRef.current?.focus();
+      editInputRef.current?.select();
+    }
+  }, [edited]);
+
+  const handleEditClick = () => {
+    if (!editedProfile) return;
+
+    setNewName(editedProfile.name);
+    setEdited(true);
+  };
+
+  const handleSaveProfile = () => {
+    if (!newName || !editedProfile) return;
+
+    const updatedProfile: Profile = {
+      ...editedProfile,
+      name: newName,
+    };
+
+    setEditedProfile((prev) => (prev ? { ...prev, name: newName } : prev));
+    setEdited(false);
+    saveProfile(updatedProfile);
+  };
 
   if (!editedProfile) return null;
 
   return (
     <div className="flex flex-col justify-center items-center md:w-2/3 lg:w-1/2 px-4">
-      <h1 className="text-4xl font-bold p-4 text-gray-800">
-        {editedProfile.name}
-      </h1>
+      <div className="flex justify-center items-center w-full gap-2">
+        <h1 className="text-4xl font-bold py-4 text-gray-800 w-full text-center">
+          {edited ? (
+            <input
+              ref={editInputRef}
+              type="text"
+              className="uppercase px-2 bg-blue-200 w-full"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+            />
+          ) : (
+            editedProfile.name
+          )}
+        </h1>
+        {!edited ? (
+          <Edit
+            size={20}
+            className="transition-all duration-150 cursor-pointer hover:text-yellow-400 hover:scale-110"
+            onClick={() => handleEditClick()}
+          />
+        ) : (
+          <>
+            <CircleX
+              size={24}
+              className="transition-all duration-150 cursor-pointer hover:text-red-400 hover:scale-110"
+              onClick={() => setEdited(false)}
+            />
+            <Save
+              size={24}
+              className="transition-all duration-150 cursor-pointer hover:text-blue-400 hover:scale-110"
+              onClick={handleSaveProfile}
+            />
+          </>
+        )}
+      </div>
       <div className="border-t-2 flex flex-col justify-between items-stretch gap-4 py-2 w-full">
         {/* Shift Tracker */}
         <ShiftTracker
