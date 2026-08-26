@@ -33,6 +33,13 @@ const ShiftTracker = ({
     return sum + hours * shift.rate;
   }, 0);
 
+  const totalHours = filteredShifts.reduce((sum, shift) => {
+    const hours =
+      (new Date(shift.clockOut).getTime() - new Date(shift.clockIn).getTime()) /
+      (1000 * 60 * 60);
+    return sum + hours;
+  }, 0);
+
   return (
     <CollapsablePanel
       header="Monitor czasu pracy"
@@ -93,9 +100,14 @@ const ShiftTracker = ({
               ))
             )}
           </select>
-          <span className="text-green-500 totalMoney">
-            +{totalEarned.toFixed(2)}zł
-          </span>
+          <div className="flex justify-center items-center gap-4">
+            <span className="totalMoney text-gray-600">
+              {totalHours.toFixed(2)}h
+            </span>
+            <span className="text-green-500 totalMoney">
+              +{totalEarned.toFixed(2)}zł
+            </span>
+          </div>
         </div>
 
         <div className="border-2 rounded-lg px-4 py-2 overflow-x-auto">
