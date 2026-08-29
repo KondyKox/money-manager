@@ -3,12 +3,15 @@ import type { Profile } from "../types/Profile";
 import ShiftTracker from "./panels/ShiftTracker";
 import ExpensePanel from "./panels/ExpensePanel";
 import IncomePanel from "./panels/IncomePanel";
-import { CircleX, Edit, Palette, Save } from "lucide-react";
+import { CircleX, Edit, MoveLeft, Palette, Save } from "lucide-react";
 import { saveProfile } from "../utils/saveProfile";
 import ColorPicker from "./modal/colorPicker-modal";
-import type { DashboardElement } from "../types/Dashboard";
+import { getProfile } from "../utils/getProfiles";
+import type { DashboardProps } from "../types/Dashboard";
 
-const Dashboard = ({ editedProfile, setEditedProfile }: DashboardElement) => {
+const Dashboard = ({ profileId, onChangeColor, onBack }: DashboardProps) => {
+  const profile = getProfile(profileId);
+  const [editedProfile, setEditedProfile] = useState<Profile | null>(profile);
   const [edited, setEdited] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
   const editInputRef = useRef<HTMLInputElement>(null);
@@ -47,6 +50,13 @@ const Dashboard = ({ editedProfile, setEditedProfile }: DashboardElement) => {
     <>
       <div className="flex flex-col justify-center items-center md:w-2/3 lg:w-1/2 px-4">
         <div className="flex justify-center items-center w-full gap-2">
+          {!edited && (
+            <MoveLeft
+              size={24}
+              className="iconBtn hover:text-red-500"
+              onClick={onBack}
+            />
+          )}
           <h1 className="text-4xl font-bold py-4 w-full text-center">
             {edited ? (
               <input
@@ -117,8 +127,7 @@ const Dashboard = ({ editedProfile, setEditedProfile }: DashboardElement) => {
         <ColorPicker
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          editedProfile={editedProfile}
-          setEditedProfile={setEditedProfile}
+          onChangeColor={onChangeColor}
         />
       )}
     </>

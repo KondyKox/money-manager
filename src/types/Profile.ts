@@ -10,11 +10,4 @@ export interface Profile {
   activeShift: ActiveShift | null;
   expenses: Expense[];
   incomes: Income[];
-  color: Color;
-}
-
-export interface Color {
-  name: string;
-  bg: string;
-  text: string;
 }

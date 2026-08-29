@@ -2,6 +2,7 @@ import type { Dispatch, ReactNode, SetStateAction } from "react";
 import type { Profile } from "./Profile";
 import type { Income } from "./Income";
 import type { Expense } from "./Expense";
+import type { Color } from "./Color";
 
 export interface ModalProps {
   children: ReactNode;
@@ -20,4 +21,10 @@ export interface DetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   element: Income | Expense;
+}
+
+export interface ColorPickerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onChangeColor: (newColor: Color) => void;
 }
