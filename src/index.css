@@ -54,6 +54,10 @@ textarea {
   @apply transition-all duration-150 cursor-pointer hover:scale-110;
 }
 
+.btn-delete {
+  @apply text-sm md:text-base uppercase cursor-pointer border-2 border-red-500 hover:bg-red-500 hover:shadow-red-700 shadow-md transition duration-200 rounded-2xl py-2 px-4 active:scale-90 text-white/90 hover:text-black/90;
+}
+
 .select {
   @apply px-2 hover:bg-gray-200 transition-colors duration-200 cursor-pointer rounded text-sm md:text-base;
 }

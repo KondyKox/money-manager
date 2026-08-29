@@ -7,6 +7,8 @@ import {
   type IncomeCategory,
 } from "../../constants/incomeCategories";
 import IncomeElement from "../ui/IncomeElement";
+import { deleteIncome } from "../../utils/updateProfile";
+import { useToast } from "../../hooks/useToast";
 
 const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -15,6 +17,7 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
   );
   const [selectedCategory, setSelectedCategory] =
     useState<IncomeCategory | null>(null);
+  const { showToast } = useToast();
 
   const availableMonths = Array.from(
     new Set(editedProfile.incomes.map((i) => i.date.slice(0, 7))),
@@ -28,6 +31,16 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
     (sum, income) => sum + income.amount,
     0,
   );
+
+  const handleDeleteIncome = async (id: string) => {
+    setEditedProfile((prev) =>
+      prev
+        ? { ...prev, incomes: prev.incomes.filter((i) => i.id !== id) }
+        : prev,
+    );
+    await deleteIncome(id);
+    showToast("Usunięto przychód.", "success");
+  };
 
   return (
     <>
@@ -110,7 +123,10 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
           ) : (
             filteredIncomes.map((income) => (
               <div key={income.id} className="w-full">
-                <IncomeElement income={income} />
+                <IncomeElement
+                  income={income}
+                  onDelete={() => handleDeleteIncome(income.id)}
+                />
               </div>
             ))
           )}

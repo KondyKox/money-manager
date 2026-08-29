@@ -21,6 +21,7 @@ export interface DetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   element: Income | Expense;
+  onDelete: (id: string) => void;
 }
 
 export interface ColorPickerProps {

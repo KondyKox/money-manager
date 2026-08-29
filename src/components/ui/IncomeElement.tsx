@@ -2,7 +2,13 @@ import { useState } from "react";
 import type { Income } from "../../types/Income";
 import DetailModal from "../modal/detail-modal";
 
-const IncomeElement = ({ income }: { income: Income }) => {
+const IncomeElement = ({
+  income,
+  onDelete,
+}: {
+  income: Income;
+  onDelete: (id: string) => void;
+}) => {
   const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false);
 
   return (
@@ -31,6 +37,7 @@ const IncomeElement = ({ income }: { income: Income }) => {
         isOpen={isDetailOpen}
         onClose={() => setIsDetailOpen(false)}
         element={income}
+        onDelete={onDelete}
       />
     </>
   );
