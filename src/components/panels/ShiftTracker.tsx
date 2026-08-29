@@ -5,6 +5,8 @@ import { useState } from "react";
 import ShiftElement from "../ui/ShiftElement";
 import { Calendar, Clock, Timer, Wallet } from "lucide-react";
 import { saveProfileInfo } from "../../utils/saveProfile";
+import { deleteShift } from "../../utils/updateProfile";
+import { useToast } from "../../hooks/useToast";
 
 const ShiftTracker = ({
   editedProfile,
@@ -13,6 +15,7 @@ const ShiftTracker = ({
   const [selectedMonth, setSelectedMonth] = useState<string>(
     new Date().toISOString().slice(0, 7),
   );
+  const { showToast } = useToast();
 
   const filteredShifts = editedProfile.completedShifts.filter((shift) =>
     shift.clockIn.startsWith(selectedMonth),
@@ -39,6 +42,19 @@ const ShiftTracker = ({
       (1000 * 60 * 60);
     return sum + hours;
   }, 0);
+
+  const handleDeleteShift = async (id: string) => {
+    setEditedProfile((prev) =>
+      prev
+        ? {
+            ...prev,
+            completedShifts: prev.completedShifts.filter((s) => s.id !== id),
+          }
+        : prev,
+    );
+    await deleteShift(id);
+    showToast("Usunięto zmianę.", "success");
+  };
 
   return (
     <CollapsablePanel
@@ -145,7 +161,13 @@ const ShiftTracker = ({
           {filteredShifts.length === 0 ? (
             <span className="text-center block">Brak zmian</span>
           ) : (
-            filteredShifts.map((shift) => <ShiftElement shift={shift} />)
+            filteredShifts.map((shift) => (
+              <ShiftElement
+                key={shift.id}
+                shift={shift}
+                onDelete={handleDeleteShift}
+              />
+            ))
           )}
         </div>
       </div>

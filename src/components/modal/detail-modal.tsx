@@ -1,4 +1,4 @@
-import { Edit, Trash } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import type { DetailModalProps } from "../../types/Modal";
 import Modal from "./Modal";
 
@@ -43,7 +43,7 @@ const DetailModal = ({
         <div className="flex justify-between items-stretch gap-4 w-full flex-col md:flex-row">
           <button
             className="btn-secondary flex-1 flex justify-center items-center gap-2"
-            onClick={handleDelete}
+            // onClick={handleDelete}
           >
             <Edit size={24} /> Edycja
           </button>
@@ -51,7 +51,7 @@ const DetailModal = ({
             className="btn-delete flex-1 flex justify-center items-center gap-2"
             onClick={handleDelete}
           >
-            <Trash size={24} /> Usuń
+            <Trash2 size={24} /> Usuń
           </button>
         </div>
       </div>
