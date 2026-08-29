@@ -1,11 +1,11 @@
 import { useRef } from "react";
 import type { ActiveShift, CompletedShift } from "../../types/Shift";
 import { toDatetimeLocal } from "../../utils/toDatetimeLocal";
-import { saveProfile } from "../../utils/saveProfile";
 import type { Profile } from "../../types/Profile";
 import { Pause, Play } from "lucide-react";
 import type { DashboardElement } from "../../types/Dashboard";
 import { useToast } from "../../hooks/useToast";
+import { addCompletedShift } from "../../utils/saveProfile";
 
 const ShiftTimePanel = ({
   editedProfile,
@@ -58,7 +58,7 @@ const ShiftTimePanel = ({
   };
 
   // Handle saving edited profile
-  const handleSaveShift = () => {
+  const handleSaveShift = async () => {
     if (!editedProfile.activeShift) return;
 
     const newCompletedShift: CompletedShift = {
@@ -75,7 +75,7 @@ const ShiftTimePanel = ({
     };
 
     setEditedProfile(updatedProfile);
-    saveProfile(updatedProfile);
+    await addCompletedShift(updatedProfile.id, newCompletedShift);
     showToast("Zapisano zmianę.", "success");
   };
 

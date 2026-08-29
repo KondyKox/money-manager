@@ -1,10 +1,10 @@
-import { saveProfile } from "../../utils/saveProfile";
 import ShiftTimePanel from "./ShiftTimePanel";
 import CollapsablePanel from "../ui/CollapsablePanel";
 import type { DashboardElement } from "../../types/Dashboard";
 import { useState } from "react";
 import ShiftElement from "../ui/ShiftElement";
 import { Calendar, Clock, Timer, Wallet } from "lucide-react";
+import { saveProfileInfo } from "../../utils/saveProfile";
 
 const ShiftTracker = ({
   editedProfile,
@@ -60,7 +60,13 @@ const ShiftTracker = ({
                 prev ? { ...prev, hourlyRate: Number(e.target.value) } : prev,
               )
             }
-            onBlur={() => saveProfile(editedProfile)}
+            onBlur={async () =>
+              await saveProfileInfo(
+                editedProfile.id,
+                editedProfile.name,
+                editedProfile.hourlyRate,
+              )
+            }
           />
           <span>zł/h</span>
         </div>

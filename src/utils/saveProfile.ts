@@ -1,17 +1,58 @@
-import { PROFILES_KEY } from "../constants/storageKeys";
-import type { Profile } from "../types/Profile";
-import { getProfiles } from "./getProfiles";
+import { supabase } from "../lib/supabaseClient";
+import type { Expense } from "../types/Expense";
+import type { Income } from "../types/Income";
+import type { CompletedShift } from "../types/Shift";
 
-export const saveProfile = (updatedProfile: Profile) => {
-  const currentProfiles = getProfiles() ?? [];
+export const saveProfileInfo = async (
+  id: string,
+  name: string,
+  hourlyRate: number,
+) => {
+  const { error } = await supabase
+    .from("profiles")
+    .update({ name, hourly_rate: hourlyRate })
+    .eq("id", id);
 
-  const exists = currentProfiles.find((p) => p.id === updatedProfile.id);
+  if (error) console.log("Error saving profile:", error.message);
+};
 
-  const updatedProfiles: Profile[] = exists
-    ? currentProfiles.map((p) =>
-        p.id === updatedProfile.id ? updatedProfile : p,
-      )
-    : [...currentProfiles, updatedProfile];
+export const addExpense = async (profileId: string, expense: Expense) => {
+  const { error } = await supabase.from("expenses").insert({
+    id: expense.id,
+    profile_id: profileId,
+    date: expense.date,
+    amount: expense.amount,
+    category: expense.category,
+    note: expense.note ?? null,
+  });
 
-  localStorage.setItem(PROFILES_KEY, JSON.stringify(updatedProfiles));
+  if (error) console.log("Error adding expense:", error.message);
+};
+
+export const addIncome = async (profileId: string, income: Income) => {
+  const { error } = await supabase.from("incomes").insert({
+    id: income.id,
+    profile_id: profileId,
+    date: income.date,
+    amount: income.amount,
+    category: income.category,
+    note: income.note ?? null,
+  });
+
+  if (error) console.log("Error adding income:", error.message);
+};
+
+export const addCompletedShift = async (
+  profileId: string,
+  shift: CompletedShift,
+) => {
+  const { error } = await supabase.from("shifts").insert({
+    id: shift.id,
+    profile_id: profileId,
+    clock_in: shift.clockIn,
+    clock_out: shift.clockOut,
+    rate: shift.rate,
+  });
+
+  if (error) console.log("Error saving shift:", error.message);
 };

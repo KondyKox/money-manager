@@ -3,9 +3,9 @@ import type { EditModalProps } from "../../types/Modal";
 import type { Expense } from "../../types/Expense";
 import { EXPENSE_CATEGORIES } from "../../constants/expenseCategories";
 import type { Profile } from "../../types/Profile";
-import { saveProfile } from "../../utils/saveProfile";
 import Modal from "./Modal";
 import { useToast } from "../../hooks/useToast";
+import { addExpense } from "../../utils/saveProfile";
 
 const AddExpenseModal = ({
   isOpen,
@@ -19,7 +19,7 @@ const AddExpenseModal = ({
 
   const { showToast } = useToast();
 
-  const handleAddExpense = () => {
+  const handleAddExpense = async () => {
     if (!newExpense.category || !newExpense.amount || !newExpense.date) {
       showToast("Kategoria, Koszt i Data nie mogą być puste!", "error");
       console.warn("Category, Amount & Date cannot be empty!");
@@ -41,7 +41,7 @@ const AddExpenseModal = ({
     };
 
     setEditedProfile(updatedProfile);
-    saveProfile(updatedProfile);
+    await addExpense(updatedProfile.id, expenseToAdd);
     setNewExpense({ date: new Date().toISOString().slice(0, 10) });
 
     showToast("Dodano wydatek!", "success");

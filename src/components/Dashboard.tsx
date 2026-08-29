@@ -4,18 +4,27 @@ import ShiftTracker from "./panels/ShiftTracker";
 import ExpensePanel from "./panels/ExpensePanel";
 import IncomePanel from "./panels/IncomePanel";
 import { CircleX, Edit, MoveLeft, Palette, Save } from "lucide-react";
-import { saveProfile } from "../utils/saveProfile";
-import ColorPicker from "./modal/colorPicker-modal";
+import { saveProfileInfo } from "../utils/saveProfile";
 import { getProfile } from "../utils/getProfiles";
+import ColorPicker from "./modal/colorPicker-modal";
 import type { DashboardProps } from "../types/Dashboard";
 
 const Dashboard = ({ profileId, onChangeColor, onBack }: DashboardProps) => {
-  const profile = getProfile(profileId);
-  const [editedProfile, setEditedProfile] = useState<Profile | null>(profile);
+  const [editedProfile, setEditedProfile] = useState<Profile | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [edited, setEdited] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
   const editInputRef = useRef<HTMLInputElement>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const profile = await getProfile(profileId);
+      setEditedProfile(profile);
+      setIsLoading(false);
+    };
+    loadProfile();
+  }, [profileId]);
 
   useEffect(() => {
     if (edited) {
@@ -31,7 +40,7 @@ const Dashboard = ({ profileId, onChangeColor, onBack }: DashboardProps) => {
     setEdited(true);
   };
 
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async () => {
     if (!newName || !editedProfile) return;
 
     const updatedProfile: Profile = {
@@ -41,10 +50,20 @@ const Dashboard = ({ profileId, onChangeColor, onBack }: DashboardProps) => {
 
     setEditedProfile(updatedProfile);
     setEdited(false);
-    saveProfile(updatedProfile);
+    await saveProfileInfo(
+      updatedProfile.id,
+      updatedProfile.name,
+      updatedProfile.hourlyRate,
+    );
   };
 
-  if (!editedProfile) return null;
+  if (isLoading) {
+    return <div className="text-center p-6">Ładowanie...</div>;
+  }
+
+  if (!editedProfile) {
+    return <div className="text-center p-6">Nie znaleziono profilu.</div>;
+  }
 
   return (
     <>
@@ -103,19 +122,14 @@ const Dashboard = ({ profileId, onChangeColor, onBack }: DashboardProps) => {
           )}
         </div>
         <div className="border-t-2 flex flex-col justify-between items-stretch gap-4 py-2 w-full">
-          {/* Shift Tracker */}
           <ShiftTracker
             editedProfile={editedProfile}
             setEditedProfile={setEditedProfile}
           />
-
-          {/* Income panel */}
           <IncomePanel
             editedProfile={editedProfile}
             setEditedProfile={setEditedProfile}
           />
-
-          {/* Expenses panel */}
           <ExpensePanel
             editedProfile={editedProfile}
             setEditedProfile={setEditedProfile}

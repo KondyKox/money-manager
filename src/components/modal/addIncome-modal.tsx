@@ -5,7 +5,7 @@ import type { EditModalProps } from "../../types/Modal";
 import Modal from "./Modal";
 import type { Income } from "../../types/Income";
 import type { Profile } from "../../types/Profile";
-import { saveProfile } from "../../utils/saveProfile";
+import { addIncome } from "../../utils/saveProfile";
 
 const AddIncomeModal = ({
   isOpen,
@@ -18,7 +18,7 @@ const AddIncomeModal = ({
   });
   const { showToast } = useToast();
 
-  const handleAddIncome = () => {
+  const handleAddIncome = async () => {
     if (!newIncome.amount || !newIncome.category || !newIncome.date) {
       showToast("Zysk, Kategoria i Data nie mogą być puste!", "error");
       console.warn("Amount, Category & Date cannot be empty!");
@@ -40,7 +40,7 @@ const AddIncomeModal = ({
     };
 
     setEditedProfile(updatedProfile);
-    saveProfile(updatedProfile);
+    await addIncome(updatedProfile.id, incomeToAdd);
     setNewIncome({ date: new Date().toISOString().slice(0, 10) });
 
     showToast("Dodano przychód!", "success");

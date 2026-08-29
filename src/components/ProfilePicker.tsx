@@ -1,9 +1,7 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import ProfileIcon from "./ui/ProfileIcon";
 import type { Profile } from "../types/Profile";
-import { newProfiles } from "../constants/newProfiles";
 import { getProfiles } from "../utils/getProfiles";
-import { saveProfile } from "../utils/saveProfile";
 import { Palette } from "lucide-react";
 import ColorPicker from "./modal/colorPicker-modal";
 import type { Color } from "../types/Color";
@@ -15,14 +13,22 @@ const ProfilePicker = ({
   setSelectedProfileId: Dispatch<SetStateAction<string | null>>;
   onChangeColor: (newColor: Color) => void;
 }) => {
-  const [profiles, setProfiles] = useState<Profile[]>(
-    () => getProfiles() ?? newProfiles,
-  );
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!getProfiles()) newProfiles.forEach((profile) => saveProfile(profile));
+    const loadProfiles = async () => {
+      const data = await getProfiles();
+      setProfiles(data ?? []);
+      setIsLoading(false);
+    };
+    loadProfiles();
   }, []);
+
+  if (isLoading) {
+    return <div className="text-center p-6">Ładowanie...</div>;
+  }
 
   return (
     <>

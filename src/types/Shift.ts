@@ -1,3 +1,5 @@
+import type { Database } from "./supabase";
+
 export interface CompletedShift {
   id: string;
   clockIn: string;
@@ -10,3 +12,5 @@ export interface ActiveShift {
   rate: number;
   clockOut?: string;
 }
+
+export type ShiftRow = Database["public"]["Tables"]["shifts"]["Row"];
