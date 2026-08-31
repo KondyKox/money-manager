@@ -20,15 +20,19 @@ const Toast = ({ id, message, type, onDismiss }: ToastProps) => {
   }, []);
 
   useEffect(() => {
+    let removeTimer: ReturnType<typeof setTimeout>;
+
     const exitTimer = setTimeout(() => {
       setIsVisible(false);
-
-      const removeTimer = setTimeout(() => {
+      removeTimer = setTimeout(() => {
         onDismiss(id);
       }, EXIT_ANIMATION_DURATION);
     }, VISIBLE_DURATION);
 
-    return () => clearTimeout(exitTimer);
+    return () => {
+      clearTimeout(exitTimer);
+      clearTimeout(removeTimer);
+    };
   }, [id, onDismiss]);
 
   return (
