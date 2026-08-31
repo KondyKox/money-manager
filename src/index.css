@@ -59,7 +59,7 @@ textarea {
 }
 
 .select {
-  @apply px-2 hover:bg-gray-200 transition-colors duration-200 cursor-pointer rounded text-sm md:text-base;
+  @apply px-2 hover:bg-gray-200 transition-colors duration-200 cursor-pointer rounded text-sm md:text-base hover:text-black/80;
 }
 
 .totalMoney {

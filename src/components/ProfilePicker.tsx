@@ -5,6 +5,7 @@ import { getProfiles } from "../utils/getProfiles";
 import { Palette } from "lucide-react";
 import ColorPicker from "./modal/colorPicker-modal";
 import type { Color } from "../types/Color";
+import CategoryOverviewChart from "./ui/CategoryOverviewChart";
 
 const ProfilePicker = ({
   setSelectedProfileId,
@@ -16,6 +17,20 @@ const ProfilePicker = ({
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedMonth, setSelectedMonth] = useState<string>(
+    new Date().toISOString().slice(0, 7),
+  );
+
+  const availableMonths = Array.from(
+    new Set(
+      profiles.flatMap((p) => [
+        ...p.expenses.map((e) => e.date.slice(0, 7)),
+        ...p.incomes.map((i) => i.date.slice(0, 7)),
+      ]),
+    ),
+  )
+    .sort()
+    .reverse();
 
   useEffect(() => {
     const loadProfiles = async () => {
@@ -36,7 +51,7 @@ const ProfilePicker = ({
         <h1 className="text-5xl font-bold">Siema mordo!</h1>
         <div className="mt-5">
           <h3 className="italic text-xl pb-2">Wybierz swój profil</h3>
-          <div className="border-t-2 py-2 flex justify-center items-stretch gap-2">
+          <div className="border-t-2 py-4 flex justify-center items-stretch gap-2">
             {profiles.map((profile) => (
               <ProfileIcon
                 key={profile.id}
@@ -56,6 +71,46 @@ const ProfilePicker = ({
               />
               Zmiana koloru
             </button>
+          </div>
+        </div>
+
+        <div className="flex flex-col justify-center items-stretch gap-12 lg:gap-6 mt-8 border-t-2 py-4">
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="select"
+          >
+            {availableMonths.length === 0 ? (
+              <option value="">
+                {new Date().toLocaleDateString("pl-PL", {
+                  month: "long",
+                  year: "numeric",
+                })}
+              </option>
+            ) : (
+              availableMonths.map((month) => (
+                <option key={month} value={month}>
+                  {new Date(month + "-01").toLocaleDateString("pl-PL", {
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </option>
+              ))
+            )}
+          </select>
+          <div className="flex flex-col gap-12 w-full max-w-4xl mb-6">
+            <CategoryOverviewChart
+              profiles={profiles}
+              kind="expenses"
+              title="Wydatki wg kategorii"
+              selectedMonth={selectedMonth}
+            />
+            <CategoryOverviewChart
+              profiles={profiles}
+              kind="incomes"
+              title="Przychody wg kategorii"
+              selectedMonth={selectedMonth}
+            />
           </div>
         </div>
       </div>

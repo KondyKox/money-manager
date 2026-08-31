@@ -24,7 +24,7 @@ function App() {
   return (
     <ToastProvider>
       <main
-        className={`flex justify-start items-center flex-col relative min-h-screen pb-5 md:pb-20 ${bgClass} ${textClass}`}
+        className={`flex justify-start items-center flex-col relative min-h-screen h-full pb-5 md:pb-20 ${bgClass} ${textClass}`}
       >
         {!selectedProfileId ? (
           <ProfilePicker

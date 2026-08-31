@@ -84,7 +84,7 @@ const AddExpenseModal = ({
               id="expense-amout"
               name="expense-amout"
               placeholder="Ile kosztowało..."
-              step={0.5}
+              step={10}
               value={newExpense.amount ?? 0}
               onChange={(e) =>
                 setNewExpense((prev) =>
