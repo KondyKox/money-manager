@@ -10,6 +10,7 @@ import IncomeElement from "../ui/IncomeElement";
 import { deleteIncome, updateIncome } from "../../utils/updateProfile";
 import { useToast } from "../../hooks/useToast";
 import type { Income } from "../../types/Income";
+import { BanknoteArrowUp } from "lucide-react";
 
 const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -63,6 +64,7 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
       <CollapsablePanel
         header="Przychody"
         colorClass="border-orange-400 text-white bg-orange-400"
+        icon=<BanknoteArrowUp />
       >
         <div className="flex justify-center items-center gap-2 border-b-2 mb-4 pb-4">
           <button

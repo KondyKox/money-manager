@@ -3,7 +3,7 @@ import CollapsablePanel from "../ui/CollapsablePanel";
 import type { DashboardElement } from "../../types/Dashboard";
 import { useState } from "react";
 import ShiftElement from "../ui/ShiftElement";
-import { Calendar, Clock, Timer, Wallet } from "lucide-react";
+import { Briefcase, Calendar, Clock, Timer, Wallet } from "lucide-react";
 import { saveProfileInfo } from "../../utils/saveProfile";
 import { deleteShift, updateShift } from "../../utils/updateProfile";
 import { useToast } from "../../hooks/useToast";
@@ -81,6 +81,7 @@ const ShiftTracker = ({
     <CollapsablePanel
       header="Monitor czasu pracy"
       colorClass="bg-green-400 shadow-green-400 text-white/90"
+      icon=<Briefcase />
     >
       <div className="input-group">
         <label htmlFor="hourlyRate">Stawka Godzinowa</label>

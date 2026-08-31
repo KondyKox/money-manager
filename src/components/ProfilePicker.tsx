@@ -2,10 +2,11 @@ import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import ProfileIcon from "./ui/ProfileIcon";
 import type { Profile } from "../types/Profile";
 import { getProfiles } from "../utils/getProfiles";
-import { Palette } from "lucide-react";
+import { ChartColumn, Palette } from "lucide-react";
 import ColorPicker from "./modal/colorPicker-modal";
 import type { Color } from "../types/Color";
 import CategoryOverviewChart from "./ui/CategoryOverviewChart";
+import CollapsablePanel from "./ui/CollapsablePanel";
 
 const ProfilePicker = ({
   setSelectedProfileId,
@@ -47,8 +48,9 @@ const ProfilePicker = ({
 
   return (
     <>
-      <div className="text-center flex justify-center items-stretch flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-0 md:p-6">
+      <div className="text-center flex justify-center items-stretch flex-col w-full px-4 py-8 md:py-12 md:w-2/3 lg:w-1/2">
         <h1 className="text-5xl font-bold">Siema mordo!</h1>
+
         <div className="mt-5">
           <h3 className="italic text-xl pb-2">Wybierz swój profil</h3>
           <div className="border-t-2 py-4 flex justify-center items-stretch gap-2">
@@ -74,44 +76,53 @@ const ProfilePicker = ({
           </div>
         </div>
 
-        <div className="flex flex-col justify-center items-stretch gap-12 lg:gap-6 mt-8 border-t-2 py-4">
-          <select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            className="select"
+        <div className="mt-8">
+          <CollapsablePanel
+            header={"Statystyki"}
+            icon=<ChartColumn />
+            colorClass="bg-white/10 text-current border-2"
           >
-            {availableMonths.length === 0 ? (
-              <option value="">
-                {new Date().toLocaleDateString("pl-PL", {
-                  month: "long",
-                  year: "numeric",
-                })}
-              </option>
-            ) : (
-              availableMonths.map((month) => (
-                <option key={month} value={month}>
-                  {new Date(month + "-01").toLocaleDateString("pl-PL", {
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </option>
-              ))
-            )}
-          </select>
-          <div className="flex flex-col gap-12 w-full max-w-4xl mb-6">
-            <CategoryOverviewChart
-              profiles={profiles}
-              kind="expenses"
-              title="Wydatki wg kategorii"
-              selectedMonth={selectedMonth}
-            />
-            <CategoryOverviewChart
-              profiles={profiles}
-              kind="incomes"
-              title="Przychody wg kategorii"
-              selectedMonth={selectedMonth}
-            />
-          </div>
+            <div className="flex justify-center items-center mb-4">
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                className="select"
+              >
+                {availableMonths.length === 0 ? (
+                  <option value="">
+                    {new Date().toLocaleDateString("pl-PL", {
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </option>
+                ) : (
+                  availableMonths.map((month) => (
+                    <option key={month} value={month}>
+                      {new Date(month + "-01").toLocaleDateString("pl-PL", {
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-8">
+              <CategoryOverviewChart
+                profiles={profiles}
+                kind="expenses"
+                title="Wydatki wg kategorii"
+                selectedMonth={selectedMonth}
+              />
+              <CategoryOverviewChart
+                profiles={profiles}
+                kind="incomes"
+                title="Przychody wg kategorii"
+                selectedMonth={selectedMonth}
+              />
+            </div>
+          </CollapsablePanel>
         </div>
       </div>
 

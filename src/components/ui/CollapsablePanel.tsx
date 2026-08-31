@@ -5,12 +5,14 @@ interface CollapsablePanelProps {
   header: string;
   children: ReactNode;
   colorClass?: string; // colors for bg, text, shadow, etc.
+  icon?: ReactNode;
 }
 
 const CollapsablePanel = ({
   header,
   children,
   colorClass = "",
+  icon,
 }: CollapsablePanelProps) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
@@ -20,6 +22,7 @@ const CollapsablePanel = ({
         onClick={() => setIsCollapsed(!isCollapsed)}
         className={`flex items-center justify-center gap-2 text-center font-bold mb-4 text-xl cursor-pointer hover:${colorClass} transition-colors duration-150`}
       >
+        {icon && icon}
         {header}
         <ChevronDown
           size={20}

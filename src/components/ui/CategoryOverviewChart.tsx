@@ -28,7 +28,7 @@ const CategoryOverviewChart = ({
   if (data.length === 0) return <p className="italic">Brak danych</p>;
 
   return (
-    <div className="w-full h-64">
+    <div className="w-full h-64 py-4">
       <h3 className="text-center font-semibold mb-2">{title}</h3>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>

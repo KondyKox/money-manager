@@ -10,6 +10,7 @@ import {
 import { deleteExpense, updateExpense } from "../../utils/updateProfile";
 import { useToast } from "../../hooks/useToast";
 import type { Expense } from "../../types/Expense";
+import { BanknoteArrowDown } from "lucide-react";
 
 const ExpensePanel = ({
   editedProfile,
@@ -74,6 +75,7 @@ const ExpensePanel = ({
       <CollapsablePanel
         header="Wydatki"
         colorClass="shadow-black text-orange-950 bg-white"
+        icon=<BanknoteArrowDown />
       >
         <div className="flex justify-center items-center gap-2 border-b-2 mb-4 pb-4">
           <button
