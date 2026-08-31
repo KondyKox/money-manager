@@ -5,8 +5,9 @@ import { useState } from "react";
 import ShiftElement from "../ui/ShiftElement";
 import { Calendar, Clock, Timer, Wallet } from "lucide-react";
 import { saveProfileInfo } from "../../utils/saveProfile";
-import { deleteShift } from "../../utils/updateProfile";
+import { deleteShift, updateShift } from "../../utils/updateProfile";
 import { useToast } from "../../hooks/useToast";
+import type { CompletedShift } from "../../types/Shift";
 
 const ShiftTracker = ({
   editedProfile,
@@ -43,6 +44,7 @@ const ShiftTracker = ({
     return sum + hours;
   }, 0);
 
+  // ------------------------------------------------------
   const handleDeleteShift = async (id: string) => {
     setEditedProfile((prev) =>
       prev
@@ -54,6 +56,25 @@ const ShiftTracker = ({
     );
     await deleteShift(id);
     showToast("Usunięto zmianę.", "success");
+  };
+
+  const handleEditClick = async (updatedShift: CompletedShift) => {
+    const updatedShifts = editedProfile.completedShifts.map((s) => {
+      if (s.id === updatedShift.id) return updatedShift;
+      return s;
+    });
+
+    setEditedProfile((prev) =>
+      prev
+        ? {
+            ...prev,
+            completedShifts: updatedShifts,
+          }
+        : prev,
+    );
+
+    await updateShift(updatedShift);
+    showToast("Zaktualizowano zmianę.", "success");
   };
 
   return (
@@ -166,6 +187,7 @@ const ShiftTracker = ({
                 key={shift.id}
                 shift={shift}
                 onDelete={handleDeleteShift}
+                onEdit={handleEditClick}
               />
             ))
           )}

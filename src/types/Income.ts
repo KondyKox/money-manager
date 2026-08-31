@@ -8,3 +8,9 @@ export interface Income {
   category: IncomeCategory;
   note?: string;
 }
+
+export interface IncomeElementProps {
+  income: Income;
+  onDelete: (id: string) => void;
+  onEdit: (income: Income) => void;
+}

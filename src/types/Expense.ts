@@ -8,3 +8,9 @@ export interface Expense {
   category: ExpenseCategory;
   note?: string;
 }
+
+export interface ExpenseElementProps {
+  expense: Expense;
+  onDelete: (id: string) => void;
+  onEdit: (expense: Expense) => void;
+}

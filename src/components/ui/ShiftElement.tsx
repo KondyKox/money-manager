@@ -1,15 +1,8 @@
-import { Edit, Trash2 } from "lucide-react";
-import type { CompletedShift } from "../../types/Shift";
+import type { CompletedShift, ShiftElementProps } from "../../types/Shift";
 import { useState } from "react";
-import Modal from "../modal/Modal";
+import ShiftDetailModal from "../modal/shiftDetail.modal";
 
-const ShiftElement = ({
-  shift,
-  onDelete,
-}: {
-  shift: CompletedShift;
-  onDelete: (id: string) => void;
-}) => {
+const ShiftElement = ({ shift, onDelete, onEdit }: ShiftElementProps) => {
   const clockInDate = new Date(shift.clockIn);
   const clockOutDate = new Date(shift.clockOut);
   const hours =
@@ -19,6 +12,12 @@ const ShiftElement = ({
 
   const handleDelete = () => {
     onDelete(shift.id);
+    setIsModalOpen(false);
+  };
+
+  const handleEdit = (updatedShift: CompletedShift) => {
+    onEdit(updatedShift);
+    console.log(updatedShift);
     setIsModalOpen(false);
   };
 
@@ -62,28 +61,13 @@ const ShiftElement = ({
       </div>
 
       {isModalOpen && (
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <div className="flex flex-col justify-center items-center gap-6">
-            <h2 className="font-bold text-2xl border-b-2 py-2">
-              Edycja / Usuwanie
-            </h2>
-
-            <div className="flex justify-center items-center gap-4 flex-col">
-              <button
-                className="btn-secondary flex-1 flex justify-center items-center gap-2"
-                // onClick={}
-              >
-                <Edit size={24} /> Edycja
-              </button>
-              <button
-                className="btn-delete flex-1 flex justify-center items-center gap-2"
-                onClick={handleDelete}
-              >
-                <Trash2 size={24} /> Usuń
-              </button>
-            </div>
-          </div>
-        </Modal>
+        <ShiftDetailModal
+          shift={shift}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       )}
     </>
   );

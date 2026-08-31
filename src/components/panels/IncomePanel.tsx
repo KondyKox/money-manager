@@ -7,8 +7,9 @@ import {
   type IncomeCategory,
 } from "../../constants/incomeCategories";
 import IncomeElement from "../ui/IncomeElement";
-import { deleteIncome } from "../../utils/updateProfile";
+import { deleteIncome, updateIncome } from "../../utils/updateProfile";
 import { useToast } from "../../hooks/useToast";
+import type { Income } from "../../types/Income";
 
 const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -32,6 +33,7 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
     0,
   );
 
+  // ---------------------------------------------------
   const handleDeleteIncome = async (id: string) => {
     setEditedProfile((prev) =>
       prev
@@ -40,6 +42,20 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
     );
     await deleteIncome(id);
     showToast("Usunięto przychód.", "success");
+  };
+
+  const handleEditIncome = async (updatedIncome: Income) => {
+    const updatedIncomes = editedProfile.incomes.map((i) => {
+      if (i.id === updatedIncome.id) return updatedIncome;
+      return i;
+    });
+
+    setEditedProfile((prev) =>
+      prev ? { ...prev, incomes: updatedIncomes } : prev,
+    );
+
+    await updateIncome(updatedIncome);
+    showToast("Zaktualizowano przychód.", "success");
   };
 
   return (
@@ -126,6 +142,7 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
                 <IncomeElement
                   income={income}
                   onDelete={() => handleDeleteIncome(income.id)}
+                  onEdit={handleEditIncome}
                 />
               </div>
             ))

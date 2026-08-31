@@ -13,4 +13,10 @@ export interface ActiveShift {
   clockOut?: string;
 }
 
+export interface ShiftElementProps {
+  shift: CompletedShift;
+  onDelete: (id: string) => void;
+  onEdit: (shift: CompletedShift) => void;
+}
+
 export type ShiftRow = Database["public"]["Tables"]["shifts"]["Row"];

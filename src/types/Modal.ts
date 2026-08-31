@@ -3,6 +3,7 @@ import type { Profile } from "./Profile";
 import type { Income } from "./Income";
 import type { Expense } from "./Expense";
 import type { Color } from "./Color";
+import type { CompletedShift } from "./Shift";
 
 export interface ModalProps {
   children: ReactNode;
@@ -17,11 +18,20 @@ export interface EditModalProps {
   setEditedProfile: Dispatch<SetStateAction<Profile | null>>;
 }
 
-export interface DetailModalProps {
+export interface DetailModalProps<T extends Expense | Income> {
   isOpen: boolean;
   onClose: () => void;
-  element: Income | Expense;
+  element: T;
   onDelete: (id: string) => void;
+  onEdit: (element: T) => void;
+}
+
+export interface ShiftDetailProps {
+  shift: CompletedShift;
+  isOpen: boolean;
+  onClose: () => void;
+  onDelete: (id: string) => void;
+  onEdit: (shift: CompletedShift) => void;
 }
 
 export interface ColorPickerProps {

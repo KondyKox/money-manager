@@ -1,14 +1,8 @@
 import { useState } from "react";
-import type { Expense } from "../../types/Expense";
+import type { ExpenseElementProps } from "../../types/Expense";
 import DetailModal from "../modal/detail-modal";
 
-const ExpenseElement = ({
-  expense,
-  onDelete,
-}: {
-  expense: Expense;
-  onDelete: (id: string) => void;
-}) => {
+const ExpenseElement = ({ expense, onDelete, onEdit }: ExpenseElementProps) => {
   const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false);
 
   return (
@@ -38,6 +32,7 @@ const ExpenseElement = ({
         onClose={() => setIsDetailOpen(false)}
         element={expense}
         onDelete={onDelete}
+        onEdit={onEdit}
       />
     </>
   );

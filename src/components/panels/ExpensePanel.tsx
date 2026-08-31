@@ -7,8 +7,9 @@ import {
   EXPENSE_CATEGORIES,
   type ExpenseCategory,
 } from "../../constants/expenseCategories";
-import { deleteExpense } from "../../utils/updateProfile";
+import { deleteExpense, updateExpense } from "../../utils/updateProfile";
 import { useToast } from "../../hooks/useToast";
+import type { Expense } from "../../types/Expense";
 
 const ExpensePanel = ({
   editedProfile,
@@ -43,7 +44,7 @@ const ExpensePanel = ({
     .sort()
     .reverse();
 
-  // deleting expense
+  // ---------------------------------------------------
   const handleDeleteExpense = async (id: string) => {
     setEditedProfile((prev) =>
       prev
@@ -52,6 +53,20 @@ const ExpensePanel = ({
     );
     await deleteExpense(id);
     showToast("Usunięto wydatek.", "success");
+  };
+
+  const handleEditExpense = async (updatedExpense: Expense) => {
+    const updatedExpenses = editedProfile.expenses.map((e) => {
+      if (e.id === updatedExpense.id) return updatedExpense;
+      return e;
+    });
+
+    setEditedProfile((prev) =>
+      prev ? { ...prev, expenses: updatedExpenses } : prev,
+    );
+
+    await updateExpense(updatedExpense);
+    showToast("Zaktualizowano wydatek.", "success");
   };
 
   return (
@@ -134,6 +149,7 @@ const ExpensePanel = ({
                 <ExpenseElement
                   expense={expense}
                   onDelete={() => handleDeleteExpense(expense.id)}
+                  onEdit={handleEditExpense}
                 />
               </div>
             ))
