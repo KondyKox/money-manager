@@ -82,6 +82,7 @@ const ShiftTracker = ({
       header="Monitor czasu pracy"
       colorClass="bg-green-400 shadow-green-400 text-white/90"
       icon=<Briefcase />
+      collapsed={true}
     >
       <div className="input-group">
         <label htmlFor="hourlyRate">Stawka Godzinowa</label>

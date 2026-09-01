@@ -6,6 +6,7 @@ interface CollapsablePanelProps {
   children: ReactNode;
   colorClass?: string; // colors for bg, text, shadow, etc.
   icon?: ReactNode;
+  collapsed?: boolean;
 }
 
 const CollapsablePanel = ({
@@ -13,8 +14,9 @@ const CollapsablePanel = ({
   children,
   colorClass = "",
   icon,
+  collapsed = false,
 }: CollapsablePanelProps) => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(collapsed);
 
   return (
     <div className={`${colorClass} rounded-lg px-4 py-6 shadow-sm`}>
