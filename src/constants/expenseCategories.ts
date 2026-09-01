@@ -3,6 +3,7 @@ export const EXPENSE_CATEGORIES = [
   "Mieszkanie",
   "Transport",
   "Subskrypcje",
+  "Opłaty",
   "Higiena",
   "Randeczki",
   "Inne",

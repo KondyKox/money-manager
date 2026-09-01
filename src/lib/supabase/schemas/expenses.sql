@@ -3,6 +3,7 @@ create type expenses_category as enum (
     'Mieszkanie',
     'Transport',
     'Subskrypcje',
+    'Opłaty',
     'Higiena',
     'Randeczki',
     'Inne'
