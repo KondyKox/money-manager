@@ -67,9 +67,9 @@ textarea {
 }
 
 .nav-link {
-  @apply font-semibold cursor-pointer hover:text-blue-400 transition-all duration-150 pb-2;
+  @apply font-semibold cursor-pointer hover:text-blue-400 transition-all duration-150 pb-2 text-center;
 }
 
 .nav-link__current {
-  @apply font-semibold hover:text-blue-400 transition-all duration-150 border-b-2 text-red-400 pointer-events-none;
+  @apply font-semibold hover:text-blue-400 transition-all duration-150 border-b-2 text-red-400 pointer-events-none text-center;
 }

@@ -9,6 +9,7 @@ import type { Color } from "./types/Color";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Navbar from "./components/ui/Navbar";
 import ColorPicker from "./components/modal/colorPicker-modal";
+import Home from "./pages/Home";
 
 function App() {
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
@@ -28,12 +29,16 @@ function App() {
   return (
     <BrowserRouter>
       <ToastProvider>
+        <Navbar
+          onOpenColors={() => setShowColorPicker(true)}
+          bgColor={bgClass}
+          textColor={textClass}
+        />
         <main
-          className={`flex justify-start items-center flex-col relative min-h-screen h-full pb-5 md:pb-20 ${bgClass} ${textClass}`}
+          className={`flex justify-start items-center flex-col relative min-h-screen h-full pt-20 pb-5 md:pb-20 ${bgClass} ${textClass}`}
         >
-          <Navbar onOpenColors={() => setShowColorPicker(true)} />
-
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route
               path="/profile"
               element={
