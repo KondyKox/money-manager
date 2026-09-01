@@ -44,7 +44,7 @@ function App() {
               element={<Home headerColor={headerClass} textColor={textClass} />}
             />
             <Route
-              path="/profile"
+              path="/profiles"
               element={
                 <ProfilePicker setSelectedProfileId={setSelectedProfileId} />
               }

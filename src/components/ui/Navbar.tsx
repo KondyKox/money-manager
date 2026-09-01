@@ -10,7 +10,7 @@ interface NavbarProps {
 
 const links = [
   { to: "/", label: "Strona główna" },
-  { to: "/profile", label: "Profile & Statystyki" },
+  { to: "/profiles", label: "Profile & Statystyki" },
   { to: "/dashboard", label: "Dashboard" },
 ];
 
