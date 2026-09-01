@@ -83,9 +83,9 @@ const ProfilePicker = ({
           <CollapsablePanel
             header={"Statystyki"}
             icon=<ChartColumn />
-            colorClass="bg-white/10 text-current border-2"
+            colorClass="bg-white/10 text-current"
           >
-            <div className="flex justify-center items-center mb-4">
+            <div className="flex justify-center items-center mb-4 pb-4 border-b-2">
               <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(e.target.value)}

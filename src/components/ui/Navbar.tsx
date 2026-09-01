@@ -11,7 +11,7 @@ interface NavbarProps {
 const links = [
   { to: "/", label: "Strona główna" },
   { to: "/profiles", label: "Profile & Statystyki" },
-  { to: "/dashboard", label: "Dashboard" },
+  { to: "/dashboard", label: "Panel główny" },
 ];
 
 const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
