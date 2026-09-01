@@ -6,6 +6,7 @@ import { ChartColumn } from "lucide-react";
 import CategoryOverviewChart from "../components/ui/CategoryOverviewChart";
 import CollapsablePanel from "../components/ui/CollapsablePanel";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "../components/ui/Skeleton";
 
 const ProfilePicker = ({
   setSelectedProfileId,
@@ -45,16 +46,28 @@ const ProfilePicker = ({
   }, []);
 
   if (isLoading) {
-    return <div className="text-center p-6">Ładowanie...</div>;
+    return (
+      <div className="text-center flex justify-center items-stretch flex-col w-full px-4 py-8 md:py-12 md:w-2/3 lg:w-1/2">
+        <div className="mt5">
+          <Skeleton className="h-6 w-40 mx-auto mb-4" />
+          <div className="border-t-2 py-4 flex justify-center items-stretch gap-2">
+            <Skeleton className="h-16 w-16 rounded-full" />
+            <Skeleton className="h-16 w-16 rounded-full" />
+            <Skeleton className="h-16 w-16 rounded-full" />
+          </div>
+        </div>
+        <div className="mt-8">
+          <Skeleton className="h-12 w-full" />
+        </div>
+      </div>
+    );
   }
 
   return (
     <>
       <div className="text-center flex justify-center items-stretch flex-col w-full px-4 py-8 md:py-12 md:w-2/3 lg:w-1/2">
-        <h1 className="text-5xl font-bold">Siema mordo!</h1>
-
         <div className="mt-5">
-          <h3 className="italic text-xl pb-2">Wybierz swój profil</h3>
+          <h3 className="italic text-3xl pb-4">Wybierz swój profil</h3>
           <div className="border-t-2 py-4 flex justify-center items-stretch gap-2">
             {profiles.map((profile) => (
               <ProfileIcon

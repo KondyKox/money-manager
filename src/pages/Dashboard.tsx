@@ -6,6 +6,7 @@ import IncomePanel from "../components/panels/IncomePanel";
 import { CircleX, Edit, Save } from "lucide-react";
 import { saveProfileInfo } from "../utils/saveProfile";
 import { getProfile } from "../utils/getProfiles";
+import Skeleton from "../components/ui/Skeleton";
 
 const Dashboard = ({ profileId }: { profileId: string }) => {
   const [editedProfile, setEditedProfile] = useState<Profile | null>(null);
@@ -55,7 +56,16 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
   };
 
   if (isLoading) {
-    return <div className="text-center p-6">Ładowanie...</div>;
+    return (
+      <div className="flex flex-col justify-center items-center md:w-2/3 lg:w-1/2 px-4 w-full">
+        <Skeleton className="h-10 w-2/3 my-4" />
+        <div className="border-t-2 flex flex-col gap-4 py-4 w-full">
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+        </div>
+      </div>
+    );
   }
 
   if (!editedProfile) {
