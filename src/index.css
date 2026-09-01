@@ -65,3 +65,11 @@ textarea {
 .totalMoney {
   @apply font-bold font-mono text-xl md:text-2xl;
 }
+
+.nav-link {
+  @apply font-semibold cursor-pointer hover:text-blue-400 transition-all duration-150 pb-2;
+}
+
+.nav-link__current {
+  @apply font-semibold hover:text-blue-400 transition-all duration-150 border-b-2 text-red-400 pointer-events-none;
+}

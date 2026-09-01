@@ -1,26 +1,28 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
-import ProfileIcon from "./ui/ProfileIcon";
+import ProfileIcon from "../components/ui/ProfileIcon";
 import type { Profile } from "../types/Profile";
 import { getProfiles } from "../utils/getProfiles";
-import { ChartColumn, Palette } from "lucide-react";
-import ColorPicker from "./modal/colorPicker-modal";
-import type { Color } from "../types/Color";
-import CategoryOverviewChart from "./ui/CategoryOverviewChart";
-import CollapsablePanel from "./ui/CollapsablePanel";
+import { ChartColumn } from "lucide-react";
+import CategoryOverviewChart from "../components/ui/CategoryOverviewChart";
+import CollapsablePanel from "../components/ui/CollapsablePanel";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePicker = ({
   setSelectedProfileId,
-  onChangeColor,
 }: {
   setSelectedProfileId: Dispatch<SetStateAction<string | null>>;
-  onChangeColor: (newColor: Color) => void;
 }) => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedMonth, setSelectedMonth] = useState<string>(
     new Date().toISOString().slice(0, 7),
   );
+  const navigate = useNavigate();
+
+  const handleProfilesSelect = (profileId: string) => {
+    setSelectedProfileId(profileId);
+    navigate("/dashboard");
+  };
 
   const availableMonths = Array.from(
     new Set(
@@ -58,21 +60,9 @@ const ProfilePicker = ({
               <ProfileIcon
                 key={profile.id}
                 profile={profile}
-                onClick={() => setSelectedProfileId(profile.id)}
+                onClick={() => handleProfilesSelect(profile.id)}
               />
             ))}
-          </div>
-          <div className="mt-4 flex justify-center items-center">
-            <button
-              className="btn-secondary border-2 flex justify-center items-center gap-2 group"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <Palette
-                size={24}
-                className="iconBtn group-hover:text-pink-400"
-              />
-              Zmiana koloru
-            </button>
           </div>
         </div>
 
@@ -125,14 +115,6 @@ const ProfilePicker = ({
           </CollapsablePanel>
         </div>
       </div>
-
-      {isModalOpen && (
-        <ColorPicker
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onChangeColor={onChangeColor}
-        />
-      )}
     </>
   );
 };

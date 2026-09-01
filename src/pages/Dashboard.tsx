@@ -1,21 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import type { Profile } from "../types/Profile";
-import ShiftTracker from "./panels/ShiftTracker";
-import ExpensePanel from "./panels/ExpensePanel";
-import IncomePanel from "./panels/IncomePanel";
-import { CircleX, Edit, MoveLeft, Palette, Save } from "lucide-react";
+import ShiftTracker from "../components/panels/ShiftTracker";
+import ExpensePanel from "../components/panels/ExpensePanel";
+import IncomePanel from "../components/panels/IncomePanel";
+import { CircleX, Edit, Save } from "lucide-react";
 import { saveProfileInfo } from "../utils/saveProfile";
 import { getProfile } from "../utils/getProfiles";
-import ColorPicker from "./modal/colorPicker-modal";
-import type { DashboardProps } from "../types/Dashboard";
 
-const Dashboard = ({ profileId, onChangeColor, onBack }: DashboardProps) => {
+const Dashboard = ({ profileId }: { profileId: string }) => {
   const [editedProfile, setEditedProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [edited, setEdited] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
   const editInputRef = useRef<HTMLInputElement>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -69,13 +66,6 @@ const Dashboard = ({ profileId, onChangeColor, onBack }: DashboardProps) => {
     <>
       <div className="flex flex-col justify-center items-center md:w-2/3 lg:w-1/2 px-4">
         <div className="flex justify-center items-center w-full gap-2">
-          {!edited && (
-            <MoveLeft
-              size={24}
-              className="iconBtn hover:text-red-500"
-              onClick={onBack}
-            />
-          )}
           <h1 className="text-4xl font-bold py-4 w-full text-center">
             {edited ? (
               <input
@@ -99,11 +89,6 @@ const Dashboard = ({ profileId, onChangeColor, onBack }: DashboardProps) => {
                 size={24}
                 className="iconBtn hover:text-yellow-400"
                 onClick={() => handleEditClick()}
-              />
-              <Palette
-                size={24}
-                className="iconBtn hover:text-pink-400"
-                onClick={() => setIsModalOpen(true)}
               />
             </>
           ) : (
@@ -136,14 +121,6 @@ const Dashboard = ({ profileId, onChangeColor, onBack }: DashboardProps) => {
           />
         </div>
       </div>
-
-      {isModalOpen && (
-        <ColorPicker
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onChangeColor={onChangeColor}
-        />
-      )}
     </>
   );
 };
