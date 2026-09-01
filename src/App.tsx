@@ -20,6 +20,7 @@ function App() {
 
   const bgClass = color.bg;
   const textClass = color.text;
+  const headerClass = color.header;
 
   const handleChangeColor = (newColor: Color) => {
     changeColor(newColor);
@@ -38,7 +39,10 @@ function App() {
           className={`flex justify-start items-center flex-col relative min-h-screen h-full pt-20 pb-5 md:pb-20 ${bgClass} ${textClass}`}
         >
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route
+              path="/"
+              element={<Home headerColor={headerClass} textColor={textClass} />}
+            />
             <Route
               path="/profile"
               element={
