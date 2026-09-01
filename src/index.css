@@ -33,7 +33,7 @@ h6 {
 }
 
 .profile-icon {
-  @apply border-2 rounded-xl p-4 text-center flex justify-center items-center transition-all duration-150 hover:border-green-400 shadow-md hover:shadow-green-400 cursor-pointer active:border-green-600 w-full font-bold;
+  @apply border-2 rounded-xl p-4 text-center flex justify-center items-center transition-all duration-150 hover:border-green-400 hover:bg-white/30 shadow-md hover:shadow-green-400 cursor-pointer active:scale-90 active:border-green-600 w-full font-bold;
 }
 
 .input-group {
