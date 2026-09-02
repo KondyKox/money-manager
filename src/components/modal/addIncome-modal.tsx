@@ -16,21 +16,41 @@ const AddIncomeModal = ({
   const [newIncome, setNewIncome] = useState<Partial<Income>>({
     date: new Date().toISOString().slice(0, 10),
   });
+  const [errors, setErrors] = useState<{
+    amount?: string;
+    category?: string;
+    date?: string;
+  }>({});
+
   const { showToast } = useToast();
 
   const handleAddIncome = async () => {
-    if (!newIncome.amount || !newIncome.category || !newIncome.date) {
+    const newErrors: typeof errors = {};
+    if (!newIncome.date) newErrors.date = "Data jest wymagana";
+    if (!newIncome.amount) newErrors.amount = "Zysk jest wymagany";
+    if (!newIncome.category) newErrors.category = "Wybierz kategorię";
+
+    if (Object.keys(newErrors).length > 0) {
       showToast("Zysk, Kategoria i Data nie mogą być puste!", "error");
       console.warn("Amount, Category & Date cannot be empty!");
+      setErrors(newErrors);
       return;
     }
+
+    setErrors({});
+
+    // if (!newIncome.amount || !newIncome.category || !newIncome.date) {
+    //   showToast("Zysk, Kategoria i Data nie mogą być puste!", "error");
+    //   console.warn("Amount, Category & Date cannot be empty!");
+    //   return;
+    // }
 
     const incomeToAdd: Income = {
       id: crypto.randomUUID(),
       kind: "income",
-      date: newIncome.date,
-      amount: newIncome.amount,
-      category: newIncome.category,
+      date: newIncome.date!,
+      amount: newIncome.amount!,
+      category: newIncome.category!,
       note: newIncome.note,
     };
 
@@ -59,18 +79,21 @@ const AddIncomeModal = ({
         {/* Date input */}
         <div className="input-group">
           <label htmlFor="income-date">Data przychodu</label>
-          <input
-            required
-            type="date"
-            id="income-date"
-            name="income-date"
-            value={newIncome.date}
-            onChange={(e) =>
-              setNewIncome((prev) =>
-                prev ? { ...prev, date: e.target.value } : prev,
-              )
-            }
-          />
+          <div>
+            <input
+              required
+              type="date"
+              id="income-date"
+              name="income-date"
+              value={newIncome.date}
+              onChange={(e) =>
+                setNewIncome((prev) =>
+                  prev ? { ...prev, date: e.target.value } : prev,
+                )
+              }
+            />
+          </div>
+          {errors.date && <p className="error-message">{errors.date}</p>}
         </div>
 
         {/* Money input */}
@@ -84,15 +107,24 @@ const AddIncomeModal = ({
               name="income-amout"
               placeholder="Ile zarobione..."
               step={10}
-              value={newIncome.amount ?? 0}
+              value={newIncome.amount ?? ""}
               onChange={(e) =>
                 setNewIncome((prev) =>
-                  prev ? { ...prev, amount: Number(e.target.value) } : prev,
+                  prev
+                    ? {
+                        ...prev,
+                        amount:
+                          e.target.value === ""
+                            ? undefined
+                            : Number(e.target.value),
+                      }
+                    : prev,
                 )
               }
             />
             <span>zł</span>
           </div>
+          {errors.amount && <p className="error-message">{errors.amount}</p>}
         </div>
 
         {/* Category selection */}
@@ -113,6 +145,9 @@ const AddIncomeModal = ({
               </button>
             ))}
           </div>
+          {errors.category && (
+            <p className="error-message">{errors.category}</p>
+          )}
         </div>
 
         {/* Note field */}

@@ -16,22 +16,35 @@ const AddExpenseModal = ({
   const [newExpense, setNewExpense] = useState<Partial<Expense>>({
     date: new Date().toISOString().slice(0, 10),
   });
+  const [errors, setErrors] = useState<{
+    amount?: string;
+    category?: string;
+    date?: string;
+  }>({});
 
   const { showToast } = useToast();
 
   const handleAddExpense = async () => {
-    if (!newExpense.category || !newExpense.amount || !newExpense.date) {
-      showToast("Kategoria, Koszt i Data nie mogą być puste!", "error");
-      console.warn("Category, Amount & Date cannot be empty!");
+    const newErrors: typeof errors = {};
+    if (!newExpense.date) newErrors.date = "Data jest wymagana";
+    if (!newExpense.amount) newErrors.amount = "Zysk jest wymagany";
+    if (!newExpense.category) newErrors.category = "Wybierz kategorię";
+
+    if (Object.keys(newErrors).length > 0) {
+      showToast("Koszt, Kategoria i Data nie mogą być puste!", "error");
+      console.warn("Amount, Category & Date cannot be empty!");
+      setErrors(newErrors);
       return;
     }
+
+    setErrors({});
 
     const expenseToAdd: Expense = {
       id: crypto.randomUUID(),
       kind: "expense",
-      date: newExpense.date,
-      amount: newExpense.amount,
-      category: newExpense.category,
+      date: newExpense.date!,
+      amount: newExpense.amount!,
+      category: newExpense.category!,
       note: newExpense.note,
     };
 
@@ -60,18 +73,21 @@ const AddExpenseModal = ({
         {/* Date input */}
         <div className="input-group">
           <label htmlFor="expense-date">Data wydatku</label>
-          <input
-            required
-            type="date"
-            id="expense-date"
-            name="expense-date"
-            value={newExpense?.date}
-            onChange={(e) =>
-              setNewExpense((prev) =>
-                prev ? { ...prev, date: e.target.value } : prev,
-              )
-            }
-          />
+          <div>
+            <input
+              required
+              type="date"
+              id="expense-date"
+              name="expense-date"
+              value={newExpense?.date}
+              onChange={(e) =>
+                setNewExpense((prev) =>
+                  prev ? { ...prev, date: e.target.value } : prev,
+                )
+              }
+            />
+          </div>
+          {errors.date && <p className="error-message">{errors.date}</p>}
         </div>
 
         {/* Money input */}
@@ -85,15 +101,24 @@ const AddExpenseModal = ({
               name="expense-amout"
               placeholder="Ile kosztowało..."
               step={10}
-              value={newExpense.amount ?? 0}
+              value={newExpense.amount ?? ""}
               onChange={(e) =>
                 setNewExpense((prev) =>
-                  prev ? { ...prev, amount: Number(e.target.value) } : prev,
+                  prev
+                    ? {
+                        ...prev,
+                        amount:
+                          e.target.value === ""
+                            ? undefined
+                            : Number(e.target.value),
+                      }
+                    : prev,
                 )
               }
             />
             <span>zł</span>
           </div>
+          {errors.amount && <p className="error-message">{errors.amount}</p>}
         </div>
 
         {/* Category selection */}
@@ -114,6 +139,9 @@ const AddExpenseModal = ({
               </button>
             ))}
           </div>
+          {errors.category && (
+            <p className="error-message">{errors.category}</p>
+          )}
         </div>
 
         {/* Note field */}
