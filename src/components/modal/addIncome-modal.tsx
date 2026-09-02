@@ -98,7 +98,7 @@ const AddIncomeModal = ({
         {/* Category selection */}
         <div className="input-group">
           <label>Kategoria</label>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2">
+          <div className="categories__container">
             {INCOME_CATEGORIES.map((category) => (
               <button
                 key={category}

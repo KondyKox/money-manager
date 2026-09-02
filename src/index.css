@@ -86,3 +86,7 @@ textarea {
 .nav-link__current {
   @apply font-semibold hover:text-blue-400 transition-all duration-150 border-b-2 text-red-400 pointer-events-none text-center;
 }
+
+.categories__container {
+  @apply grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 max-h-48 overflow-y-auto pr-2;
+}
