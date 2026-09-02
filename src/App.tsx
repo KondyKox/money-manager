@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import ProfilePicker from "./pages/ProfilePicker";
 import Dashboard from "./pages/Dashboard";
 import ToastContainer from "./components/ui/ToastContainer";
@@ -71,6 +72,7 @@ function App() {
         )}
 
         <ToastContainer />
+        <Analytics />
       </ToastProvider>
     </BrowserRouter>
   );
