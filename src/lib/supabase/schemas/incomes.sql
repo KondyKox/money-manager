@@ -1,4 +1,4 @@
-create type income_category as enum ('Praca', 'Prezenty', 'Oszczędności', 'Inne');
+create type income_category as enum ('Praca', 'Prezenty', 'Inne');
 
 create table
     incomes (

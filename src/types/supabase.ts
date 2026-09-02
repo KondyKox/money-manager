@@ -150,8 +150,9 @@ export type Database = {
         | "Higiena"
         | "Randeczki"
         | "Inne"
+        | "Oszczędności"
         | "Opłaty";
-      income_category: "Praca" | "Prezenty" | "Inne" | "Oszczędności";
+      income_category: "Praca" | "Prezenty" | "Inne";
     };
     CompositeTypes: {
       [_ in never]: never;
