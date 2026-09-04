@@ -180,7 +180,6 @@ export type Database = {
         | "Randeczki"
         | "Inne"
         | "Opłaty"
-        | "Oszczędności"
       income_category: "Praca" | "Prezenty" | "Inne"
     }
     CompositeTypes: {
@@ -318,7 +317,6 @@ export const Constants = {
         "Randeczki",
         "Inne",
         "Opłaty",
-        "Oszczędności",
       ],
       income_category: ["Praca", "Prezenty", "Inne"],
     },
