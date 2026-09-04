@@ -7,6 +7,7 @@ import CategoryOverviewChart from "../components/ui/CategoryOverviewChart";
 import CollapsablePanel from "../components/ui/CollapsablePanel";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "../components/ui/Skeleton";
+import SavingsOverviewChart from "../components/ui/SavingsOverviewChart";
 
 const ProfilePicker = ({
   setSelectedProfileId,
@@ -123,6 +124,10 @@ const ProfilePicker = ({
                 kind="incomes"
                 title="Przychody wg kategorii"
                 selectedMonth={selectedMonth}
+              />
+              <SavingsOverviewChart
+                profiles={profiles}
+                title="Oszczędności na przestrzeni czasu"
               />
             </div>
           </CollapsablePanel>

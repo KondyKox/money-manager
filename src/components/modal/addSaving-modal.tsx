@@ -4,6 +4,7 @@ import Modal from "./Modal";
 import type { Saving } from "../../types/Savings";
 import { useToast } from "../../hooks/useToast";
 import type { Profile } from "../../types/Profile";
+import { addSaving } from "../../utils/saveProfile";
 
 interface AddSavingModalProps extends EditModalProps {
   mode: "deposit" | "withdraw";
@@ -77,7 +78,7 @@ const AddSavingModal = ({
     };
 
     setEditedProfile(updatedProfile);
-
+    await addSaving(updatedProfile.id, savingToAdd);
     setNewSaving({ date: new Date().toISOString().split("T")[0] });
 
     showToast(
