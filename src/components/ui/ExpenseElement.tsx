@@ -9,7 +9,7 @@ const ExpenseElement = ({ expense, onDelete, onEdit }: ExpenseElementProps) => {
     <>
       <button
         onClick={() => setIsDetailOpen(true)}
-        className="flex items-center justify-between w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 transition-colors"
+        className="flex items-center justify-between w-full text-left px-3 py-2 rounded-lg hover:bg-black/15 transition-colors"
       >
         <div className="flex flex-col min-w-0">
           <span className="text-sm font-medium truncate">
