@@ -1,6 +1,7 @@
 import { supabase } from "../lib/supabaseClient";
 import type { Expense } from "../types/Expense";
 import type { Income } from "../types/Income";
+import type { Saving } from "../types/Savings";
 import type { ActiveShift } from "../types/Shift";
 
 export const saveProfileInfo = async (
@@ -13,7 +14,7 @@ export const saveProfileInfo = async (
     .update({ name, hourly_rate: hourlyRate })
     .eq("id", id);
 
-  if (error) console.log("Error saving profile:", error.message);
+  if (error) console.error("Error saving profile:", error.message);
 };
 
 export const addExpense = async (profileId: string, expense: Expense) => {
@@ -26,7 +27,7 @@ export const addExpense = async (profileId: string, expense: Expense) => {
     note: expense.note ?? null,
   });
 
-  if (error) console.log("Error adding expense:", error.message);
+  if (error) console.error("Error adding expense:", error.message);
 };
 
 export const addIncome = async (profileId: string, income: Income) => {
@@ -39,7 +40,7 @@ export const addIncome = async (profileId: string, income: Income) => {
     note: income.note ?? null,
   });
 
-  if (error) console.log("Error adding income:", error.message);
+  if (error) console.error("Error adding income:", error.message);
 };
 
 export const addActiveShift = async (profileId: string, shift: ActiveShift) => {
@@ -51,5 +52,16 @@ export const addActiveShift = async (profileId: string, shift: ActiveShift) => {
     rate: shift.rate,
   });
 
-  if (error) console.log("Error saving shift:", error.message);
+  if (error) console.error("Error saving shift:", error.message);
+};
+
+export const addSaving = async (profileId: string, saving: Saving) => {
+  const { error } = await supabase.from("savings").insert({
+    id: saving.id,
+    profile_id: profileId,
+    amount: saving.amount,
+    date: saving.date,
+  });
+
+  if (error) console.error("Error saving saving:", error.message);
 };

@@ -1,5 +1,4 @@
 export const EXPENSE_CATEGORIES = [
-  "Oszczędności",
   "Jedzenie",
   "Mieszkanie",
   "Transport",

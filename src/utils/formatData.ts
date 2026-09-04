@@ -1,5 +1,6 @@
 import type { Expense } from "../types/Expense";
 import type { Income } from "../types/Income";
+import type { Saving } from "../types/Savings";
 import type { ShiftRow } from "../types/Shift";
 import type { Database } from "../types/supabase";
 
@@ -37,4 +38,12 @@ export const toIncome = (
   amount: i.amount,
   category: i.category,
   note: i.note ?? undefined,
+});
+
+export const toSaving = (
+  s: Database["public"]["Tables"]["savings"]["Row"],
+): Saving => ({
+  id: s.id,
+  amount: s.amount,
+  date: s.date,
 });

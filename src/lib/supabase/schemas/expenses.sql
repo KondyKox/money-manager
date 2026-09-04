@@ -1,5 +1,4 @@
 create type expenses_category as enum (
-    'Oszczędności',
     'Jedzenie',
     'Mieszkanie',
     'Transport',

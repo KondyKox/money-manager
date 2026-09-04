@@ -7,15 +7,18 @@ import {
   toCompletedShift,
   toExpense,
   toIncome,
+  toSaving,
 } from "./formatData";
 
 export const getProfiles = async (): Promise<Profile[] | null> => {
-  const [profilesRes, shiftsRes, expensesRes, incomesRes] = await Promise.all([
-    supabase.from("profiles").select("*"),
-    supabase.from("shifts").select("*"),
-    supabase.from("expenses").select("*"),
-    supabase.from("incomes").select("*"),
-  ]);
+  const [profilesRes, shiftsRes, expensesRes, incomesRes, savingsRes] =
+    await Promise.all([
+      supabase.from("profiles").select("*"),
+      supabase.from("shifts").select("*"),
+      supabase.from("expenses").select("*"),
+      supabase.from("incomes").select("*"),
+      supabase.from("savings").select("*"),
+    ]);
 
   if (profilesRes.error) {
     console.log("Error fetching profiles:", profilesRes.error.message);
@@ -31,6 +34,7 @@ export const getProfiles = async (): Promise<Profile[] | null> => {
   const shifts = shiftsRes.data ?? [];
   const expenses = expensesRes.data ?? [];
   const incomes = incomesRes.data ?? [];
+  const savings = savingsRes.data ?? [];
 
   return profiles.map((p) => ({
     id: p.id,
@@ -49,6 +53,7 @@ export const getProfiles = async (): Promise<Profile[] | null> => {
       .map(toCompletedShift),
     expenses: expenses.filter((e) => e.profile_id === p.id).map(toExpense),
     incomes: incomes.filter((i) => i.profile_id === p.id).map(toIncome),
+    savings: savings.filter((s) => s.profile_id === p.id).map(toSaving),
   }));
 };
 
