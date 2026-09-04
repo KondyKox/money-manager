@@ -19,6 +19,11 @@ const SavingsPanel = ({
     console.log("edit");
   };
 
+  const totalSavings = editedProfile.savings.reduce(
+    (sum, saving) => sum + saving.amount,
+    0,
+  );
+
   return (
     <>
       <CollapsablePanel
@@ -27,9 +32,9 @@ const SavingsPanel = ({
         colorClass="text-gray-700 bg-cyan-300"
       >
         <div className="flex flex-col-reverse justify-center items-center border-b-2 pb-2 shadow-xl">
-          <h3 className="italic text-sm">Twoje oszczędności</h3>
+          {/* <h3 className="italic text-sm">Twoje oszczędności</h3> */}
           <span className="text-4xl font-mono font-extrabold text-green-700">
-            100zł
+            {totalSavings}zł
           </span>
         </div>
 
@@ -72,6 +77,7 @@ const SavingsPanel = ({
           editedProfile={editedProfile}
           setEditedProfile={setEditedProfile}
           mode={modalMode}
+          totalSavings={totalSavings}
         />
       )}
     </>

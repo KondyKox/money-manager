@@ -7,6 +7,7 @@ import type { Profile } from "../../types/Profile";
 
 interface AddSavingModalProps extends EditModalProps {
   mode: "deposit" | "withdraw";
+  totalSavings: number;
 }
 
 const AddSavingModal = ({
@@ -15,6 +16,7 @@ const AddSavingModal = ({
   editedProfile,
   setEditedProfile,
   mode,
+  totalSavings,
 }: AddSavingModalProps) => {
   const [newSaving, setNewSaving] = useState<Partial<Saving>>({
     date: new Date().toISOString().split("T")[0],
@@ -26,6 +28,27 @@ const AddSavingModal = ({
 
   const { showToast } = useToast();
 
+  // handle input when amount changes
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+
+    if (raw === "" || raw === "-") {
+      setNewSaving((prev) => ({ ...prev, amount: undefined }));
+      return;
+    }
+
+    const parsed = Number(raw);
+    if (parsed === 0) return;
+
+    if (mode === "withdraw" && Math.abs(parsed) > totalSavings) {
+      setNewSaving((prev) => ({ ...prev, amount: totalSavings }));
+      return;
+    }
+
+    setNewSaving((prev) => ({ ...prev, amount: Math.abs(parsed) }));
+  };
+
+  // saving saving
   const handleAddSaving = async () => {
     const newErrors: typeof errors = {};
     if (!newSaving.date) newErrors.date = "Data jest wymagana";
@@ -40,9 +63,11 @@ const AddSavingModal = ({
 
     setErrors({});
 
+    const amount = mode === "deposit" ? newSaving.amount : -newSaving.amount!;
+
     const savingToAdd: Saving = {
       id: crypto.randomUUID(),
-      amount: newSaving.amount!,
+      amount: amount!,
       date: newSaving.date!,
     };
 
@@ -69,6 +94,8 @@ const AddSavingModal = ({
           {mode === "deposit" ? "Wpłać środki" : "Wypłać środki"}
         </h2>
       </div>
+
+      {/* Date */}
       <div className="mt-4">
         <div className="input-group">
           <label htmlFor="saving-date">Data</label>
@@ -89,6 +116,7 @@ const AddSavingModal = ({
           {errors.date && <p className="error-message">{errors.date}</p>}
         </div>
 
+        {/* Amount */}
         <div className="input-group">
           <label htmlFor="saving-amount">Kwota</label>
           <div className="relative">
@@ -105,14 +133,9 @@ const AddSavingModal = ({
               id="saving-amount"
               name="saving-amount"
               className="pl-7!"
+              max={mode === "withdraw" ? totalSavings : undefined}
               value={newSaving.amount ?? ""}
-              onChange={(e) =>
-                setNewSaving((prev) => ({
-                  ...prev,
-                  amount:
-                    e.target.value === "" ? undefined : Number(e.target.value),
-                }))
-              }
+              onChange={handleAmountChange}
             />
           </div>
           {errors.amount && <p className="error-message">{errors.amount}</p>}
