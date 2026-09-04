@@ -146,7 +146,7 @@ const ExpensePanel = ({
           {filteredExpenses.length === 0 ? (
             <span className="text-center">Brak wydatków</span>
           ) : (
-            filteredExpenses.map((expense) => (
+            filteredExpenses.reverse().map((expense) => (
               <div key={expense.id} className="w-full">
                 <ExpenseElement
                   expense={expense}

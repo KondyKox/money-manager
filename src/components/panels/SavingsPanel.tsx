@@ -52,7 +52,7 @@ const SavingsPanel = ({
           {!editedProfile.savings || editedProfile.savings.length === 0 ? (
             <span className="text-center">Brak oszczędności</span>
           ) : (
-            editedProfile.savings.map((saving) => (
+            editedProfile.savings.reverse().map((saving) => (
               <div key={saving.id} className="w-full">
                 <SavingElement
                   saving={saving}

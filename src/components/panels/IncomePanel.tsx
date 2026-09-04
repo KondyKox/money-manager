@@ -139,7 +139,7 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
           {filteredIncomes.length === 0 ? (
             <span className="text-center">Brak przychodów</span>
           ) : (
-            filteredIncomes.map((income) => (
+            filteredIncomes.reverse().map((income) => (
               <div key={income.id} className="w-full">
                 <IncomeElement
                   income={income}
