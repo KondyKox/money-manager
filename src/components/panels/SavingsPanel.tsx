@@ -4,8 +4,9 @@ import type { DashboardElement } from "../../types/Dashboard";
 import SavingElement from "../ui/SavingElement";
 import { useState } from "react";
 import AddSavingModal from "../modal/addSaving-modal";
-import { deleteSaving } from "../../utils/updateProfile";
+import { deleteSaving, updateSaving } from "../../utils/updateProfile";
 import { useToast } from "../../hooks/useToast";
+import type { Saving } from "../../types/Savings";
 
 const SavingsPanel = ({
   editedProfile,
@@ -28,8 +29,18 @@ const SavingsPanel = ({
     showToast("Usunięto oszczędności.", "success");
   };
 
-  const handleEditSaving = () => {
-    console.log("edit");
+  const handleEditSaving = async (saving: Saving) => {
+    const updatedSavings = editedProfile.savings.map((s) => {
+      if (s.id === saving.id) return saving;
+      return s;
+    });
+
+    setEditedProfile((prev) =>
+      prev ? { ...prev, savings: updatedSavings } : prev,
+    );
+
+    await updateSaving(saving);
+    showToast("Zmieniono oszczędność.", "success");
   };
 
   const totalSavings = editedProfile.savings.reduce(

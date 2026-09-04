@@ -1,6 +1,7 @@
 import { supabase } from "../lib/supabaseClient";
 import type { Expense } from "../types/Expense";
 import type { Income } from "../types/Income";
+import type { Saving } from "../types/Savings";
 import type { CompletedShift } from "../types/Shift";
 
 // DELETING FUNCTIONS
@@ -61,4 +62,16 @@ export const updateShift = async (shift: CompletedShift) => {
     })
     .eq("id", shift.id);
   if (error) console.error("Error updating shift:", error.message);
+};
+
+export const updateSaving = async (saving: Saving) => {
+  const { error } = await supabase
+    .from("savings")
+    .update({
+      id: saving.id,
+      date: saving.date,
+      amount: saving.amount,
+    })
+    .eq("id", saving.id);
+  if (error) console.error("Error updating saving:", error.message);
 };
