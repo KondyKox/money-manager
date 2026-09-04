@@ -25,12 +25,14 @@ const ExpensePanel = ({
   const { showToast } = useToast();
 
   // expenses that we use here
-  const filteredExpenses = editedProfile.expenses.filter((expense) => {
-    const matchesMonth = expense.date.startsWith(selectedMonth);
-    const matchesCategory =
-      selectedCategory === null || expense.category === selectedCategory;
-    return matchesMonth && matchesCategory;
-  });
+  const filteredExpenses = editedProfile.expenses
+    .filter((expense) => {
+      const matchesMonth = expense.date.startsWith(selectedMonth);
+      const matchesCategory =
+        selectedCategory === null || expense.category === selectedCategory;
+      return matchesMonth && matchesCategory;
+    })
+    .sort((a, b) => b.date.localeCompare(a.date));
 
   // total money spent by month
   const totalSpent = filteredExpenses.reduce(
@@ -146,7 +148,7 @@ const ExpensePanel = ({
           {filteredExpenses.length === 0 ? (
             <span className="text-center">Brak wydatków</span>
           ) : (
-            filteredExpenses.reverse().map((expense) => (
+            filteredExpenses.map((expense) => (
               <div key={expense.id} className="w-full">
                 <ExpenseElement
                   expense={expense}

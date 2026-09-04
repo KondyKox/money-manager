@@ -27,7 +27,9 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
     .sort()
     .reverse();
 
-  const filteredIncomes = editedProfile.incomes;
+  const filteredIncomes = editedProfile.incomes.sort((a, b) =>
+    b.date.localeCompare(a.date),
+  );
 
   const totalIncome = filteredIncomes.reduce(
     (sum, income) => sum + income.amount,
@@ -139,7 +141,7 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
           {filteredIncomes.length === 0 ? (
             <span className="text-center">Brak przychodów</span>
           ) : (
-            filteredIncomes.reverse().map((income) => (
+            filteredIncomes.map((income) => (
               <div key={income.id} className="w-full">
                 <IncomeElement
                   income={income}

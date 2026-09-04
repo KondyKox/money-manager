@@ -24,6 +24,10 @@ const SavingsPanel = ({
     0,
   );
 
+  const sortedSavings = editedProfile.savings.sort((a, b) =>
+    b.date.localeCompare(a.date),
+  );
+
   return (
     <>
       <CollapsablePanel
@@ -54,10 +58,10 @@ const SavingsPanel = ({
         </div>
 
         <div className="py-4 flex flex-col justify-center items-center gap-2">
-          {!editedProfile.savings || editedProfile.savings.length === 0 ? (
+          {!sortedSavings || sortedSavings.length === 0 ? (
             <span className="text-center">Brak oszczędności</span>
           ) : (
-            editedProfile.savings.reverse().map((saving) => (
+            sortedSavings.map((saving) => (
               <div key={saving.id} className="w-full">
                 <SavingElement
                   saving={saving}
