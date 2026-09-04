@@ -5,7 +5,8 @@ import type { Profile } from "../../types/Profile";
 import { Pause, Play } from "lucide-react";
 import type { DashboardElement } from "../../types/Dashboard";
 import { useToast } from "../../hooks/useToast";
-import { addCompletedShift } from "../../utils/saveProfile";
+import { addActiveShift } from "../../utils/saveProfile";
+import { updateShift } from "../../utils/updateProfile";
 
 const ShiftTimePanel = ({
   editedProfile,
@@ -25,8 +26,9 @@ const ShiftTimePanel = ({
   };
 
   // start shift and enter to input
-  const handleStartShift = () => {
+  const handleStartShift = async () => {
     const newActiveShift: ActiveShift = {
+      id: crypto.randomUUID(),
       clockIn: toDatetimeLocal(new Date()),
       rate: editedProfile.hourlyRate,
     };
@@ -34,6 +36,8 @@ const ShiftTimePanel = ({
     setEditedProfile((prev) =>
       prev ? { ...prev, activeShift: newActiveShift } : prev,
     );
+
+    await addActiveShift(editedProfile.id, newActiveShift);
 
     clockInRef.current?.focus();
     showToast("Rozpoczęto zmianę.", "success");
@@ -75,7 +79,7 @@ const ShiftTimePanel = ({
     };
 
     setEditedProfile(updatedProfile);
-    await addCompletedShift(updatedProfile.id, newCompletedShift);
+    await updateShift(newCompletedShift);
     showToast("Zapisano zmianę.", "success");
   };
 

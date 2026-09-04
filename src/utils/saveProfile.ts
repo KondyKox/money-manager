@@ -1,7 +1,7 @@
 import { supabase } from "../lib/supabaseClient";
 import type { Expense } from "../types/Expense";
 import type { Income } from "../types/Income";
-import type { CompletedShift } from "../types/Shift";
+import type { ActiveShift } from "../types/Shift";
 
 export const saveProfileInfo = async (
   id: string,
@@ -42,15 +42,12 @@ export const addIncome = async (profileId: string, income: Income) => {
   if (error) console.log("Error adding income:", error.message);
 };
 
-export const addCompletedShift = async (
-  profileId: string,
-  shift: CompletedShift,
-) => {
+export const addActiveShift = async (profileId: string, shift: ActiveShift) => {
   const { error } = await supabase.from("shifts").insert({
     id: shift.id,
     profile_id: profileId,
     clock_in: shift.clockIn,
-    clock_out: shift.clockOut,
+    clock_out: null,
     rate: shift.rate,
   });
 
