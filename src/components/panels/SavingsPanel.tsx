@@ -1,9 +1,11 @@
 import { PiggyBank } from "lucide-react";
 import CollapsablePanel from "../ui/CollapsablePanel";
 import type { DashboardElement } from "../../types/Dashboard";
-import SavingElement from "../ui/SavingsElement";
+import SavingElement from "../ui/SavingElement";
 import { useState } from "react";
 import AddSavingModal from "../modal/addSaving-modal";
+import { deleteSaving } from "../../utils/updateProfile";
+import { useToast } from "../../hooks/useToast";
 
 const SavingsPanel = ({
   editedProfile,
@@ -11,8 +13,19 @@ const SavingsPanel = ({
 }: DashboardElement) => {
   const [modalMode, setMode] = useState<"deposit" | "withdraw" | null>(null);
 
-  const handleDeleteSaving = () => {
-    console.log("delete");
+  const { showToast } = useToast();
+
+  const handleDeleteSaving = async (savingId: string) => {
+    setEditedProfile(
+      (prev) =>
+        prev && {
+          ...prev,
+          savings: prev.savings.filter((s) => s.id !== savingId),
+        },
+    );
+
+    await deleteSaving(savingId);
+    showToast("Usunięto oszczędności.", "success");
   };
 
   const handleEditSaving = () => {
@@ -65,7 +78,7 @@ const SavingsPanel = ({
               <div key={saving.id} className="w-full">
                 <SavingElement
                   saving={saving}
-                  onDelete={handleDeleteSaving}
+                  onDelete={() => handleDeleteSaving(saving.id)}
                   onEdit={handleEditSaving}
                 />
               </div>

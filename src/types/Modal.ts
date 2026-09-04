@@ -4,6 +4,7 @@ import type { Income } from "./Income";
 import type { Expense } from "./Expense";
 import type { Color } from "./Color";
 import type { CompletedShift } from "./Shift";
+import type { Saving } from "./Savings";
 
 export interface ModalProps {
   children: ReactNode;
@@ -24,6 +25,14 @@ export interface DetailModalProps<T extends Expense | Income> {
   element: T;
   onDelete: (id: string) => void;
   onEdit: (element: T) => void;
+}
+
+export interface SavingDetailModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  saving: Saving;
+  onDelete: (id: string) => void;
+  onEdit: (saving: Saving) => void;
 }
 
 export interface ShiftDetailProps {

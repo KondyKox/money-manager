@@ -19,6 +19,11 @@ export const deleteShift = async (id: string) => {
   if (error) console.error("Error deleting shift:", error.message);
 };
 
+export const deleteSaving = async (id: string) => {
+  const { error } = await supabase.from("savings").delete().eq("id", id);
+  if (error) console.error("Error deleting saving:", error.message);
+};
+
 // UPDATING FUNCTIONS
 export const updateExpense = async (expense: Expense) => {
   const { error } = await supabase
