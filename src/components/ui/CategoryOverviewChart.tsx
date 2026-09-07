@@ -28,7 +28,7 @@ const CategoryOverviewChart = ({
   if (data.length === 0) return <p className="italic">Brak danych</p>;
 
   return (
-    <div className="w-full h-64 py-4">
+    <div className="w-full h-64 py-4 relative">
       <h3 className="text-center font-semibold mb-2">{title}</h3>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
@@ -39,9 +39,16 @@ const CategoryOverviewChart = ({
             textAnchor="end"
             tick={{ fontSize: 11 }}
           />
-          <YAxis />
+          <YAxis tick={{ fontSize: 14 }} />
           <Tooltip content={<ChartTooltip />} />
-          <Legend />
+          <Legend
+            wrapperStyle={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              fontSize: 12,
+            }}
+          />
           {profiles.map((profile, i) => (
             <Bar
               key={profile.id}

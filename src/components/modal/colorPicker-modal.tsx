@@ -22,7 +22,7 @@ const ColorPicker = ({ isOpen, onClose, onChangeColor }: ColorPickerProps) => {
         Jaki kolor wariacie?
       </h2>
 
-      <div className="flex justify-center items-stretch gap-2 flex-wrap py-4 overflow-y-auto max-h-75 md:max-h-50">
+      <div className="flex justify-center items-stretch gap-2 flex-wrap py-4 mt-4 overflow-y-auto max-h-96 md:max-h-50">
         {BG_PALETTE.map((color, index) => (
           <div
             key={color.name}

@@ -48,7 +48,7 @@ const SavingsPanel = ({
     0,
   );
 
-  const sortedSavings = editedProfile.savings.sort((a, b) =>
+  const sortedSavings = [...editedProfile.savings].sort((a, b) =>
     b.date.localeCompare(a.date),
   );
 
@@ -81,7 +81,7 @@ const SavingsPanel = ({
           </button>
         </div>
 
-        <div className="py-4 flex flex-col justify-center items-center gap-2">
+        <div className="panelElements">
           {!sortedSavings || sortedSavings.length === 0 ? (
             <span className="text-center">Brak oszczędności</span>
           ) : (

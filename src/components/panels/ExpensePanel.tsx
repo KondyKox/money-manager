@@ -25,7 +25,7 @@ const ExpensePanel = ({
   const { showToast } = useToast();
 
   // expenses that we use here
-  const filteredExpenses = editedProfile.expenses
+  const filteredExpenses = [...editedProfile.expenses]
     .filter((expense) => {
       const matchesMonth = expense.date.startsWith(selectedMonth);
       const matchesCategory =
@@ -144,7 +144,7 @@ const ExpensePanel = ({
           </span>
         </div>
 
-        <div className="flex flex-col justify-center items-center gap-2 mt-4">
+        <div className="panelElements">
           {filteredExpenses.length === 0 ? (
             <span className="text-center">Brak wydatków</span>
           ) : (

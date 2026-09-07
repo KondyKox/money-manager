@@ -21,7 +21,9 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
     <nav
       className={`w-full px-4 py-3 flex items-center justify-between fixed z-40 ${bgColor} ${textColor}`}
     >
-      <span className="text-center font-bold text-lg">Wydatkonator</span>
+      <NavLink to={"/"} className="text-center font-bold text-lg">
+        Wydatkonator
+      </NavLink>
 
       {/* Desktop links */}
       <div className="hidden md:flex gap-6 items-center">

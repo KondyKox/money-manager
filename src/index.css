@@ -100,3 +100,7 @@ textarea {
 .error-message {
   @apply text-red-300 text-xs mt-1;
 }
+
+.panelElements {
+  @apply flex flex-col items-center gap-2 mt-4 max-h-64 overflow-y-auto;
+}

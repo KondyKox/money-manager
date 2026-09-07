@@ -52,9 +52,9 @@ const ProfilePicker = ({
         <div className="mt5">
           <Skeleton className="h-6 w-40 mx-auto mb-4" />
           <div className="border-t-2 py-4 flex justify-center items-stretch gap-2">
-            <Skeleton className="h-16 w-16 rounded-full" />
-            <Skeleton className="h-16 w-16 rounded-full" />
-            <Skeleton className="h-16 w-16 rounded-full" />
+            <Skeleton className="h-16 w-24 rounded-2xl" />
+            <Skeleton className="h-16 w-24 rounded-2xl" />
+            <Skeleton className="h-16 w-24 rounded-2xl" />
           </div>
         </div>
         <div className="mt-8">
@@ -112,7 +112,7 @@ const ProfilePicker = ({
               </select>
             </div>
 
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-8 pb-4">
               <CategoryOverviewChart
                 profiles={profiles}
                 kind="expenses"
@@ -127,7 +127,7 @@ const ProfilePicker = ({
               />
               <SavingsOverviewChart
                 profiles={profiles}
-                title="Oszczędności na przestrzeni czasu"
+                title="Oszczędności w czasie"
               />
             </div>
           </CollapsablePanel>

@@ -27,7 +27,7 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
     .sort()
     .reverse();
 
-  const filteredIncomes = editedProfile.incomes.sort((a, b) =>
+  const filteredIncomes = [...editedProfile.incomes].sort((a, b) =>
     b.date.localeCompare(a.date),
   );
 
@@ -137,7 +137,7 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
           </span>
         </div>
 
-        <div className="flex flex-col justify-center items-center gap-2 mt-4">
+        <div className="panelElements">
           {filteredIncomes.length === 0 ? (
             <span className="text-center">Brak przychodów</span>
           ) : (
