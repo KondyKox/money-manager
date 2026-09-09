@@ -38,6 +38,10 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
     0,
   );
 
+  const monthlySavings = editedProfile.savings
+    .filter((s) => s.date.startsWith(selectedMonth))
+    .reduce((sum, saving) => sum + saving.amount, 0);
+
   // ---------------------------------------------------
   const handleDeleteIncome = async (id: string) => {
     setEditedProfile((prev) =>
@@ -134,9 +138,14 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
             </select>
           </div>
 
-          <span className="text-green-600 totalMoney">
-            +{totalIncome.toFixed(2)}zł
-          </span>
+          <div className="flex flex-col text-center">
+            <span className="text-green-600 totalMoney">
+              +{(totalIncome - monthlySavings).toFixed(2)}zł
+            </span>
+            <span className="text-green-600 text-sm font-mono">
+              (+{monthlySavings.toFixed(2)}zł)
+            </span>
+          </div>
         </div>
 
         <div className="panelElements">
