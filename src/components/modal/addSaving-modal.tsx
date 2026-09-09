@@ -70,6 +70,7 @@ const AddSavingModal = ({
       id: crypto.randomUUID(),
       amount: amount!,
       date: newSaving.date!,
+      createdAt: new Date().toISOString(),
     };
 
     const updatedProfile: Profile = {

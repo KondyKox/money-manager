@@ -46,6 +46,7 @@ const AddExpenseModal = ({
       amount: newExpense.amount!,
       category: newExpense.category!,
       note: newExpense.note,
+      createdAt: new Date().toISOString(),
     };
 
     const updatedProfile: Profile = {

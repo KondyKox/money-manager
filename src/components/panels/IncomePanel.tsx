@@ -139,10 +139,16 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
           </div>
 
           <div className="flex flex-col text-center">
-            <span className="text-green-600 totalMoney">
+            <span
+              title="Przychód bez oszczędności"
+              className="text-green-600 totalMoney"
+            >
               +{(totalIncome - monthlySavings).toFixed(2)}zł
             </span>
-            <span className="text-green-600 text-sm font-mono">
+            <span
+              title="Miesięczne oszczędności"
+              className="text-green-600 text-sm font-mono"
+            >
               (+{monthlySavings.toFixed(2)}zł)
             </span>
           </div>

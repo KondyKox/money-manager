@@ -52,6 +52,7 @@ const AddIncomeModal = ({
       amount: newIncome.amount!,
       category: newIncome.category!,
       note: newIncome.note,
+      createdAt: new Date().toISOString(),
     };
 
     const updatedProfile: Profile = {
