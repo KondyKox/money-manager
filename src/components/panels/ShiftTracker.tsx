@@ -18,9 +18,9 @@ const ShiftTracker = ({
   );
   const { showToast } = useToast();
 
-  const filteredShifts = editedProfile.completedShifts.filter((shift) =>
-    shift.clockIn.startsWith(selectedMonth),
-  );
+  const filteredShifts = editedProfile.completedShifts
+  .filter((shift) => shift.clockIn.startsWith(selectedMonth))
+  .sort((a, b) => b.clockIn.localeCompare(a.clockIn));
 
   const availableMonths = Array.from(
     new Set(
