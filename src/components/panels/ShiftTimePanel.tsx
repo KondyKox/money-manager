@@ -66,7 +66,7 @@ const ShiftTimePanel = ({
     if (!editedProfile.activeShift) return;
 
     const newCompletedShift: CompletedShift = {
-      id: crypto.randomUUID(),
+      id: editedProfile.activeShift.id,
       clockIn: editedProfile.activeShift.clockIn,
       clockOut: editedProfile.activeShift.clockOut!,
       rate: editedProfile.activeShift.rate,
