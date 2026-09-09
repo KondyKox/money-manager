@@ -48,9 +48,11 @@ const SavingsPanel = ({
     0,
   );
 
-  const sortedSavings = [...editedProfile.savings].sort((a, b) =>
-    b.date.localeCompare(a.date),
-  );
+  const sortedSavings = [...editedProfile.savings].sort((a, b) => {
+    const dateCompare = b.date.localeCompare(a.date);
+    if (dateCompare !== 0) return dateCompare;
+    return b.createdAt.localeCompare(a.createdAt);
+  });
 
   return (
     <>

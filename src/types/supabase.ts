@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           amount: number
           category: Database["public"]["Enums"]["expenses_category"]
+          created_at: string
           date: string
           id: string
           note: string | null
@@ -26,6 +27,7 @@ export type Database = {
         Insert: {
           amount: number
           category: Database["public"]["Enums"]["expenses_category"]
+          created_at?: string
           date: string
           id?: string
           note?: string | null
@@ -34,6 +36,7 @@ export type Database = {
         Update: {
           amount?: number
           category?: Database["public"]["Enums"]["expenses_category"]
+          created_at?: string
           date?: string
           id?: string
           note?: string | null
@@ -53,6 +56,7 @@ export type Database = {
         Row: {
           amount: number
           category: Database["public"]["Enums"]["income_category"]
+          created_at: string
           date: string
           id: string
           note: string | null
@@ -61,6 +65,7 @@ export type Database = {
         Insert: {
           amount: number
           category: Database["public"]["Enums"]["income_category"]
+          created_at?: string
           date: string
           id?: string
           note?: string | null
@@ -69,6 +74,7 @@ export type Database = {
         Update: {
           amount?: number
           category?: Database["public"]["Enums"]["income_category"]
+          created_at?: string
           date?: string
           id?: string
           note?: string | null
@@ -105,18 +111,21 @@ export type Database = {
       savings: {
         Row: {
           amount: number
+          created_at: string
           date: string
           id: string
           profile_id: string
         }
         Insert: {
           amount: number
+          created_at?: string
           date?: string
           id?: string
           profile_id: string
         }
         Update: {
           amount?: number
+          created_at?: string
           date?: string
           id?: string
           profile_id?: string

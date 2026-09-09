@@ -7,5 +7,6 @@ create table
         amount numeric not null,
         category income_category not null,
         date timestamp not null,
-        note text
+        note text,
+        created_at timestamptz not null default now();
     );

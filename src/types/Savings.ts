@@ -2,6 +2,7 @@ export interface Saving {
   id: string;
   amount: number;
   date: string;
+  createdAt: string;
 }
 
 export interface SavingElementProps {

@@ -7,6 +7,7 @@ export interface Expense {
   amount: number;
   category: ExpenseCategory;
   note?: string;
+  createdAt: string;
 }
 
 export interface ExpenseElementProps {

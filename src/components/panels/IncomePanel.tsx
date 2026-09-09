@@ -27,9 +27,11 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
     .sort()
     .reverse();
 
-  const filteredIncomes = [...editedProfile.incomes].sort((a, b) =>
-    b.date.localeCompare(a.date),
-  );
+  const filteredIncomes = [...editedProfile.incomes].sort((a, b) => {
+    const dateCompare = b.date.localeCompare(a.date);
+    if (dateCompare !== 0) return dateCompare;
+    return b.createdAt.localeCompare(a.createdAt);
+  });
 
   const totalIncome = filteredIncomes.reduce(
     (sum, income) => sum + income.amount,

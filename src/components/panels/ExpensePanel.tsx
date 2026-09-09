@@ -32,7 +32,11 @@ const ExpensePanel = ({
         selectedCategory === null || expense.category === selectedCategory;
       return matchesMonth && matchesCategory;
     })
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort((a, b) => {
+      const dateCompare = b.date.localeCompare(a.date);
+      if (dateCompare !== 0) return dateCompare;
+      return b.createdAt.localeCompare(a.createdAt);
+    });
 
   // total money spent by month
   const totalSpent = filteredExpenses.reduce(

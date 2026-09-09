@@ -7,6 +7,7 @@ export interface Income {
   amount: number;
   category: IncomeCategory;
   note?: string;
+  createdAt: string;
 }
 
 export interface IncomeElementProps {

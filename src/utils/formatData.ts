@@ -27,6 +27,7 @@ export const toExpense = (
   amount: e.amount,
   category: e.category,
   note: e.note ?? undefined,
+  createdAt: e.created_at,
 });
 
 export const toIncome = (
@@ -38,6 +39,7 @@ export const toIncome = (
   amount: i.amount,
   category: i.category,
   note: i.note ?? undefined,
+  createdAt: i.created_at,
 });
 
 export const toSaving = (
@@ -46,4 +48,5 @@ export const toSaving = (
   id: s.id,
   amount: s.amount,
   date: s.date,
+  createdAt: s.created_at,
 });
