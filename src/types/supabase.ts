@@ -185,11 +185,13 @@ export type Database = {
         | "Mieszkanie"
         | "Transport"
         | "Subskrypcje"
+        | "Gry"
+        | "Elektronika"
         | "Higiena"
         | "Randeczki"
         | "Inne"
         | "Opłaty"
-      income_category: "Praca" | "Prezenty" | "Inne"
+      income_category: "Praca" | "Prezenty" | "Hazard" | "Inne"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -322,12 +324,14 @@ export const Constants = {
         "Mieszkanie",
         "Transport",
         "Subskrypcje",
+        "Gry",
+        "Elektronika",
         "Higiena",
         "Randeczki",
         "Inne",
         "Opłaty",
       ],
-      income_category: ["Praca", "Prezenty", "Inne"],
+      income_category: ["Praca", "Prezenty", "Hazard", "Inne"],
     },
   },
 } as const
