@@ -25,7 +25,7 @@ const ShiftElement = ({ shift, onDelete, onEdit }: ShiftElementProps) => {
     <>
       <div
         key={shift.id}
-        className="flex flex-col md:grid md:grid-cols-5 md:gap-2 md:items-center border-b md:border-none py-2 text-sm hover:bg-gray-400 transition-colors duration-150 px-2 rounded-lg cursor-pointer"
+        className="flex flex-col md:grid md:grid-cols-5 md:gap-2 md:items-center py-2 text-sm hover:bg-gray-400 transition-colors duration-150 px-2 rounded-lg cursor-pointer"
         onClick={() => setIsModalOpen(true)}
       >
         {/* Row 1 on mobile: date + pay */}
