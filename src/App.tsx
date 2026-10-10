@@ -11,6 +11,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Navbar from "./components/ui/Navbar";
 import ColorPicker from "./components/modal/colorPicker-modal";
 import Home from "./pages/Home";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
@@ -30,50 +31,54 @@ function App() {
 
   return (
     <BrowserRouter>
-      <ToastProvider>
-        <Navbar
-          onOpenColors={() => setShowColorPicker(true)}
-          bgColor={bgClass}
-          textColor={textClass}
-        />
-        <main
-          className={`flex justify-start items-center flex-col relative min-h-screen h-full pt-20 pb-5 md:pb-20 ${bgClass} ${textClass}`}
-        >
-          <Routes>
-            <Route
-              path="/"
-              element={<Home headerColor={headerClass} textColor={textClass} />}
-            />
-            <Route
-              path="/profiles"
-              element={
-                <ProfilePicker setSelectedProfileId={setSelectedProfileId} />
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                selectedProfileId ? (
-                  <Dashboard profileId={selectedProfileId} />
-                ) : (
-                  <Navigate to="/profiles" replace />
-                )
-              }
-            />
-          </Routes>
-        </main>
-
-        {showColorPicker && (
-          <ColorPicker
-            isOpen={showColorPicker}
-            onClose={() => setShowColorPicker(false)}
-            onChangeColor={handleChangeColor}
+      <AuthProvider>
+        <ToastProvider>
+          <Navbar
+            onOpenColors={() => setShowColorPicker(true)}
+            bgColor={bgClass}
+            textColor={textClass}
           />
-        )}
+          <main
+            className={`flex justify-start items-center flex-col relative min-h-screen h-full pt-20 pb-5 md:pb-20 ${bgClass} ${textClass}`}
+          >
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Home headerColor={headerClass} textColor={textClass} />
+                }
+              />
+              <Route
+                path="/profiles"
+                element={
+                  <ProfilePicker setSelectedProfileId={setSelectedProfileId} />
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  selectedProfileId ? (
+                    <Dashboard profileId={selectedProfileId} />
+                  ) : (
+                    <Navigate to="/profiles" replace />
+                  )
+                }
+              />
+            </Routes>
+          </main>
 
-        <ToastContainer />
-        <Analytics />
-      </ToastProvider>
+          {showColorPicker && (
+            <ColorPicker
+              isOpen={showColorPicker}
+              onClose={() => setShowColorPicker(false)}
+              onChangeColor={handleChangeColor}
+            />
+          )}
+
+          <ToastContainer />
+          <Analytics />
+        </ToastProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
