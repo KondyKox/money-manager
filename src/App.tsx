@@ -12,6 +12,7 @@ import Navbar from "./components/ui/Navbar";
 import ColorPicker from "./components/modal/colorPicker-modal";
 import Home from "./pages/Home";
 import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
@@ -48,22 +49,26 @@ function App() {
                   <Home headerColor={headerClass} textColor={textClass} />
                 }
               />
-              <Route
-                path="/profiles"
-                element={
-                  <ProfilePicker setSelectedProfileId={setSelectedProfileId} />
-                }
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  selectedProfileId ? (
-                    <Dashboard profileId={selectedProfileId} />
-                  ) : (
-                    <Navigate to="/profiles" replace />
-                  )
-                }
-              />
+              <Route element={<ProtectedRoute />}>
+                <Route
+                  path="/profiles"
+                  element={
+                    <ProfilePicker
+                      setSelectedProfileId={setSelectedProfileId}
+                    />
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                    selectedProfileId ? (
+                      <Dashboard profileId={selectedProfileId} />
+                    ) : (
+                      <Navigate to="/profiles" replace />
+                    )
+                  }
+                />
+              </Route>
             </Routes>
           </main>
 
