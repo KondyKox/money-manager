@@ -13,6 +13,7 @@ import ColorPicker from "./components/modal/colorPicker-modal";
 import Home from "./pages/Home";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
@@ -49,6 +50,16 @@ function App() {
                   <Home headerColor={headerClass} textColor={textClass} />
                 }
               />
+              <Route
+                path="/login"
+                element={<AuthPage key="login" mode="login" />}
+              />{" "}
+              {/* Login */}
+              <Route
+                path="/register"
+                element={<AuthPage key="register" mode="register" />}
+              />{" "}
+              {/* Register */}
               <Route element={<ProtectedRoute />}>
                 <Route
                   path="/profiles"
