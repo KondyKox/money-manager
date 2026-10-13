@@ -6,12 +6,14 @@ import { useToast } from "../hooks/useToast";
 
 const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { user, signIn, signUp } = useAuth();
+  const { user, loading, signIn, signUp } = useAuth();
   const { showToast } = useToast();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [repPassword, setRepPassword] = useState<string>("");
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
+  if (loading) return null;
   if (user) return <Navigate to={"/"} replace />;
 
   const checkErrors = () => {
@@ -25,27 +27,36 @@ const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
       return true;
     }
 
-    if (repPassword)
-      if (password !== repPassword) {
-        showToast("Hasła się nie zgadzają.", "error");
-        return;
-      }
+    if (mode === "register" && password !== repPassword) {
+      showToast("Hasła się nie zgadzają.", "error");
+      return true;
+    }
 
     return false;
   };
 
-  const handleLogin = () => {
-    if (checkErrors()) return;
-  };
-
-  const handleRegister = () => {
-    if (checkErrors()) return;
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (checkErrors()) return;
 
-    mode === "login" ? handleLogin() : handleRegister();
+    setSubmitting(true);
+    try {
+      if (mode === "login") {
+        await signIn(email.trim(), password);
+        showToast("Zalogowano się pomyślnie.", "success");
+      } else {
+        await signUp(email.trim(), password);
+        showToast("Utworzono konto.", "success");
+      }
+    } catch (error) {
+      console.error("Auth error:", error);
+      showToast(
+        error instanceof Error ? error.message : "Coś poszło nie tak.",
+        "error",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -89,12 +100,9 @@ const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
                 type="button"
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-900 cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Ukryj hasło" : "Pokaż hasło"}
               >
-                {showPassword ? (
-                  <EyeClosed size={16} aria-label="Ukryj hasło" />
-                ) : (
-                  <Eye size={16} aria-label="Pokaż hasło" />
-                )}
+                {showPassword ? <EyeClosed size={16} /> : <Eye size={16} />}
               </button>
             </div>
           </div>
@@ -117,12 +125,9 @@ const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
                   type="button"
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-900 cursor-pointer"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Ukryj hasło" : "Pokaż hasło"}
                 >
-                  {showPassword ? (
-                    <EyeClosed size={16} aria-label="Ukryj hasło" />
-                  ) : (
-                    <Eye size={16} aria-label="Pokaż hasło" />
-                  )}
+                  {showPassword ? <EyeClosed size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
@@ -139,8 +144,20 @@ const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
           </Link>
         </p>
 
-        <button type="submit" className="btn-secondary">
-          {mode === "login" ? "Zaloguj się" : "Stwórz konto"}
+        <button disabled={submitting} type="submit" className="btn-secondary">
+          {submitting
+            ? Array.from("...").map((char, i) => (
+                <span
+                  key={i}
+                  style={{ animationDelay: `${i * 0.2}s` }}
+                  className="animate-letter-bounce inline-block motion-reduce:animate-none font-mono font-bold"
+                >
+                  {char}
+                </span>
+              ))
+            : mode === "login"
+              ? "Zaloguj się"
+              : "Stwórz konto"}
         </button>
       </form>
     </section>

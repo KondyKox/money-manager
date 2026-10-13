@@ -1,6 +1,8 @@
-import { Menu, Palette, X } from "lucide-react";
+import { LogOut, Menu, Palette, X } from "lucide-react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { useToast } from "../../hooks/useToast";
 
 interface NavbarProps {
   onOpenColors: () => void;
@@ -8,14 +10,41 @@ interface NavbarProps {
   textColor: string;
 }
 
-const links = [
-  { to: "/", label: "Strona główna" },
-  { to: "/profiles", label: "Profile & Statystyki" },
-  { to: "/dashboard", label: "Panel główny" },
+type NavItem = {
+  to: string;
+  label: string;
+  visibility: "always" | "guest" | "auth";
+};
+
+const links: NavItem[] = [
+  { to: "/", label: "Strona główna", visibility: "always" },
+  { to: "/login", label: "Logowanie", visibility: "guest" },
+  { to: "/profiles", label: "Profile & Statystyki", visibility: "auth" },
+  { to: "/dashboard", label: "Panel główny", visibility: "auth" },
 ];
 
 const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { user, loading, signOut } = useAuth();
+  const { showToast } = useToast();
+
+  const visibleLinks = links.filter((link) => {
+    if (link.visibility === "always") return true;
+    if (loading) return false; // don't guess while the session loads
+    return link.visibility === "auth" ? !!user : !user;
+  });
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      showToast("Wylogowano.", "success");
+    } catch (error) {
+      showToast(
+        error instanceof Error ? error.message : "Nie udało się wylogować.",
+        "error",
+      );
+    }
+  };
 
   return (
     <nav
@@ -27,7 +56,7 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
 
       {/* Desktop links */}
       <div className="hidden md:flex gap-6 items-center">
-        {links.map((link) => (
+        {visibleLinks.map((link) => (
           <NavLink
             key={link.to}
             to={link.to}
@@ -45,6 +74,16 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
           <Palette size={20} className="iconBtn hover:text-pink-400" />
           Zmiana koloru
         </button>
+
+        {user && (
+          <button
+            onClick={handleSignOut}
+            className="nav-link flex gap-2 justify-center items-center"
+          >
+            <LogOut size={20} className="iconBtn hover:text-red-400" />
+            Wyloguj
+          </button>
+        )}
       </div>
 
       {/* Hamburger btn */}
@@ -57,7 +96,7 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
         <div
           className={`fixed inset-0 top-10 flex flex-col items-center justify-center gap-3 md:hidden ${bgColor} ${textColor}`}
         >
-          {links.map((link) => (
+          {visibleLinks.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
@@ -79,6 +118,16 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
             <Palette size={20} className="iconBtn hover:text-pink-400" />
             Zmiana koloru
           </button>
+
+          {user && (
+            <button
+              onClick={handleSignOut}
+              className="nav-link flex gap-2 justify-center items-center"
+            >
+              <LogOut size={20} className="iconBtn hover:text-red-400" />
+              Wyloguj
+            </button>
+          )}
         </div>
       )}
     </nav>
