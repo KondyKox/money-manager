@@ -93,6 +93,10 @@ const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Twoje sekretne hasło"
                 required
+                autoComplete={
+                  mode === "login" ? "current-password" : "new-password"
+                }
+                minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
