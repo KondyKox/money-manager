@@ -44,7 +44,9 @@ h6 {
 }
 
 .profile-icon {
-  @apply rounded-xl p-4 text-center flex justify-center items-center transition-all duration-150 hover:border-green-400 bg-white/40 hover:bg-white/30 shadow-md hover:shadow-green-400 cursor-pointer active:scale-90 active:border-green-600 w-full font-bold;
+  @apply rounded-xl p-4 text-center flex justify-center items-center transition-all duration-150 hover:border-green-400 bg-white/40
+    hover:bg-white/30 shadow-md hover:shadow-green-400 cursor-pointer active:scale-90 active:border-green-600 font-bold 
+      last:odd:col-span-2 last:odd:justify-self-center last:odd:w-[calc(50%-0.25rem)];
 }
 
 .input-group {

@@ -63,6 +63,7 @@ const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
     <section className="flex justify-center items-center w-full p-4">
       <form
         onSubmit={handleSubmit}
+        noValidate
         className="px-8 lg:px-12 py-12 rounded-2xl shadow-xl shadow-white flex flex-col justify-center items-stretch gap-4 w-full lg:w-1/3"
       >
         <h3 className="text-center font-bold text-xl md:text-2xl border-b-2 pb-2">
