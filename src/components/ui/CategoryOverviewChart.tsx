@@ -10,7 +10,14 @@ import {
 import type { Profile } from "../../types/Profile";
 import { buildCategoryChartData } from "../../utils/buildCategoryChartData";
 
-const PROFILE_COLORS = ["#f97316", "#3b82f6", "#22c55e", "#ec4899"];
+const PROFILE_COLORS = [
+  "#f97316", // orange
+  "#3b82f6", // blue
+  "#22c55e", // green
+  "#ec4899", // pink
+  "#a855f7", // purple
+  "#eab308", // yellow
+];
 
 const CategoryOverviewChart = ({
   profiles,
