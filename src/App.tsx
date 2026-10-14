@@ -73,7 +73,10 @@ function App() {
                   path="/dashboard"
                   element={
                     selectedProfileId ? (
-                      <Dashboard profileId={selectedProfileId} />
+                      <Dashboard
+                        profileId={selectedProfileId}
+                        onDeleted={() => setSelectedProfileId(null)}
+                      />
                     ) : (
                       <Navigate to="/profiles" replace />
                     )

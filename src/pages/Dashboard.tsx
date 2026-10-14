@@ -3,26 +3,55 @@ import type { Profile } from "../types/Profile";
 import ShiftTracker from "../components/panels/ShiftTracker";
 import ExpensePanel from "../components/panels/ExpensePanel";
 import IncomePanel from "../components/panels/IncomePanel";
-import { CircleX, Edit, Save } from "lucide-react";
+import { CircleX, Edit, Save, Trash2 } from "lucide-react";
 import { saveProfileInfo } from "../utils/saveProfile";
 import { getProfile } from "../utils/getProfiles";
 import Skeleton from "../components/ui/Skeleton";
 import SavingsPanel from "../components/panels/SavingsPanel";
+import { useToast } from "../hooks/useToast";
+import { deleteProfile } from "../utils/deleteProfile";
+import { useNavigate } from "react-router-dom";
+import { cleanName } from "../utils/cleanName";
+import DeleteProfileModal from "../components/modal/deleteProfile-modal";
 
-const Dashboard = ({ profileId }: { profileId: string }) => {
+const Dashboard = ({
+  profileId,
+  onDeleted,
+}: {
+  profileId: string;
+  onDeleted: () => void;
+}) => {
   const [editedProfile, setEditedProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [edited, setEdited] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
+  const [saving, setSaving] = useState<boolean>(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
+  const [deleting, setDeleting] = useState<boolean>(false);
   const editInputRef = useRef<HTMLInputElement>(null);
+  const { showToast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    let cancelled = false;
+
     const loadProfile = async () => {
-      const profile = await getProfile(profileId);
-      setEditedProfile(profile);
-      setIsLoading(false);
+      setIsLoading(true);
+      try {
+        const profile = await getProfile(profileId);
+        if (!cancelled) setEditedProfile(profile ?? null);
+      } catch (error) {
+        console.error("Error loading profile:", error);
+        if (!cancelled) setEditedProfile(null);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
     };
+
     loadProfile();
+    return () => {
+      cancelled = true;
+    };
   }, [profileId]);
 
   useEffect(() => {
@@ -40,20 +69,54 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
   };
 
   const handleSaveProfile = async () => {
-    if (!newName || !editedProfile) return;
+    if (!editedProfile || saving) return;
 
-    const updatedProfile: Profile = {
-      ...editedProfile,
-      name: newName,
-    };
+    const name = cleanName(newName);
+    if (!name) {
+      showToast("Nazwa profilu nie może być pusta.", "error");
+      return;
+    }
+    if (name === editedProfile.name) {
+      setEdited(false);
+      return;
+    }
 
-    setEditedProfile(updatedProfile);
-    setEdited(false);
-    await saveProfileInfo(
-      updatedProfile.id,
-      updatedProfile.name,
-      updatedProfile.hourlyRate,
-    );
+    setSaving(true);
+    try {
+      await saveProfileInfo(editedProfile.id, name, editedProfile.hourlyRate);
+      setEditedProfile((prev) => (prev ? { ...prev, name } : prev));
+      setEdited(false);
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      showToast(
+        error instanceof Error
+          ? error.message
+          : "Nie udało się zapisać profilu.",
+        "error",
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteProfile = async () => {
+    if (!editedProfile || deleting) return;
+
+    setDeleting(true);
+    try {
+      await deleteProfile(editedProfile.id);
+      showToast(`Usunięto profil ${editedProfile.name}.`, "success");
+      onDeleted();
+      navigate("/profiles", { replace: true });
+    } catch (error) {
+      console.error("Error deleting profile:", error);
+      showToast(
+        error instanceof Error ? error.message : "Błąd przy usuwaniu profilu.",
+        "error",
+      );
+    } finally {
+      setDeleting(false);
+    }
   };
 
   if (isLoading) {
@@ -97,6 +160,11 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
           </h1>
           {!edited ? (
             <>
+              <Trash2
+                size={24}
+                className="iconBtn hover:text-red-500"
+                onClick={() => setIsDeleteOpen(true)}
+              />
               <Edit
                 size={24}
                 className="iconBtn hover:text-yellow-400"
@@ -137,6 +205,16 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
           />
         </div>
       </div>
+
+      {isDeleteOpen && (
+        <DeleteProfileModal
+          isOpen={isDeleteOpen}
+          onClose={() => setIsDeleteOpen(false)}
+          onConfirm={handleDeleteProfile}
+          profileName={editedProfile.name}
+          deleting={deleting}
+        />
+      )}
     </>
   );
 };

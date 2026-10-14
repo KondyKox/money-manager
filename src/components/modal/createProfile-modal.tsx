@@ -3,6 +3,7 @@ import Modal from "./Modal";
 import { useToast } from "../../hooks/useToast";
 import { createProfile } from "../../utils/createProfile";
 import type { Profile } from "../../types/Profile";
+import { cleanName } from "../../utils/cleanName";
 
 interface CreateProfileModalProps {
   isOpen: boolean;
@@ -24,9 +25,9 @@ const CreateProfileModal = ({
 
   const handleCreateProfile = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const cleanName = profileName.trim().replace(/\s+/g, " ");
+    const name = cleanName(profileName);
 
-    if (!cleanName) {
+    if (!name) {
       showToast("Nazwa profilu nie może być pusta.", "error");
       return;
     }
@@ -41,8 +42,8 @@ const CreateProfileModal = ({
 
     setSubmitting(true);
     try {
-      const newProfile = await createProfile(cleanName, finalRate);
-      showToast(`Utworzono profil ${cleanName}`, "success");
+      const newProfile = await createProfile(name, finalRate);
+      showToast(`Utworzono profil ${name}`, "success");
       onCreate(newProfile);
     } catch (error) {
       showToast(
