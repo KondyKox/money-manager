@@ -1,24 +1,22 @@
 import { useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import ProfilePicker from "./pages/ProfilePicker";
-import Dashboard from "./pages/Dashboard";
 import ToastContainer from "./components/ui/ToastContainer";
 import { ToastProvider } from "./context/ToastContext";
 import { DEFAULT_BG_COLOR } from "./constants/bgPalette";
 import { changeColor, getColor } from "./utils/changeColors";
 import type { Color } from "./types/Color";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/ui/Navbar";
 import ColorPicker from "./components/modal/colorPicker-modal";
 import Home from "./pages/Home";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthPage from "./pages/AuthPage";
+import { ProfileProvider } from "./context/ProfileContext";
+import DashboardRoute from "./components/DashboardRoute";
 
 function App() {
-  const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
-    null,
-  );
   const [color, setColor] = useState<Color>(getColor() ?? DEFAULT_BG_COLOR);
   const [showColorPicker, setShowColorPicker] = useState<boolean>(false);
 
@@ -34,69 +32,52 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <ToastProvider>
-          <Navbar
-            onOpenColors={() => setShowColorPicker(true)}
-            bgColor={bgClass}
-            textColor={textClass}
-          />
-          <main
-            className={`flex justify-start items-center flex-col relative min-h-screen h-full pt-20 pb-5 md:pb-20 ${bgClass} ${textClass}`}
-          >
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <Home headerColor={headerClass} textColor={textClass} />
-                }
-              />
-              <Route
-                path="/login"
-                element={<AuthPage key="login" mode="login" />}
-              />{" "}
-              {/* Login */}
-              <Route
-                path="/register"
-                element={<AuthPage key="register" mode="register" />}
-              />{" "}
-              {/* Register */}
-              <Route element={<ProtectedRoute />}>
-                <Route
-                  path="/profiles"
-                  element={
-                    <ProfilePicker
-                      setSelectedProfileId={setSelectedProfileId}
-                    />
-                  }
-                />
-                <Route
-                  path="/dashboard"
-                  element={
-                    selectedProfileId ? (
-                      <Dashboard
-                        profileId={selectedProfileId}
-                        onDeleted={() => setSelectedProfileId(null)}
-                      />
-                    ) : (
-                      <Navigate to="/profiles" replace />
-                    )
-                  }
-                />
-              </Route>
-            </Routes>
-          </main>
-
-          {showColorPicker && (
-            <ColorPicker
-              isOpen={showColorPicker}
-              onClose={() => setShowColorPicker(false)}
-              onChangeColor={handleChangeColor}
+        <ProfileProvider>
+          <ToastProvider>
+            <Navbar
+              onOpenColors={() => setShowColorPicker(true)}
+              bgColor={bgClass}
+              textColor={textClass}
             />
-          )}
+            <main
+              className={`flex justify-start items-center flex-col relative min-h-screen h-full pt-20 pb-5 md:pb-20 ${bgClass} ${textClass}`}
+            >
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <Home headerColor={headerClass} textColor={textClass} />
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={<AuthPage key="login" mode="login" />}
+                />{" "}
+                {/* Login */}
+                <Route
+                  path="/register"
+                  element={<AuthPage key="register" mode="register" />}
+                />{" "}
+                {/* Register */}
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/profiles" element={<ProfilePicker />} />
+                  <Route path="/dashboard" element={<DashboardRoute />} />
+                </Route>
+              </Routes>
+            </main>
 
-          <ToastContainer />
-          <Analytics />
-        </ToastProvider>
+            {showColorPicker && (
+              <ColorPicker
+                isOpen={showColorPicker}
+                onClose={() => setShowColorPicker(false)}
+                onChangeColor={handleChangeColor}
+              />
+            )}
+
+            <ToastContainer />
+            <Analytics />
+          </ToastProvider>
+        </ProfileProvider>
       </AuthProvider>
     </BrowserRouter>
   );

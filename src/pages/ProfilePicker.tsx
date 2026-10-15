@@ -1,4 +1,4 @@
-import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import ProfileIcon from "../components/ui/ProfileIcon";
 import type { Profile } from "../types/Profile";
 import { getProfiles } from "../utils/getProfiles";
@@ -10,12 +10,9 @@ import Skeleton from "../components/ui/Skeleton";
 import SavingsOverviewChart from "../components/ui/SavingsOverviewChart";
 import CreateProfileModal from "../components/modal/createProfile-modal";
 import { MAX_PROFILES } from "../constants/maxProfiles";
+import { useProfile } from "../hooks/useProfile";
 
-const ProfilePicker = ({
-  setSelectedProfileId,
-}: {
-  setSelectedProfileId: Dispatch<SetStateAction<string | null>>;
-}) => {
+const ProfilePicker = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -23,11 +20,12 @@ const ProfilePicker = ({
     new Date().toISOString().slice(0, 7),
   );
   const navigate = useNavigate();
+  const { selectProfile } = useProfile();
 
   const canAddProfile = profiles.length < MAX_PROFILES;
 
   const handleProfilesSelect = (profileId: string) => {
-    setSelectedProfileId(profileId);
+    selectProfile(profileId);
     navigate("/dashboard");
   };
 

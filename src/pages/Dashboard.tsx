@@ -13,14 +13,9 @@ import { deleteProfile } from "../utils/deleteProfile";
 import { useNavigate } from "react-router-dom";
 import { cleanName } from "../utils/cleanName";
 import DeleteProfileModal from "../components/modal/deleteProfile-modal";
+import { useProfile } from "../hooks/useProfile";
 
-const Dashboard = ({
-  profileId,
-  onDeleted,
-}: {
-  profileId: string;
-  onDeleted: () => void;
-}) => {
+const Dashboard = ({ profileId }: { profileId: string }) => {
   const [editedProfile, setEditedProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [edited, setEdited] = useState<boolean>(false);
@@ -31,6 +26,7 @@ const Dashboard = ({
   const editInputRef = useRef<HTMLInputElement>(null);
   const { showToast } = useToast();
   const navigate = useNavigate();
+  const { clearProfile } = useProfile();
 
   useEffect(() => {
     let cancelled = false;
@@ -106,7 +102,7 @@ const Dashboard = ({
     try {
       await deleteProfile(editedProfile.id);
       showToast(`Usunięto profil ${editedProfile.name}.`, "success");
-      onDeleted();
+      clearProfile();
       navigate("/profiles", { replace: true });
     } catch (error) {
       console.error("Error deleting profile:", error);
