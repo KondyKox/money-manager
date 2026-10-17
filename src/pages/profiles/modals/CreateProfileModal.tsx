@@ -4,6 +4,7 @@ import { useToast } from "../../../hooks/useToast";
 import { createProfile } from "../../../services/profiles/createProfile";
 import type { Profile } from "../../../types/Profile";
 import { cleanName } from "../../../utils/cleanName";
+import LoadingDots from "../../../components/ui/LoadingDots";
 
 interface CreateProfileModalProps {
   isOpen: boolean;
@@ -103,17 +104,7 @@ const CreateProfileModal = ({
         </div>
 
         <button className="btn-primary" type="submit" disabled={submitting}>
-          {submitting
-            ? Array.from("...").map((char, i) => (
-                <span
-                  key={i}
-                  style={{ animationDelay: `${i * 0.1}s` }}
-                  className="inline-block animate-letter-bounce motion-reduce:animate-none font-bold font-mono"
-                >
-                  {char}
-                </span>
-              ))
-            : "Dodaj profil"}
+          {submitting ? <LoadingDots /> : "Dodaj profil"}
         </button>
       </form>
     </Modal>
