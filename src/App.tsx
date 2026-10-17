@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
-import ProfilePicker from "./pages/ProfilePicker";
+import ProfilePicker from "./pages/profiles/ProfilePicker";
 import ToastContainer from "./components/ui/ToastContainer";
 import { ToastProvider } from "./context/ToastContext";
 import { DEFAULT_BG_COLOR } from "./constants/bgPalette";
 import { changeColor, getColor } from "./utils/changeColors";
 import type { Color } from "./types/Color";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from "./components/ui/Navbar";
-import ColorPicker from "./components/modal/colorPicker-modal";
+import Navbar from "./components/layout/Navbar";
+import ColorPicker from "./components/modal/ColorPickerModal";
 import Home from "./pages/Home";
 import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import AuthPage from "./pages/AuthPage";
 import { ProfileProvider } from "./context/ProfileContext";
-import DashboardRoute from "./components/DashboardRoute";
-import Settings from "./pages/Settings";
+import DashboardRoute from "./routes/DashboardRoute";
+import Settings from "./pages/settings/Settings";
 
 function App() {
   const [color, setColor] = useState<Color>(getColor() ?? DEFAULT_BG_COLOR);
