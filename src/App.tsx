@@ -15,6 +15,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AuthPage from "./pages/AuthPage";
 import { ProfileProvider } from "./context/ProfileContext";
 import DashboardRoute from "./components/DashboardRoute";
+import Settings from "./pages/Settings";
 
 function App() {
   const [color, setColor] = useState<Color>(getColor() ?? DEFAULT_BG_COLOR);
@@ -52,16 +53,15 @@ function App() {
                 <Route
                   path="/login"
                   element={<AuthPage key="login" mode="login" />}
-                />{" "}
-                {/* Login */}
+                />
                 <Route
                   path="/register"
                   element={<AuthPage key="register" mode="register" />}
-                />{" "}
-                {/* Register */}
+                />
                 <Route element={<ProtectedRoute />}>
                   <Route path="/profiles" element={<ProfilePicker />} />
                   <Route path="/dashboard" element={<DashboardRoute />} />
+                  <Route path="/settings" element={<Settings />} />
                 </Route>
               </Routes>
             </main>

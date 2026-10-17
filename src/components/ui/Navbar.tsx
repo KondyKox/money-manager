@@ -21,6 +21,7 @@ const links: NavItem[] = [
   { to: "/login", label: "Logowanie", visibility: "guest" },
   { to: "/profiles", label: "Profile & Statystyki", visibility: "auth" },
   { to: "/dashboard", label: "Panel główny", visibility: "auth" },
+  { to: "/settings", label: "Ustawienia", visibility: "auth" },
 ];
 
 const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
