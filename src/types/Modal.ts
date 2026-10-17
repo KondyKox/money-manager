@@ -48,3 +48,10 @@ export interface ColorPickerProps {
   onClose: () => void;
   onChangeColor: (newColor: Color) => void;
 }
+
+export interface ConfirmModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  header: string;
+  onConfirm: (confirmPassword: string) => void;
+}
