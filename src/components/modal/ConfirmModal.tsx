@@ -1,18 +1,28 @@
 import { useState, type FormEvent } from "react";
 import type { ConfirmModalProps } from "../../types/Modal";
 import Modal from "./Modal";
+import PasswordInput from "../ui/PasswordInput";
+import SubmitingText from "../ui/SubmitingText";
 
 const ConfirmModal = ({
   isOpen,
   onClose,
   header,
+  confirmationText,
   onConfirm,
 }: ConfirmModalProps) => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [confirming, setConfirming] = useState<boolean>(false);
 
-  const handleConfirm = (e: FormEvent<HTMLFormElement>) => {
+  const handleConfirm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onConfirm(confirmPassword);
+
+    setConfirming(true);
+    try {
+      await onConfirm(confirmPassword);
+    } finally {
+      setConfirming(false);
+    }
   };
 
   return (
@@ -22,22 +32,17 @@ const ConfirmModal = ({
         className="flex flex-col justify-center items-stretch"
       >
         <h2 className="modal-header">{header}</h2>
-        <p className="text-center p-4">
-          Potwierdź wpisując swoje <b>hasło</b>.
-        </p>
-        <div className="input-group">
-          <label htmlFor="confirmPassword">Hasło</label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            placeholder="Wpisz hasło by potwierdzić"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" className="btn-secondary">
-          Potwierdź
+        <p className="text-center p-4">{confirmationText}</p>
+        <PasswordInput
+          id="confirmPassword"
+          label="Hasło"
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+          autoComplete="current-password"
+          placeholder="Wpisz (stare) hasło by potwierdzić"
+        />
+        <button disabled={confirming} type="submit" className="btn-secondary">
+          {confirming ? <SubmitingText /> : "Potwierdź"}
         </button>
       </form>
     </Modal>

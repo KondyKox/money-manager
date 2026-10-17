@@ -53,5 +53,6 @@ export interface ConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
   header: string;
-  onConfirm: (confirmPassword: string) => void;
+  confirmationText: string;
+  onConfirm: (confirmPassword: string) => void | Promise<void>;
 }

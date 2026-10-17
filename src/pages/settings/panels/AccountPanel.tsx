@@ -3,12 +3,22 @@ import { useAuth } from "../../../hooks/useAuth";
 import ConfirmModal from "../../../components/modal/ConfirmModal";
 import { useToast } from "../../../hooks/useToast";
 import { verifyPassword } from "../../../services/auth/verifyPassword";
-import { updateUserEmail } from "../../../services/auth/updateUser";
+import {
+  updateUserEmail,
+  updateUserPassword,
+} from "../../../services/auth/updateUser";
+import PasswordInput from "../../../components/ui/PasswordInput";
+import { MIN_PASSWORD_LENGHT } from "../../../constants/auth";
 
 const AccountPanel = () => {
-  const [edited, setEdited] = useState<boolean>(false);
+  const [emailEdited, setEmailEdited] = useState<boolean>(false);
+  const [passwordEdited, setPasswordEdited] = useState<boolean>(false);
   const [newEmail, setNewEmail] = useState<string>("");
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [repPassword, setRepPassword] = useState<string>("");
+  const [confirmAction, setConfirmAction] = useState<
+    "email" | "password" | null
+  >(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
   const { showToast } = useToast();
@@ -18,18 +28,37 @@ const AccountPanel = () => {
   }, [user]);
 
   useEffect(() => {
-    if (edited) {
+    if (emailEdited) {
       emailInputRef.current?.focus();
       emailInputRef.current?.select();
     }
-  }, [edited]);
+  }, [emailEdited]);
 
   const handleChangeEmailClick = () => {
-    if (!edited) {
-      setEdited(true);
+    if (!emailEdited) {
+      setEmailEdited(true);
       return;
     }
     handleCheckValidity();
+  };
+
+  const handleChangePasswordClick = () => {
+    if (!passwordEdited) {
+      setPasswordEdited(true);
+      return;
+    }
+
+    if (newPassword.length < MIN_PASSWORD_LENGHT) {
+      showToast("Hasło za krótkie", "error");
+      return;
+    }
+
+    if (newPassword !== repPassword) {
+      showToast("Hasła się nie zgadzają", "error");
+      return;
+    }
+
+    setConfirmAction("password");
   };
 
   const handleCheckValidity = () => {
@@ -41,14 +70,14 @@ const AccountPanel = () => {
     }
 
     if (newEmail.trim() === user.email) {
-      setEdited(false);
+      setEmailEdited(false);
       return;
     }
 
-    setIsConfirmModalOpen(true);
+    setConfirmAction("email");
   };
 
-  const handleConfirm = async (confirmPassword: string) => {
+  const handleEmailConfirm = async (confirmPassword: string) => {
     if (!user || !user.email) return;
 
     try {
@@ -59,8 +88,8 @@ const AccountPanel = () => {
         "Sprawdź skrzynkę, żeby potwierdzić zmianę adresu email.",
         "success",
       );
-      setIsConfirmModalOpen(false);
-      setEdited(false);
+      setConfirmAction(null);
+      setEmailEdited(false);
       setNewEmail(user.email);
     } catch (error) {
       showToast(
@@ -71,14 +100,36 @@ const AccountPanel = () => {
     }
   };
 
+  const handlePasswordConfirm = async (confirmPassword: string) => {
+    if (!user || !user.email) return;
+
+    try {
+      await verifyPassword(user.email, confirmPassword);
+      await updateUserPassword(newPassword);
+
+      showToast("Udało się zmienić hasło", "success");
+
+      setConfirmAction(null);
+      setPasswordEdited(false);
+      setNewPassword("");
+      setRepPassword("");
+    } catch (error) {
+      showToast(
+        error instanceof Error ? error.message : "Coś poszło nie tak.",
+        "error",
+      );
+      console.error("Error changing password:", error);
+    }
+  };
+
   if (!user) return null;
 
   return (
     <>
       <fieldset className="settings-panel">
         <legend>Konto</legend>
-        <div>
-          <div className="input-group">
+        <div className="flex flex-col gap-4">
+          <div className="input-group flex flex-col items-stretch">
             <label htmlFor="userEmail">Adres email</label>
             <input
               ref={emailInputRef}
@@ -87,31 +138,67 @@ const AccountPanel = () => {
               type="email"
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
-              disabled={!edited}
+              disabled={!emailEdited}
+              placeholder="Wpisz tutaj adres email"
             />
             <button
-              className="btn-primary mt-2 w-2/3 md:w-1/2"
+              className="btn-primary mt-4"
               onClick={handleChangeEmailClick}
             >
-              {edited ? "Zapisz email" : "Zmień adres email"}
+              {emailEdited ? "Zapisz email" : "Zmień adres email"}
             </button>
           </div>
-          <div className="input-group">
+
+          <div className="input-group flex flex-col items-stretch">
             <label htmlFor="userPassword">Hasło</label>
-            <input id="userPassword" name="userPassword" type="password" />
-            <button className="btn-primary mt-2 w-2/3 md:w-1/2">
-              Zmień hasło
-            </button>
+            {passwordEdited && (
+              <div className="flex flex-col justify-center items-center">
+                <PasswordInput
+                  id="userPassword"
+                  label="Nowe hasło"
+                  value={newPassword}
+                  onChange={setNewPassword}
+                  autoComplete="new-password"
+                  placeholder="Wpisz nowe hasło"
+                />
+                <PasswordInput
+                  id="userPassword"
+                  label="Powtórz hasło"
+                  value={repPassword}
+                  onChange={setRepPassword}
+                  autoComplete="new-password"
+                  placeholder="Powtórz nowe hasło"
+                />
+              </div>
+            )}
+            <div className="flex justify-center items-center gap-2">
+              <button
+                className="btn-secondary flex-1"
+                onClick={handleChangePasswordClick}
+              >
+                {passwordEdited ? "Zapisz hasło" : "Zmień hasło"}
+              </button>
+              <button className="btn-primary flex-1">Zapomniałem hasła</button>
+            </div>
           </div>
         </div>
       </fieldset>
 
-      {isConfirmModalOpen && (
+      {confirmAction && (
         <ConfirmModal
-          isOpen={isConfirmModalOpen}
-          onClose={() => setIsConfirmModalOpen(false)}
+          isOpen={confirmAction !== null}
+          onClose={() => setConfirmAction(null)}
           header="Zmiana adresu Email"
-          onConfirm={handleConfirm}
+          confirmationText={
+            confirmAction === "email"
+              ? "Potwierdź wpisując swoje hasło."
+              : "Potwierdź wpisując swoje stare hasło."
+          }
+          onConfirm={
+            confirmAction === "email"
+              ? handleEmailConfirm
+              : handlePasswordConfirm
+          }
         />
       )}
     </>
