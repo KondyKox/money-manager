@@ -18,9 +18,7 @@ const ColorPicker = ({ isOpen, onClose, onChangeColor }: ColorPickerProps) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <h2 className="text-center font-bold text-xl border-b-2 pb-4">
-        Jaki kolor wariacie?
-      </h2>
+      <h2 className="modal-header">Jaki kolor wariacie?</h2>
 
       <div className="flex justify-center items-stretch gap-2 flex-wrap py-4 mt-4 overflow-y-auto max-h-96 md:max-h-50">
         {BG_PALETTE.map((color, index) => (

@@ -44,7 +44,7 @@ const ShiftDetailModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col justify-center items-center gap-6">
-        <h2 className="font-bold text-2xl border-b-2 py-2">
+        <h2 className="modal-header">
           {edited ? "Edycja zmiany" : "Edycja / Usuwanie"}
         </h2>
 

@@ -92,7 +92,7 @@ const AddSavingModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex justify-center items-center border-b-2 py-2">
-        <h2 className="text-2xl font-bold">
+        <h2 className="modal-header">
           {mode === "deposit" ? "Wpłać środki" : "Wypłać środki"}
         </h2>
       </div>

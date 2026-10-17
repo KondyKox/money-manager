@@ -53,7 +53,7 @@ const DetailModal = <T extends Income | Expense>({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col justify-center items-center gap-2">
-        <h2 className="text-xl font-bold mb-4">{element.category}</h2>
+        <h2 className="modal-header">{element.category}</h2>
 
         <div className="flex justify-between items-center w-full gap-2 input-group">
           {edited ? (

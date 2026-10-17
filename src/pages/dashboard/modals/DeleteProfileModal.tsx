@@ -32,9 +32,7 @@ const DeleteProfileModal = ({
         onSubmit={handleSubmit}
         className="flex flex-col justify-center items-stretch gap-4"
       >
-        <h3 className="font-bold text-xl lg:text-2xl text-center pb-2 border-b-2">
-          Usuń profil
-        </h3>
+        <h3 className="modal-header">Usuń profil</h3>
         <p className="text-base md:text-lg text-center">
           Ta operacja usunie profil <b>{profileName}</b> razem ze wszystkimi
           zmianami, wydatkami, przychodami i oszczędnościami. <br />

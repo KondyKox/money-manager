@@ -65,9 +65,7 @@ const CreateProfileModal = ({
         noValidate
         className="flex flex-col justify-center items-stretch gap-4"
       >
-        <h3 className="font-bold text-xl lg:text-2xl text-center pb-2 border-b-2">
-          Utwórz nowy profil
-        </h3>
+        <h3 className="modal-header">Utwórz nowy profil</h3>
         <div className="my-8 flex flex-col justify-center items-center gap-2">
           <div className="input-group">
             <label htmlFor="profileName">Nazwa</label>

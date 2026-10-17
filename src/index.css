@@ -127,5 +127,5 @@ textarea {
 }
 
 .modal-header {
-  @apply font-bold text-center pb-2 border-b-2 text-xl md:text-2xl;
+  @apply font-bold text-center pb-2 border-b-2 text-xl lg:text-2xl;
 }
