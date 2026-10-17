@@ -3,6 +3,8 @@ import type { SavingDetailModalProps } from "../../../types/Modal";
 import Modal from "../../../components/modal/Modal";
 import { useState } from "react";
 import type { Saving } from "../../../types/Savings";
+import { useToast } from "../../../hooks/useToast";
+import LoadingDots from "../../../components/ui/LoadingDots";
 
 const SavingDetailModal = ({
   isOpen,
@@ -14,10 +16,29 @@ const SavingDetailModal = ({
   const [edited, setEdited] = useState<boolean>(false);
   const [date, setDate] = useState<string>(saving.date);
   const [amount, setAmount] = useState<number>(saving.amount);
+  // which request is in flight (null = idle)
+  const [pending, setPending] = useState<"save" | "delete" | null>(null);
 
-  const handleDelete = () => {
-    onDelete(saving.id);
-    onClose();
+  const { showToast } = useToast();
+
+  const handleDelete = async () => {
+    if (pending) return;
+
+    setPending("delete");
+    try {
+      await onDelete(saving.id);
+      onClose();
+    } catch (error) {
+      console.error("Error deleting saving:", error);
+      showToast(
+        error instanceof Error
+          ? error.message
+          : "Nie udało się usunąć oszczędności.",
+        "error",
+      );
+    } finally {
+      setPending(null);
+    }
   };
 
   const handleEditClick = () => {
@@ -26,16 +47,29 @@ const SavingDetailModal = ({
     setEdited(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (pending) return;
+
     const updatedSaving: Saving = {
       ...saving,
       date,
       amount,
     };
 
-    onEdit(updatedSaving);
-    setEdited(false);
-    onClose();
+    setPending("save");
+    try {
+      await onEdit(updatedSaving);
+      setEdited(false);
+      onClose();
+    } catch (error) {
+      console.error("Error saving saving:", error);
+      showToast(
+        error instanceof Error ? error.message : "Nie udało się zapisać zmian.",
+        "error",
+      );
+    } finally {
+      setPending(null);
+    }
   };
 
   return (
@@ -95,8 +129,15 @@ const SavingDetailModal = ({
           <button
             className="btn-secondary flex-1 flex justify-center items-center gap-2 w-full"
             onClick={handleSave}
+            disabled={pending !== null}
           >
-            <Save size={24} /> Zapisz
+            {pending === "save" ? (
+              <LoadingDots />
+            ) : (
+              <>
+                <Save size={24} /> Zapisz
+              </>
+            )}
           </button>
         ) : (
           <button
@@ -111,6 +152,7 @@ const SavingDetailModal = ({
           <button
             className="btn-delete flex-1 flex justify-center items-center gap-2 w-full"
             onClick={() => setEdited(false)}
+            disabled={pending !== null}
           >
             <CircleX size={24} /> Anuluj
           </button>
@@ -118,8 +160,15 @@ const SavingDetailModal = ({
           <button
             className="btn-delete flex-1 flex justify-center items-center gap-2 w-full"
             onClick={handleDelete}
+            disabled={pending !== null}
           >
-            <Trash2 size={24} /> Usuń
+            {pending === "delete" ? (
+              <LoadingDots />
+            ) : (
+              <>
+                <Trash2 size={24} /> Usuń
+              </>
+            )}
           </button>
         )}
       </div>

@@ -4,7 +4,10 @@ import type { DashboardElement } from "../../../types/Dashboard";
 import SavingElement from "../elements/SavingElement";
 import { useState } from "react";
 import AddSavingModal from "../modals/AddSavingModal";
-import { deleteSaving, updateSaving } from "../../../services/profiles/updateProfile";
+import {
+  deleteSaving,
+  updateSaving,
+} from "../../../services/profiles/updateProfile";
 import { useToast } from "../../../hooks/useToast";
 import type { Saving } from "../../../types/Savings";
 
@@ -16,7 +19,10 @@ const SavingsPanel = ({
 
   const { showToast } = useToast();
 
+  // Errors are NOT caught here on purpose: the detail modal catches them,
+  // shows the toast and stays open. Local state changes only after the DB.
   const handleDeleteSaving = async (savingId: string) => {
+    await deleteSaving(savingId);
     setEditedProfile(
       (prev) =>
         prev && {
@@ -24,22 +30,19 @@ const SavingsPanel = ({
           savings: prev.savings.filter((s) => s.id !== savingId),
         },
     );
-
-    await deleteSaving(savingId);
     showToast("Usunięto oszczędności.", "success");
   };
 
   const handleEditSaving = async (saving: Saving) => {
-    const updatedSavings = editedProfile.savings.map((s) => {
-      if (s.id === saving.id) return saving;
-      return s;
-    });
-
-    setEditedProfile((prev) =>
-      prev ? { ...prev, savings: updatedSavings } : prev,
-    );
-
     await updateSaving(saving);
+    setEditedProfile((prev) =>
+      prev
+        ? {
+            ...prev,
+            savings: prev.savings.map((s) => (s.id === saving.id ? saving : s)),
+          }
+        : prev,
+    );
     showToast("Zmieniono oszczędność.", "success");
   };
 

@@ -12,6 +12,6 @@ export interface Expense {
 
 export interface ExpenseElementProps {
   expense: Expense;
-  onDelete: (id: string) => void;
-  onEdit: (expense: Expense) => void;
+  onDelete: (id: string) => void | Promise<void>;
+  onEdit: (expense: Expense) => void | Promise<void>;
 }

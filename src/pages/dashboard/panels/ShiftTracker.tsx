@@ -5,7 +5,10 @@ import { useState } from "react";
 import ShiftElement from "../elements/ShiftElement";
 import { Briefcase, Calendar, Clock, Timer, Wallet } from "lucide-react";
 import { saveProfileInfo } from "../../../services/profiles/saveProfile";
-import { deleteShift, updateShift } from "../../../services/profiles/updateProfile";
+import {
+  deleteShift,
+  updateShift,
+} from "../../../services/profiles/updateProfile";
 import { useToast } from "../../../hooks/useToast";
 import type { CompletedShift } from "../../../types/Shift";
 
@@ -19,8 +22,8 @@ const ShiftTracker = ({
   const { showToast } = useToast();
 
   const filteredShifts = editedProfile.completedShifts
-  .filter((shift) => shift.clockIn.startsWith(selectedMonth))
-  .sort((a, b) => b.clockIn.localeCompare(a.clockIn));
+    .filter((shift) => shift.clockIn.startsWith(selectedMonth))
+    .sort((a, b) => b.clockIn.localeCompare(a.clockIn));
 
   const availableMonths = Array.from(
     new Set(
@@ -45,7 +48,10 @@ const ShiftTracker = ({
   }, 0);
 
   // ------------------------------------------------------
+  // Errors are NOT caught here on purpose: the detail modal catches them,
+  // shows the toast and stays open. Local state changes only after the DB.
   const handleDeleteShift = async (id: string) => {
+    await deleteShift(id);
     setEditedProfile((prev) =>
       prev
         ? {
@@ -54,27 +60,41 @@ const ShiftTracker = ({
           }
         : prev,
     );
-    await deleteShift(id);
     showToast("Usunięto zmianę.", "success");
   };
 
   const handleEditClick = async (updatedShift: CompletedShift) => {
-    const updatedShifts = editedProfile.completedShifts.map((s) => {
-      if (s.id === updatedShift.id) return updatedShift;
-      return s;
-    });
-
+    await updateShift(updatedShift);
     setEditedProfile((prev) =>
       prev
         ? {
             ...prev,
-            completedShifts: updatedShifts,
+            completedShifts: prev.completedShifts.map((s) =>
+              s.id === updatedShift.id ? updatedShift : s,
+            ),
           }
         : prev,
     );
-
-    await updateShift(updatedShift);
     showToast("Zaktualizowano zmianę.", "success");
+  };
+
+  // hourly rate is saved on blur, so there is no modal to show an error in
+  const handleSaveHourlyRate = async () => {
+    try {
+      await saveProfileInfo(
+        editedProfile.id,
+        editedProfile.name,
+        editedProfile.hourlyRate,
+      );
+    } catch (error) {
+      console.error("Error saving hourly rate:", error);
+      showToast(
+        error instanceof Error
+          ? error.message
+          : "Nie udało się zapisać stawki godzinowej.",
+        "error",
+      );
+    }
   };
 
   return (
@@ -99,13 +119,7 @@ const ShiftTracker = ({
                 prev ? { ...prev, hourlyRate: Number(e.target.value) } : prev,
               )
             }
-            onBlur={async () =>
-              await saveProfileInfo(
-                editedProfile.id,
-                editedProfile.name,
-                editedProfile.hourlyRate,
-              )
-            }
+            onBlur={handleSaveHourlyRate}
           />
           <span>zł/h</span>
         </div>

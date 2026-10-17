@@ -7,6 +7,6 @@ export interface Saving {
 
 export interface SavingElementProps {
   saving: Saving;
-  onDelete: (id: string) => void;
-  onEdit: (expense: Saving) => void;
+  onDelete: (id: string) => void | Promise<void>;
+  onEdit: (expense: Saving) => void | Promise<void>;
 }

@@ -1,4 +1,4 @@
-const SubmitingText = () => {
+const LoadingDots = () => {
   return Array.from("...").map((char, i) => (
     <span
       key={i}
@@ -10,4 +10,4 @@ const SubmitingText = () => {
   ));
 };
 
-export default SubmitingText;
+export default LoadingDots;

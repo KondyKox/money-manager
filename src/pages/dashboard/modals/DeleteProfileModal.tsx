@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import Modal from "../../../components/modal/Modal";
 import { cleanName } from "../../../utils/cleanName";
+import LoadingDots from "../../../components/ui/LoadingDots";
 
 interface DeleteProfileModalProps {
   isOpen: boolean;
@@ -58,7 +59,7 @@ const DeleteProfileModal = ({
           className="btn-primary"
           disabled={!matches || deleting}
         >
-          {deleting ? "Usuwanie..." : "Usuń profil"}
+          {deleting ? <LoadingDots /> : "Usuń profil"}
         </button>
       </form>
     </Modal>

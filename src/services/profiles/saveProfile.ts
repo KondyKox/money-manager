@@ -14,7 +14,10 @@ export const saveProfileInfo = async (
     .update({ name, hourly_rate: hourlyRate })
     .eq("id", id);
 
-  if (error) console.error("Error saving profile:", error.message);
+  if (error) {
+    console.error("Error saving profile:", error.message);
+    throw new Error("Nie udało się zapisać profilu.");
+  }
 };
 
 export const addExpense = async (profileId: string, expense: Expense) => {
@@ -27,7 +30,10 @@ export const addExpense = async (profileId: string, expense: Expense) => {
     note: expense.note ?? null,
   });
 
-  if (error) console.error("Error adding expense:", error.message);
+  if (error) {
+    console.error("Error adding expense:", error.message);
+    throw new Error("Nie udało się dodać wydatku.");
+  }
 };
 
 export const addIncome = async (profileId: string, income: Income) => {
@@ -40,7 +46,10 @@ export const addIncome = async (profileId: string, income: Income) => {
     note: income.note ?? null,
   });
 
-  if (error) console.error("Error adding income:", error.message);
+  if (error) {
+    console.error("Error adding income:", error.message);
+    throw new Error("Nie udało się dodać przychodu.");
+  }
 };
 
 export const addActiveShift = async (profileId: string, shift: ActiveShift) => {
@@ -52,7 +61,10 @@ export const addActiveShift = async (profileId: string, shift: ActiveShift) => {
     rate: shift.rate,
   });
 
-  if (error) console.error("Error saving shift:", error.message);
+  if (error) {
+    console.error("Error saving shift:", error.message);
+    throw new Error("Nie udało się rozpocząć zmiany.");
+  }
 };
 
 export const addSaving = async (profileId: string, saving: Saving) => {
@@ -63,5 +75,8 @@ export const addSaving = async (profileId: string, saving: Saving) => {
     date: saving.date,
   });
 
-  if (error) console.error("Error saving saving:", error.message);
+  if (error) {
+    console.error("Error saving saving:", error.message);
+    throw new Error("Nie udało się zapisać oszczędności.");
+  }
 };

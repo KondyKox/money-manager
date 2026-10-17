@@ -6,6 +6,8 @@ import type { Expense } from "../../../types/Expense";
 import { useState } from "react";
 import { EXPENSE_CATEGORIES } from "../../../constants/expenseCategories";
 import { INCOME_CATEGORIES } from "../../../constants/incomeCategories";
+import { useToast } from "../../../hooks/useToast";
+import LoadingDots from "../../../components/ui/LoadingDots";
 
 const DetailModal = <T extends Income | Expense>({
   isOpen,
@@ -19,6 +21,10 @@ const DetailModal = <T extends Income | Expense>({
   const [amount, setAmount] = useState<number>(element.amount);
   const [category, setCategory] = useState<string>(element.category);
   const [note, setNote] = useState<string>(element.note ?? "");
+  // which request is in flight (null = idle)
+  const [pending, setPending] = useState<"save" | "delete" | null>(null);
+
+  const { showToast } = useToast();
 
   const categories =
     element.kind === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
@@ -31,7 +37,9 @@ const DetailModal = <T extends Income | Expense>({
     setEdited(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (pending) return;
+
     const updatedElement = {
       ...element,
       date,
@@ -40,14 +48,38 @@ const DetailModal = <T extends Income | Expense>({
       note: note || undefined,
     } as T;
 
-    onEdit(updatedElement);
-    setEdited(false);
-    onClose();
+    setPending("save");
+    try {
+      await onEdit(updatedElement);
+      setEdited(false);
+      onClose();
+    } catch (error) {
+      console.error("Error saving element:", error);
+      showToast(
+        error instanceof Error ? error.message : "Nie udało się zapisać zmian.",
+        "error",
+      );
+    } finally {
+      setPending(null);
+    }
   };
 
-  const handleDelete = () => {
-    onDelete(element.id);
-    onClose();
+  const handleDelete = async () => {
+    if (pending) return;
+
+    setPending("delete");
+    try {
+      await onDelete(element.id);
+      onClose();
+    } catch (error) {
+      console.error("Error deleting element:", error);
+      showToast(
+        error instanceof Error ? error.message : "Nie udało się usunąć wpisu.",
+        "error",
+      );
+    } finally {
+      setPending(null);
+    }
   };
 
   return (
@@ -125,8 +157,11 @@ const DetailModal = <T extends Income | Expense>({
           <button
             className="btn-secondary flex-1 flex justify-center items-center gap-2"
             onClick={edited ? handleSave : handleEditClick}
+            disabled={pending !== null}
           >
-            {edited ? (
+            {pending === "save" ? (
+              <LoadingDots />
+            ) : edited ? (
               <>
                 <Save size={24} /> Zapisz
               </>
@@ -139,8 +174,11 @@ const DetailModal = <T extends Income | Expense>({
           <button
             className="btn-delete flex-1 flex justify-center items-center gap-2"
             onClick={edited ? () => setEdited(false) : handleDelete}
+            disabled={pending !== null}
           >
-            {edited ? (
+            {pending === "delete" ? (
+              <LoadingDots />
+            ) : edited ? (
               <>
                 <CircleX size={24} /> Anuluj
               </>
