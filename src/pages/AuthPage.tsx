@@ -139,6 +139,17 @@ const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
           )}
         </div>
 
+        {mode === "login" && (
+          <p className="text-xs text-center">
+            <Link
+              to="/forgot-password"
+              className="underline font-bold text-blue-300"
+            >
+              Nie pamiętasz hasła?
+            </Link>
+          </p>
+        )}
+
         <p className="text-xs text-center">
           {mode === "login" ? "Nie masz konta? " : "Masz już konto? "}
           <Link

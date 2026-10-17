@@ -16,6 +16,8 @@ import AuthPage from "./pages/AuthPage";
 import { ProfileProvider } from "./context/ProfileContext";
 import DashboardRoute from "./routes/DashboardRoute";
 import Settings from "./pages/settings/Settings";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
   const [color, setColor] = useState<Color>(getColor() ?? DEFAULT_BG_COLOR);
@@ -58,6 +60,13 @@ function App() {
                   path="/register"
                   element={<AuthPage key="register" mode="register" />}
                 />
+
+                <Route
+                  path="/forgot-password"
+                  element={<ForgotPasswordPage />}
+                />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
+
                 <Route element={<ProtectedRoute />}>
                   <Route path="/profiles" element={<ProfilePicker />} />
                   <Route path="/dashboard" element={<DashboardRoute />} />
