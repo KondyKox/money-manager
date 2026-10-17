@@ -2,10 +2,10 @@ import { useState } from "react";
 import type { EditModalProps } from "../../../types/Modal";
 import type { Expense } from "../../../types/Expense";
 import { EXPENSE_CATEGORIES } from "../../../constants/expenseCategories";
-import type { Profile } from "../../../types/Profile";
 import Modal from "../../../components/modal/Modal";
 import { useToast } from "../../../hooks/useToast";
 import { addExpense } from "../../../services/profiles/saveProfile";
+import LoadingDots from "../../../components/ui/LoadingDots";
 
 const AddExpenseModal = ({
   isOpen,
@@ -22,9 +22,13 @@ const AddExpenseModal = ({
     date?: string;
   }>({});
 
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
   const { showToast } = useToast();
 
   const handleAddExpense = async () => {
+    if (submitting) return;
+
     const newErrors: typeof errors = {};
     if (!newExpense.date) newErrors.date = "Data jest wymagana";
     if (!newExpense.amount) newErrors.amount = "Zysk jest wymagany";
@@ -49,17 +53,25 @@ const AddExpenseModal = ({
       createdAt: new Date().toISOString(),
     };
 
-    const updatedProfile: Profile = {
-      ...editedProfile,
-      expenses: [...editedProfile.expenses, expenseToAdd],
-    };
+    setSubmitting(true);
+    try {
+      await addExpense(editedProfile.id, expenseToAdd);
+      setEditedProfile((prev) =>
+        prev ? { ...prev, expenses: [...prev.expenses, expenseToAdd] } : prev,
+      );
+      setNewExpense({ date: new Date().toISOString().slice(0, 10) });
 
-    setEditedProfile(updatedProfile);
-    await addExpense(updatedProfile.id, expenseToAdd);
-    setNewExpense({ date: new Date().toISOString().slice(0, 10) });
-
-    showToast("Dodano wydatek!", "success");
-    onClose();
+      showToast("Dodano wydatek!", "success");
+      onClose();
+    } catch (error) {
+      console.error("Error adding expense:", error);
+      showToast(
+        error instanceof Error ? error.message : "Nie udało się dodać wydatku.",
+        "error",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -163,8 +175,9 @@ const AddExpenseModal = ({
         <button
           className="btn-secondary w-full"
           onClick={() => handleAddExpense()}
+          disabled={submitting}
         >
-          Dodaj
+          {submitting ? <LoadingDots /> : "Dodaj"}
         </button>
       </div>
     </Modal>

@@ -10,14 +10,13 @@ const ShiftElement = ({ shift, onDelete, onEdit }: ShiftElementProps) => {
   const pay = hours * shift.rate;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const handleDelete = () => {
-    onDelete(shift.id);
+  const handleDelete = async () => {
+    await onDelete(shift.id);
     setIsModalOpen(false);
   };
 
-  const handleEdit = (updatedShift: CompletedShift) => {
-    onEdit(updatedShift);
-    console.log(updatedShift);
+  const handleEdit = async (updatedShift: CompletedShift) => {
+    await onEdit(updatedShift);
     setIsModalOpen(false);
   };
 

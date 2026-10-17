@@ -4,8 +4,8 @@ import { useToast } from "../../../hooks/useToast";
 import type { EditModalProps } from "../../../types/Modal";
 import Modal from "../../../components/modal/Modal";
 import type { Income } from "../../../types/Income";
-import type { Profile } from "../../../types/Profile";
 import { addIncome } from "../../../services/profiles/saveProfile";
+import LoadingDots from "../../../components/ui/LoadingDots";
 
 const AddIncomeModal = ({
   isOpen,
@@ -22,9 +22,13 @@ const AddIncomeModal = ({
     date?: string;
   }>({});
 
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
   const { showToast } = useToast();
 
   const handleAddIncome = async () => {
+    if (submitting) return;
+
     const newErrors: typeof errors = {};
     if (!newIncome.date) newErrors.date = "Data jest wymagana";
     if (!newIncome.amount) newErrors.amount = "Zysk jest wymagany";
@@ -55,17 +59,27 @@ const AddIncomeModal = ({
       createdAt: new Date().toISOString(),
     };
 
-    const updatedProfile: Profile = {
-      ...editedProfile,
-      incomes: [...editedProfile.incomes, incomeToAdd],
-    };
+    setSubmitting(true);
+    try {
+      await addIncome(editedProfile.id, incomeToAdd);
+      setEditedProfile((prev) =>
+        prev ? { ...prev, incomes: [...prev.incomes, incomeToAdd] } : prev,
+      );
+      setNewIncome({ date: new Date().toISOString().slice(0, 10) });
 
-    setEditedProfile(updatedProfile);
-    await addIncome(updatedProfile.id, incomeToAdd);
-    setNewIncome({ date: new Date().toISOString().slice(0, 10) });
-
-    showToast("Dodano przychód!", "success");
-    onClose();
+      showToast("Dodano przychód!", "success");
+      onClose();
+    } catch (error) {
+      console.error("Error adding income:", error);
+      showToast(
+        error instanceof Error
+          ? error.message
+          : "Nie udało się dodać przychodu.",
+        "error",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -169,8 +183,9 @@ const AddIncomeModal = ({
         <button
           className="btn-secondary w-full"
           onClick={() => handleAddIncome()}
+          disabled={submitting}
         >
-          Dodaj
+          {submitting ? <LoadingDots /> : "Dodaj"}
         </button>
       </div>
     </Modal>

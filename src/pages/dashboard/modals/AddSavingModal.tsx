@@ -3,8 +3,8 @@ import type { EditModalProps } from "../../../types/Modal";
 import Modal from "../../../components/modal/Modal";
 import type { Saving } from "../../../types/Savings";
 import { useToast } from "../../../hooks/useToast";
-import type { Profile } from "../../../types/Profile";
 import { addSaving } from "../../../services/profiles/saveProfile";
+import LoadingDots from "../../../components/ui/LoadingDots";
 
 interface AddSavingModalProps extends EditModalProps {
   mode: "deposit" | "withdraw";
@@ -26,6 +26,8 @@ const AddSavingModal = ({
     amount?: string;
     date?: string;
   }>({});
+
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const { showToast } = useToast();
 
@@ -51,6 +53,8 @@ const AddSavingModal = ({
 
   // saving saving
   const handleAddSaving = async () => {
+    if (submitting) return;
+
     const newErrors: typeof errors = {};
     if (!newSaving.date) newErrors.date = "Data jest wymagana";
     if (!newSaving.amount) newErrors.amount = "Kwota jest wymagana";
@@ -73,20 +77,30 @@ const AddSavingModal = ({
       createdAt: new Date().toISOString(),
     };
 
-    const updatedProfile: Profile = {
-      ...editedProfile,
-      savings: [...editedProfile.savings, savingToAdd],
-    };
+    setSubmitting(true);
+    try {
+      await addSaving(editedProfile.id, savingToAdd);
+      setEditedProfile((prev) =>
+        prev ? { ...prev, savings: [...prev.savings, savingToAdd] } : prev,
+      );
+      setNewSaving({ date: new Date().toISOString().split("T")[0] });
 
-    setEditedProfile(updatedProfile);
-    await addSaving(updatedProfile.id, savingToAdd);
-    setNewSaving({ date: new Date().toISOString().split("T")[0] });
-
-    showToast(
-      `${mode === "deposit" ? "Dokonano wpłaty." : "Wypłacono pieniądze."}`,
-      "success",
-    );
-    onClose();
+      showToast(
+        `${mode === "deposit" ? "Dokonano wpłaty." : "Wypłacono pieniądze."}`,
+        "success",
+      );
+      onClose();
+    } catch (error) {
+      console.error("Error adding saving:", error);
+      showToast(
+        error instanceof Error
+          ? error.message
+          : "Nie udało się zapisać oszczędności.",
+        "error",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -143,8 +157,12 @@ const AddSavingModal = ({
           {errors.amount && <p className="error-message">{errors.amount}</p>}
         </div>
 
-        <button className="btn-primary w-full" onClick={handleAddSaving}>
-          Dodaj
+        <button
+          className="btn-primary w-full"
+          onClick={handleAddSaving}
+          disabled={submitting}
+        >
+          {submitting ? <LoadingDots /> : "Dodaj"}
         </button>
       </div>
     </Modal>

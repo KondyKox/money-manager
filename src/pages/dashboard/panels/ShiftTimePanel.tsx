@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import type { ActiveShift, CompletedShift } from "../../../types/Shift";
 import { toDatetimeLocal } from "../../../utils/toDatetimeLocal";
-import type { Profile } from "../../../types/Profile";
 import { Pause, Play } from "lucide-react";
 import type { DashboardElement } from "../../../types/Dashboard";
 import { useToast } from "../../../hooks/useToast";
@@ -33,14 +32,23 @@ const ShiftTimePanel = ({
       rate: editedProfile.hourlyRate,
     };
 
-    setEditedProfile((prev) =>
-      prev ? { ...prev, activeShift: newActiveShift } : prev,
-    );
+    try {
+      await addActiveShift(editedProfile.id, newActiveShift);
+      setEditedProfile((prev) =>
+        prev ? { ...prev, activeShift: newActiveShift } : prev,
+      );
 
-    await addActiveShift(editedProfile.id, newActiveShift);
-
-    clockInRef.current?.focus();
-    showToast("Rozpoczęto zmianę.", "success");
+      clockInRef.current?.focus();
+      showToast("Rozpoczęto zmianę.", "success");
+    } catch (error) {
+      console.error("Error starting shift:", error);
+      showToast(
+        error instanceof Error
+          ? error.message
+          : "Nie udało się rozpocząć zmiany.",
+        "error",
+      );
+    }
   };
 
   // stop shift and enter to input
@@ -72,15 +80,27 @@ const ShiftTimePanel = ({
       rate: editedProfile.activeShift.rate,
     };
 
-    const updatedProfile: Profile = {
-      ...editedProfile,
-      completedShifts: [...editedProfile.completedShifts, newCompletedShift],
-      activeShift: null,
-    };
-
-    setEditedProfile(updatedProfile);
-    await updateShift(newCompletedShift);
-    showToast("Zapisano zmianę.", "success");
+    try {
+      await updateShift(newCompletedShift);
+      setEditedProfile((prev) =>
+        prev
+          ? {
+              ...prev,
+              completedShifts: [...prev.completedShifts, newCompletedShift],
+              activeShift: null,
+            }
+          : prev,
+      );
+      showToast("Zapisano zmianę.", "success");
+    } catch (error) {
+      console.error("Error saving shift:", error);
+      showToast(
+        error instanceof Error
+          ? error.message
+          : "Nie udało się zapisać zmiany.",
+        "error",
+      );
+    }
   };
 
   return (

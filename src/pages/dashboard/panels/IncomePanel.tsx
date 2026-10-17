@@ -7,7 +7,10 @@ import {
   type IncomeCategory,
 } from "../../../constants/incomeCategories";
 import IncomeElement from "../elements/IncomeElement";
-import { deleteIncome, updateIncome } from "../../../services/profiles/updateProfile";
+import {
+  deleteIncome,
+  updateIncome,
+} from "../../../services/profiles/updateProfile";
 import { useToast } from "../../../hooks/useToast";
 import type { Income } from "../../../types/Income";
 import { BanknoteArrowUp } from "lucide-react";
@@ -45,27 +48,30 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
     .reduce((sum, saving) => sum + saving.amount, 0);
 
   // ---------------------------------------------------
+  // Errors are NOT caught here on purpose: the detail modal catches them,
+  // shows the toast and stays open. Local state changes only after the DB.
   const handleDeleteIncome = async (id: string) => {
+    await deleteIncome(id);
     setEditedProfile((prev) =>
       prev
         ? { ...prev, incomes: prev.incomes.filter((i) => i.id !== id) }
         : prev,
     );
-    await deleteIncome(id);
     showToast("Usunięto przychód.", "success");
   };
 
   const handleEditIncome = async (updatedIncome: Income) => {
-    const updatedIncomes = editedProfile.incomes.map((i) => {
-      if (i.id === updatedIncome.id) return updatedIncome;
-      return i;
-    });
-
-    setEditedProfile((prev) =>
-      prev ? { ...prev, incomes: updatedIncomes } : prev,
-    );
-
     await updateIncome(updatedIncome);
+    setEditedProfile((prev) =>
+      prev
+        ? {
+            ...prev,
+            incomes: prev.incomes.map((i) =>
+              i.id === updatedIncome.id ? updatedIncome : i,
+            ),
+          }
+        : prev,
+    );
     showToast("Zaktualizowano przychód.", "success");
   };
 

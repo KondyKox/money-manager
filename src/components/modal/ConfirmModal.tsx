@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import type { ConfirmModalProps } from "../../types/Modal";
 import Modal from "./Modal";
 import PasswordInput from "../ui/PasswordInput";
-import SubmitingText from "../ui/SubmitingText";
+import LoadingDots from "../ui/LoadingDots";
 
 const ConfirmModal = ({
   isOpen,
@@ -42,7 +42,7 @@ const ConfirmModal = ({
           placeholder="Wpisz (stare) hasło by potwierdzić"
         />
         <button disabled={confirming} type="submit" className="btn-secondary">
-          {confirming ? <SubmitingText /> : "Potwierdź"}
+          {confirming ? <LoadingDots /> : "Potwierdź"}
         </button>
       </form>
     </Modal>

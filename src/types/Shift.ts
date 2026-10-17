@@ -16,8 +16,8 @@ export interface ActiveShift {
 
 export interface ShiftElementProps {
   shift: CompletedShift;
-  onDelete: (id: string) => void;
-  onEdit: (shift: CompletedShift) => void;
+  onDelete: (id: string) => void | Promise<void>;
+  onEdit: (shift: CompletedShift) => void | Promise<void>;
 }
 
 export type ShiftRow = Database["public"]["Tables"]["shifts"]["Row"];

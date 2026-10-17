@@ -23,24 +23,24 @@ export interface DetailModalProps<T extends Expense | Income> {
   isOpen: boolean;
   onClose: () => void;
   element: T;
-  onDelete: (id: string) => void;
-  onEdit: (element: T) => void;
+  onDelete: (id: string) => void | Promise<void>;
+  onEdit: (element: T) => void | Promise<void>;
 }
 
 export interface SavingDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   saving: Saving;
-  onDelete: (id: string) => void;
-  onEdit: (saving: Saving) => void;
+  onDelete: (id: string) => void | Promise<void>;
+  onEdit: (saving: Saving) => void | Promise<void>;
 }
 
 export interface ShiftDetailProps {
   shift: CompletedShift;
   isOpen: boolean;
   onClose: () => void;
-  onDelete: (id: string) => void;
-  onEdit: (shift: CompletedShift) => void;
+  onDelete: (id: string) => void | Promise<void>;
+  onEdit: (shift: CompletedShift) => void | Promise<void>;
 }
 
 export interface ColorPickerProps {

@@ -7,7 +7,10 @@ import {
   EXPENSE_CATEGORIES,
   type ExpenseCategory,
 } from "../../../constants/expenseCategories";
-import { deleteExpense, updateExpense } from "../../../services/profiles/updateProfile";
+import {
+  deleteExpense,
+  updateExpense,
+} from "../../../services/profiles/updateProfile";
 import { useToast } from "../../../hooks/useToast";
 import type { Expense } from "../../../types/Expense";
 import { BanknoteArrowDown } from "lucide-react";
@@ -52,27 +55,30 @@ const ExpensePanel = ({
     .reverse();
 
   // ---------------------------------------------------
+  // Errors are NOT caught here on purpose: the detail modal catches them,
+  // shows the toast and stays open. Local state changes only after the DB.
   const handleDeleteExpense = async (id: string) => {
+    await deleteExpense(id);
     setEditedProfile((prev) =>
       prev
         ? { ...prev, expenses: prev.expenses.filter((e) => e.id !== id) }
         : prev,
     );
-    await deleteExpense(id);
     showToast("Usunięto wydatek.", "success");
   };
 
   const handleEditExpense = async (updatedExpense: Expense) => {
-    const updatedExpenses = editedProfile.expenses.map((e) => {
-      if (e.id === updatedExpense.id) return updatedExpense;
-      return e;
-    });
-
-    setEditedProfile((prev) =>
-      prev ? { ...prev, expenses: updatedExpenses } : prev,
-    );
-
     await updateExpense(updatedExpense);
+    setEditedProfile((prev) =>
+      prev
+        ? {
+            ...prev,
+            expenses: prev.expenses.map((e) =>
+              e.id === updatedExpense.id ? updatedExpense : e,
+            ),
+          }
+        : prev,
+    );
     showToast("Zaktualizowano wydatek.", "success");
   };
 

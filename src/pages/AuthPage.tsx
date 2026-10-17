@@ -3,6 +3,7 @@ import { useState, type FormEvent } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Link, Navigate } from "react-router-dom";
 import { useToast } from "../hooks/useToast";
+import LoadingDots from "../components/ui/LoadingDots";
 
 const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -161,19 +162,13 @@ const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
         </p>
 
         <button disabled={submitting} type="submit" className="btn-secondary">
-          {submitting
-            ? Array.from("...").map((char, i) => (
-                <span
-                  key={i}
-                  style={{ animationDelay: `${i * 0.2}s` }}
-                  className="animate-letter-bounce inline-block motion-reduce:animate-none font-mono font-bold"
-                >
-                  {char}
-                </span>
-              ))
-            : mode === "login"
-              ? "Zaloguj się"
-              : "Stwórz konto"}
+          {submitting ? (
+            <LoadingDots />
+          ) : mode === "login" ? (
+            "Zaloguj się"
+          ) : (
+            "Stwórz konto"
+          )}
         </button>
       </form>
     </section>

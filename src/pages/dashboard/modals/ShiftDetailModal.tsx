@@ -3,6 +3,8 @@ import type { ShiftDetailProps } from "../../../types/Modal";
 import type { CompletedShift } from "../../../types/Shift";
 import Modal from "../../../components/modal/Modal";
 import { useState } from "react";
+import { useToast } from "../../../hooks/useToast";
+import LoadingDots from "../../../components/ui/LoadingDots";
 
 const ShiftDetailModal = ({
   shift,
@@ -15,6 +17,10 @@ const ShiftDetailModal = ({
   const [clockIn, setClockIn] = useState<string>(shift.clockIn);
   const [clockOut, setClockOut] = useState<string>(shift.clockOut);
   const [rate, setRate] = useState<number>(shift.rate);
+  // which request is in flight (null = idle)
+  const [pending, setPending] = useState<"save" | "delete" | null>(null);
+
+  const { showToast } = useToast();
 
   const handleEditClick = () => {
     setClockIn(shift.clockIn);
@@ -23,7 +29,9 @@ const ShiftDetailModal = ({
     setEdited(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (pending) return;
+
     const updatedShift: CompletedShift = {
       ...shift,
       clockIn,
@@ -31,14 +39,38 @@ const ShiftDetailModal = ({
       rate,
     };
 
-    onEdit(updatedShift);
-    setEdited(false);
-    onClose();
+    setPending("save");
+    try {
+      await onEdit(updatedShift);
+      setEdited(false);
+      onClose();
+    } catch (error) {
+      console.error("Error saving shift:", error);
+      showToast(
+        error instanceof Error ? error.message : "Nie udało się zapisać zmian.",
+        "error",
+      );
+    } finally {
+      setPending(null);
+    }
   };
 
-  const handleDelete = () => {
-    onDelete(shift.id);
-    onClose();
+  const handleDelete = async () => {
+    if (pending) return;
+
+    setPending("delete");
+    try {
+      await onDelete(shift.id);
+      onClose();
+    } catch (error) {
+      console.error("Error deleting shift:", error);
+      showToast(
+        error instanceof Error ? error.message : "Nie udało się usunąć zmiany.",
+        "error",
+      );
+    } finally {
+      setPending(null);
+    }
   };
 
   return (
@@ -95,8 +127,15 @@ const ShiftDetailModal = ({
             <button
               className="btn-secondary flex-1 flex justify-center items-center gap-2 w-full"
               onClick={handleSave}
+              disabled={pending !== null}
             >
-              <Save size={24} /> Zapisz
+              {pending === "save" ? (
+                <LoadingDots />
+              ) : (
+                <>
+                  <Save size={24} /> Zapisz
+                </>
+              )}
             </button>
           ) : (
             <button
@@ -111,6 +150,7 @@ const ShiftDetailModal = ({
             <button
               className="btn-delete flex-1 flex justify-center items-center gap-2 w-full"
               onClick={() => setEdited(false)}
+              disabled={pending !== null}
             >
               <CircleX size={24} /> Anuluj
             </button>
@@ -118,8 +158,15 @@ const ShiftDetailModal = ({
             <button
               className="btn-delete flex-1 flex justify-center items-center gap-2 w-full"
               onClick={handleDelete}
+              disabled={pending !== null}
             >
-              <Trash2 size={24} /> Usuń
+              {pending === "delete" ? (
+                <LoadingDots />
+              ) : (
+                <>
+                  <Trash2 size={24} /> Usuń
+                </>
+              )}
             </button>
           )}
         </div>
