@@ -11,6 +11,7 @@ import SavingsOverviewChart from "./charts/SavingsOverviewChart";
 import CreateProfileModal from "./modals/CreateProfileModal";
 import { MAX_PROFILES } from "../../constants/maxProfiles";
 import { useProfile } from "../../hooks/useProfile";
+import { useToast } from "../../hooks/useToast";
 
 const ProfilePicker = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -21,6 +22,7 @@ const ProfilePicker = () => {
   );
   const navigate = useNavigate();
   const { selectProfile } = useProfile();
+  const { showToast } = useToast();
 
   const canAddProfile = profiles.length < MAX_PROFILES;
 
@@ -47,9 +49,18 @@ const ProfilePicker = () => {
 
   useEffect(() => {
     const loadProfiles = async () => {
-      const data = await getProfiles();
-      setProfiles(data ?? []);
-      setIsLoading(false);
+      try {
+        const data = await getProfiles();
+        setProfiles(data ?? []);
+      } catch (error) {
+        console.error("Error loading profiles:", error);
+        showToast(
+          error instanceof Error ? error.message : "Błąd pobierania profili",
+          "error",
+        );
+      } finally {
+        setIsLoading(false);
+      }
     };
     loadProfiles();
   }, []);

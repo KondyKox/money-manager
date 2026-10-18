@@ -10,7 +10,7 @@ import {
   toSaving,
 } from "../../utils/formatData";
 
-export const getProfiles = async (): Promise<Profile[] | null> => {
+export const getProfiles = async (): Promise<Profile[]> => {
   const [profilesRes, shiftsRes, expensesRes, incomesRes, savingsRes] =
     await Promise.all([
       supabase.from("profiles").select("*"),
@@ -21,14 +21,14 @@ export const getProfiles = async (): Promise<Profile[] | null> => {
     ]);
 
   if (profilesRes.error) {
-    console.log("Error fetching profiles:", profilesRes.error.message);
-    return null;
+    console.error("Error fetching profiles:", profilesRes.error.message);
+    throw new Error("Nie udało się pobrać profili.");
   }
 
   const profiles = profilesRes.data;
   if (!profiles || profiles.length === 0) {
-    console.log("No profiles saved.");
-    return null;
+    console.error("No profiles saved.");
+    throw new Error("Brak zapisanych profili.");
   }
 
   const shifts = shiftsRes.data ?? [];
@@ -36,25 +36,27 @@ export const getProfiles = async (): Promise<Profile[] | null> => {
   const incomes = incomesRes.data ?? [];
   const savings = savingsRes.data ?? [];
 
-  return profiles.map((p) => ({
-    id: p.id,
-    name: p.name,
-    hourlyRate: p.hourly_rate,
-    color: DEFAULT_BG_COLOR,
-    activeShift:
-      shifts
-        .filter((s) => s.profile_id === p.id && !s.clock_out)
-        .map(toActiveShift)[0] ?? null,
-    completedShifts: shifts
-      .filter(
-        (s): s is ShiftRow & { clock_out: string } =>
-          s.profile_id === p.id && !!s.clock_out,
-      )
-      .map(toCompletedShift),
-    expenses: expenses.filter((e) => e.profile_id === p.id).map(toExpense),
-    incomes: incomes.filter((i) => i.profile_id === p.id).map(toIncome),
-    savings: savings.filter((s) => s.profile_id === p.id).map(toSaving),
-  }));
+  return (
+    profiles.map((p) => ({
+      id: p.id,
+      name: p.name,
+      hourlyRate: p.hourly_rate,
+      color: DEFAULT_BG_COLOR,
+      activeShift:
+        shifts
+          .filter((s) => s.profile_id === p.id && !s.clock_out)
+          .map(toActiveShift)[0] ?? null,
+      completedShifts: shifts
+        .filter(
+          (s): s is ShiftRow & { clock_out: string } =>
+            s.profile_id === p.id && !!s.clock_out,
+        )
+        .map(toCompletedShift),
+      expenses: expenses.filter((e) => e.profile_id === p.id).map(toExpense),
+      incomes: incomes.filter((i) => i.profile_id === p.id).map(toIncome),
+      savings: savings.filter((s) => s.profile_id === p.id).map(toSaving),
+    })) ?? []
+  );
 };
 
 export const getProfile = async (

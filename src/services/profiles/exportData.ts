@@ -2,7 +2,7 @@ import { getProfiles } from "./getProfiles";
 
 export const exportData = async () => {
   const profiles = await getProfiles();
-  if (!profiles) throw new Error("Brak profili do pobrania");
+  if (!profiles.length) throw new Error("Brak profili do pobrania");
 
   const data = {
     exportedAt: new Date().toISOString(),
