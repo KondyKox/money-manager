@@ -171,7 +171,7 @@ const AccountPanel = () => {
                 />
               </div>
             )}
-            <div className="flex justify-center items-center gap-2">
+            <div className="flex flex-col lg:flex-row justify-center items-stretch gap-2">
               <button
                 className="btn-secondary flex-1"
                 onClick={handleChangePasswordClick}
