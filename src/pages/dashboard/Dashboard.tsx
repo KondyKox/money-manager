@@ -141,7 +141,9 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
   }
 
   if (!editedProfile) {
-    return <div className="text-center p-6">Nie znaleziono profilu.</div>;
+    return (
+      <div className="text-center p-6">Nie udało się wczytać profilu.</div>
+    );
   }
 
   return (

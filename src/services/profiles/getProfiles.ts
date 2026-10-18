@@ -1,14 +1,6 @@
-import { DEFAULT_BG_COLOR } from "../../constants/bgPalette";
 import { supabase } from "../../lib/supabaseClient";
 import type { Profile } from "../../types/Profile";
-import type { ShiftRow } from "../../types/Shift";
-import {
-  toActiveShift,
-  toCompletedShift,
-  toExpense,
-  toIncome,
-  toSaving,
-} from "../../utils/formatData";
+import { buildProfile } from "../../utils/buildProfile";
 
 export const getProfiles = async (): Promise<Profile[]> => {
   const [profilesRes, shiftsRes, expensesRes, incomesRes, savingsRes] =
@@ -27,8 +19,8 @@ export const getProfiles = async (): Promise<Profile[]> => {
 
   const profiles = profilesRes.data;
   if (!profiles || profiles.length === 0) {
-    console.error("No profiles saved.");
-    throw new Error("Brak zapisanych profili.");
+    const profiles = profilesRes.data ?? [];
+    if (profiles.length === 0) return [];
   }
 
   const shifts = shiftsRes.data ?? [];
@@ -36,34 +28,48 @@ export const getProfiles = async (): Promise<Profile[]> => {
   const incomes = incomesRes.data ?? [];
   const savings = savingsRes.data ?? [];
 
-  return (
-    profiles.map((p) => ({
-      id: p.id,
-      name: p.name,
-      hourlyRate: p.hourly_rate,
-      color: DEFAULT_BG_COLOR,
-      activeShift:
-        shifts
-          .filter((s) => s.profile_id === p.id && !s.clock_out)
-          .map(toActiveShift)[0] ?? null,
-      completedShifts: shifts
-        .filter(
-          (s): s is ShiftRow & { clock_out: string } =>
-            s.profile_id === p.id && !!s.clock_out,
-        )
-        .map(toCompletedShift),
-      expenses: expenses.filter((e) => e.profile_id === p.id).map(toExpense),
-      incomes: incomes.filter((i) => i.profile_id === p.id).map(toIncome),
-      savings: savings.filter((s) => s.profile_id === p.id).map(toSaving),
-    })) ?? []
+  return profiles.map((p) =>
+    buildProfile(
+      p,
+      shifts.filter((s) => s.profile_id === p.id),
+      expenses.filter((e) => e.profile_id === p.id),
+      incomes.filter((i) => i.profile_id === p.id),
+      savings.filter((s) => s.profile_id === p.id),
+    ),
   );
 };
 
 export const getProfile = async (
   profileId: string,
 ): Promise<Profile | null> => {
-  const profiles = await getProfiles();
-  if (!profiles) return null;
+  const [profileRes, shiftsRes, expensesRes, incomesRes, savingsRes] =
+    await Promise.all([
+      supabase.from("profiles").select("*").eq("id", profileId).maybeSingle(),
+      supabase.from("shifts").select("*").eq("profile_id", profileId),
+      supabase.from("expenses").select("*").eq("profile_id", profileId),
+      supabase.from("incomes").select("*").eq("profile_id", profileId),
+      supabase.from("savings").select("*").eq("profile_id", profileId),
+    ]);
 
-  return profiles.find((p) => p.id === profileId) ?? null;
+  const failed = [
+    profileRes,
+    shiftsRes,
+    expensesRes,
+    incomesRes,
+    savingsRes,
+  ].find((res) => res.error);
+  if (failed?.error) {
+    console.error("Error fetching profile:", failed.error.message);
+    throw new Error("Nie udało się pobrać profilu.");
+  }
+
+  if (!profileRes.data) return null; // not found
+
+  return buildProfile(
+    profileRes.data,
+    shiftsRes.data ?? [],
+    expensesRes.data ?? [],
+    incomesRes.data ?? [],
+    savingsRes.data ?? [],
+  );
 };

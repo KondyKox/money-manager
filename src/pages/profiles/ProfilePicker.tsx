@@ -17,6 +17,7 @@ const ProfilePicker = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [loadError, setLoadError] = useState<boolean>(false);
   const [selectedMonth, setSelectedMonth] = useState<string>(
     new Date().toISOString().slice(0, 7),
   );
@@ -48,21 +49,28 @@ const ProfilePicker = () => {
     .reverse();
 
   useEffect(() => {
+    let cancelled = false;
+
     const loadProfiles = async () => {
       try {
         const data = await getProfiles();
-        setProfiles(data ?? []);
+        if (!cancelled) setProfiles(data);
       } catch (error) {
         console.error("Error loading profiles:", error);
         showToast(
           error instanceof Error ? error.message : "Błąd pobierania profili",
           "error",
         );
+        if (!cancelled) setLoadError(true);
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
+
     loadProfiles();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   if (isLoading) {
@@ -79,6 +87,20 @@ const ProfilePicker = () => {
         <div className="mt-8">
           <Skeleton className="h-12 w-full" />
         </div>
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="flex flex-col items-center gap-4 p-6 text-center">
+        <p>Nie udało się wczytać profili.</p>
+        <button
+          className="btn-primary"
+          onClick={() => window.location.reload()}
+        >
+          Spróbuj ponownie
+        </button>
       </div>
     );
   }
