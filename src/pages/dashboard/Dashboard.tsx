@@ -23,6 +23,7 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
   const [saving, setSaving] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
+  const [notFound, setNotFound] = useState<boolean>(false);
   const editInputRef = useRef<HTMLInputElement>(null);
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -35,7 +36,10 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
       setIsLoading(true);
       try {
         const profile = await getProfile(profileId);
-        if (!cancelled) setEditedProfile(profile ?? null);
+        if (!cancelled) {
+          setEditedProfile(profile ?? null);
+          setNotFound(!profile);
+        }
       } catch (error) {
         console.error("Error loading profile:", error);
         if (!cancelled) setEditedProfile(null);
@@ -49,6 +53,13 @@ const Dashboard = ({ profileId }: { profileId: string }) => {
       cancelled = true;
     };
   }, [profileId]);
+
+  useEffect(() => {
+    if (!notFound) return;
+
+    showToast("Nie znaleziono profilu.", "error");
+    clearProfile();
+  }, [notFound, clearProfile, showToast]);
 
   useEffect(() => {
     if (edited) {
