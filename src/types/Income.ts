@@ -12,6 +12,6 @@ export interface Income {
 
 export interface IncomeElementProps {
   income: Income;
-  onDelete: (id: string) => void;
-  onEdit: (income: Income) => void;
+  onDelete: (id: string) => void | Promise<void>;
+  onEdit: (income: Income) => void | Promise<void>;
 }

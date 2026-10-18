@@ -10,6 +10,7 @@
   /* --spacing-  */ /* margin, padding, itd. */
 
   --animate-fade-in: fade-in 0.8s ease-out forwards;
+  --animate-letter-bounce: letter-bounce 1s ease-in-out infinite;
 
   @keyframes fade-in {
     from {
@@ -19,6 +20,16 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @keyframes letter-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-0.6rem);
     }
   }
 }
@@ -33,7 +44,9 @@ h6 {
 }
 
 .profile-icon {
-  @apply rounded-xl p-4 text-center flex justify-center items-center transition-all duration-150 hover:border-green-400 bg-white/40 hover:bg-white/30 shadow-md hover:shadow-green-400 cursor-pointer active:scale-90 active:border-green-600 w-full font-bold;
+  @apply rounded-xl p-4 text-center flex justify-center items-center transition-all duration-150 hover:border-green-400 bg-white/40
+    hover:bg-white/30 shadow-md hover:shadow-green-400 cursor-pointer active:scale-90 active:border-green-600 font-bold 
+      last:odd:col-span-2 last:odd:justify-self-center last:odd:w-[calc(50%-0.25rem)];
 }
 
 .input-group {
@@ -73,6 +86,12 @@ textarea {
   @apply transition-all duration-150 cursor-pointer hover:scale-110;
 }
 
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-delete:disabled {
+  @apply opacity-60 cursor-not-allowed active:scale-100;
+}
+
 .btn-delete {
   @apply text-sm md:text-base uppercase cursor-pointer border-2 border-red-500 hover:bg-red-500 hover:shadow-red-700 shadow-md transition duration-200 rounded-2xl py-2 px-4 active:scale-90 text-white/90 hover:text-black/90;
 }
@@ -103,4 +122,16 @@ textarea {
 
 .panelElements {
   @apply flex flex-col items-center gap-2 mt-4 max-h-64 overflow-y-auto;
+}
+
+.settings-panel {
+  @apply border-2 rounded-2xl px-8 py-10 relative shadow-xl shadow-white;
+}
+
+.settings-panel legend {
+  @apply font-bold uppercase text-3xl mx-auto px-4 text-center;
+}
+
+.modal-header {
+  @apply font-bold text-center pb-2 border-b-2 text-xl lg:text-2xl;
 }

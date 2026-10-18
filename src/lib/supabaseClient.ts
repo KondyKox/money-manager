@@ -4,4 +4,8 @@ import type { Database } from "../types/supabase";
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+export const openedFromRecoveryLink =
+  typeof window !== "undefined" &&
+  window.location.hash.includes("type=recovery");
+
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
