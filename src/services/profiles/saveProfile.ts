@@ -3,6 +3,7 @@ import type { Expense } from "../../types/Expense";
 import type { Income } from "../../types/Income";
 import type { Saving } from "../../types/Savings";
 import type { ActiveShift } from "../../types/Shift";
+import { translateAuthError } from "../../utils/authErrors";
 
 export const saveProfileInfo = async (
   id: string,
@@ -16,7 +17,7 @@ export const saveProfileInfo = async (
 
   if (error) {
     console.error("Error saving profile:", error.message);
-    throw new Error("Nie udało się zapisać profilu.");
+    throw new Error(translateAuthError(error));
   }
 };
 
@@ -32,7 +33,7 @@ export const addExpense = async (profileId: string, expense: Expense) => {
 
   if (error) {
     console.error("Error adding expense:", error.message);
-    throw new Error("Nie udało się dodać wydatku.");
+    throw new Error(translateAuthError(error));
   }
 };
 
@@ -48,7 +49,7 @@ export const addIncome = async (profileId: string, income: Income) => {
 
   if (error) {
     console.error("Error adding income:", error.message);
-    throw new Error("Nie udało się dodać przychodu.");
+    throw new Error(translateAuthError(error));
   }
 };
 
@@ -63,7 +64,7 @@ export const addActiveShift = async (profileId: string, shift: ActiveShift) => {
 
   if (error) {
     console.error("Error saving shift:", error.message);
-    throw new Error("Nie udało się rozpocząć zmiany.");
+    throw new Error(translateAuthError(error));
   }
 };
 
@@ -77,6 +78,6 @@ export const addSaving = async (profileId: string, saving: Saving) => {
 
   if (error) {
     console.error("Error saving saving:", error.message);
-    throw new Error("Nie udało się zapisać oszczędności.");
+    throw new Error(translateAuthError(error));
   }
 };

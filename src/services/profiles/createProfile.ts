@@ -1,5 +1,6 @@
 import { supabase } from "../../lib/supabaseClient";
 import type { Profile } from "../../types/Profile";
+import { translateAuthError } from "../../utils/authErrors";
 import { getProfile } from "./getProfiles";
 
 export const createProfile = async (
@@ -17,7 +18,7 @@ export const createProfile = async (
     .select()
     .single();
 
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(translateAuthError(error));
   if (!data) throw new Error("Błąd przy tworzeniu profilu");
 
   const profile = await getProfile(data.id);

@@ -3,13 +3,14 @@ import type { Expense } from "../../types/Expense";
 import type { Income } from "../../types/Income";
 import type { Saving } from "../../types/Savings";
 import type { CompletedShift } from "../../types/Shift";
+import { translateAuthError } from "../../utils/authErrors";
 
 // DELETING FUNCTIONS
 export const deleteExpense = async (id: string) => {
   const { error } = await supabase.from("expenses").delete().eq("id", id);
   if (error) {
     console.error("Error deleting expense:", error.message);
-    throw new Error("Nie udało się usunąć wydatku.");
+    throw new Error(translateAuthError(error));
   }
 };
 
@@ -17,7 +18,7 @@ export const deleteIncome = async (id: string) => {
   const { error } = await supabase.from("incomes").delete().eq("id", id);
   if (error) {
     console.error("Error deleting income:", error.message);
-    throw new Error("Nie udało się usunąć przychodu.");
+    throw new Error(translateAuthError(error));
   }
 };
 
@@ -25,7 +26,7 @@ export const deleteShift = async (id: string) => {
   const { error } = await supabase.from("shifts").delete().eq("id", id);
   if (error) {
     console.error("Error deleting shift:", error.message);
-    throw new Error("Nie udało się usunąć zmiany.");
+    throw new Error(translateAuthError(error));
   }
 };
 
@@ -33,7 +34,7 @@ export const deleteSaving = async (id: string) => {
   const { error } = await supabase.from("savings").delete().eq("id", id);
   if (error) {
     console.error("Error deleting saving:", error.message);
-    throw new Error("Nie udało się usunąć oszczędności.");
+    throw new Error(translateAuthError(error));
   }
 };
 
@@ -50,7 +51,7 @@ export const updateExpense = async (expense: Expense) => {
     .eq("id", expense.id);
   if (error) {
     console.error("Error updating expense:", error.message);
-    throw new Error("Nie udało się zaktualizować wydatku.");
+    throw new Error(translateAuthError(error));
   }
 };
 
@@ -66,7 +67,7 @@ export const updateIncome = async (income: Income) => {
     .eq("id", income.id);
   if (error) {
     console.error("Error updating income:", error.message);
-    throw new Error("Nie udało się zaktualizować przychodu.");
+    throw new Error(translateAuthError(error));
   }
 };
 
@@ -81,7 +82,7 @@ export const updateShift = async (shift: CompletedShift) => {
     .eq("id", shift.id);
   if (error) {
     console.error("Error updating shift:", error.message);
-    throw new Error("Nie udało się zaktualizować zmiany.");
+    throw new Error(translateAuthError(error));
   }
 };
 
@@ -96,6 +97,6 @@ export const updateSaving = async (saving: Saving) => {
     .eq("id", saving.id);
   if (error) {
     console.error("Error updating saving:", error.message);
-    throw new Error("Nie udało się zaktualizować oszczędności.");
+    throw new Error(translateAuthError(error));
   }
 };

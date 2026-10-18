@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabaseClient";
+import { translateAuthError } from "../utils/authErrors";
 
 interface AuthContextType {
   session: Session | null;
@@ -25,7 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const { data, error } = await supabase.auth.getSession();
         if (error) {
-          console.error("Error fetching session:", error.message);
+          console.error("Error fetching session:", error);
           return;
         }
         setSession(data.session);
@@ -51,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.signUp({ email, password });
 
     if (error) {
-      throw new Error(error.message);
+      throw new Error(translateAuthError(error));
     }
   };
   const signIn = async (email: string, password: string) => {
@@ -61,12 +62,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     if (error) {
-      throw new Error(error.message);
+      throw new Error(translateAuthError(error));
     }
   };
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(translateAuthError(error));
   };
 
   return (

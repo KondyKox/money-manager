@@ -13,7 +13,7 @@ export const getProfiles = async (): Promise<Profile[]> => {
     ]);
 
   if (profilesRes.error) {
-    console.error("Error fetching profiles:", profilesRes.error.message);
+    console.error("Error fetching profiles:", profilesRes.error);
     throw new Error("Nie udało się pobrać profili.");
   }
 
