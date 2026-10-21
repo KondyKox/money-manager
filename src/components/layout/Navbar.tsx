@@ -4,7 +4,6 @@ import {
   LogIn,
   LogOut,
   Menu,
-  Palette,
   Settings,
   Users,
   X,
@@ -13,12 +12,7 @@ import { useState, type ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useToast } from "../../hooks/useToast";
-
-interface NavbarProps {
-  onOpenColors: () => void;
-  bgColor: string;
-  textColor: string;
-}
+import { useTheme } from "../../hooks/useTheme";
 
 type NavItem = {
   to: string;
@@ -50,10 +44,11 @@ const links: NavItem[] = [
   },
 ];
 
-const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { user, loading, signOut } = useAuth();
   const { showToast } = useToast();
+  const { color } = useTheme();
 
   const visibleLinks = links.filter((link) => {
     if (link.visibility === "always") return true;
@@ -75,7 +70,7 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
 
   return (
     <nav
-      className={`w-full px-4 py-3 flex items-center justify-between fixed z-40 ${bgColor} ${textColor}`}
+      className={`w-full px-4 py-3 flex items-center justify-between fixed z-40 ${color.bg} ${color.text}`}
     >
       <NavLink to={"/"} className="text-center font-bold text-lg">
         Wydatkonator
@@ -95,13 +90,6 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
             {link.label}
           </NavLink>
         ))}
-        <button
-          onClick={onOpenColors}
-          className="nav-link flex gap-2 justify-center items-center"
-        >
-          <Palette size={20} className="iconBtn hover:text-pink-400" />
-          Zmiana koloru
-        </button>
 
         {user && (
           <button
@@ -122,7 +110,7 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
       {/* Mobile dropdown */}
       {isOpen && (
         <div
-          className={`fixed inset-0 top-10 flex flex-col items-center justify-center gap-3 md:hidden ${bgColor} ${textColor}`}
+          className={`fixed inset-0 top-10 flex flex-col items-center justify-center gap-3 md:hidden ${color.bg} ${color.text}`}
         >
           {visibleLinks.map((link) => (
             <NavLink
@@ -137,16 +125,6 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
               {link.label}
             </NavLink>
           ))}
-          <button
-            onClick={() => {
-              onOpenColors();
-              setIsOpen(false);
-            }}
-            className="nav-link flex gap-2 justify-center items-center"
-          >
-            <Palette size={20} className="iconBtn hover:text-pink-400" />
-            Zmiana koloru
-          </button>
 
           {user && (
             <button
