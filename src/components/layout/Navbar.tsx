@@ -1,5 +1,15 @@
-import { LogOut, Menu, Palette, X } from "lucide-react";
-import { useState } from "react";
+import {
+  Home,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+  Menu,
+  Palette,
+  Settings,
+  Users,
+  X,
+} from "lucide-react";
+import { useState, type ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useToast } from "../../hooks/useToast";
@@ -13,15 +23,31 @@ interface NavbarProps {
 type NavItem = {
   to: string;
   label: string;
+  icon: ReactNode;
   visibility: "always" | "guest" | "auth";
 };
 
 const links: NavItem[] = [
-  { to: "/", label: "Strona główna", visibility: "always" },
-  { to: "/login", label: "Logowanie", visibility: "guest" },
-  { to: "/profiles", label: "Profile & Statystyki", visibility: "auth" },
-  { to: "/dashboard", label: "Panel główny", visibility: "auth" },
-  { to: "/settings", label: "Ustawienia", visibility: "auth" },
+  { to: "/", label: "Strona główna", icon: <Home />, visibility: "always" },
+  { to: "/login", label: "Logowanie", icon: <LogIn />, visibility: "guest" },
+  {
+    to: "/profiles",
+    label: "Profile & Statystyki",
+    icon: <Users />,
+    visibility: "auth",
+  },
+  {
+    to: "/dashboard",
+    label: "Panel główny",
+    icon: <LayoutDashboard />,
+    visibility: "auth",
+  },
+  {
+    to: "/settings",
+    label: "Ustawienia",
+    icon: <Settings />,
+    visibility: "auth",
+  },
 ];
 
 const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
@@ -65,6 +91,7 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
               isActive ? "nav-link__current" : "nav-link"
             }
           >
+            {link.icon}
             {link.label}
           </NavLink>
         ))}
@@ -81,7 +108,7 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
             onClick={handleSignOut}
             className="nav-link flex gap-2 justify-center items-center"
           >
-            <LogOut size={20} className="iconBtn hover:text-red-400" />
+            <LogOut size={20} />
             Wyloguj
           </button>
         )}
@@ -106,6 +133,7 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
                 isActive ? "nav-link__current" : "nav-link"
               }
             >
+              {link.icon}
               {link.label}
             </NavLink>
           ))}
@@ -125,7 +153,7 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
               onClick={handleSignOut}
               className="nav-link flex gap-2 justify-center items-center"
             >
-              <LogOut size={20} className="iconBtn hover:text-red-400" />
+              <LogOut size={20} />
               Wyloguj
             </button>
           )}
