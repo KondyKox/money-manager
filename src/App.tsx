@@ -37,11 +37,7 @@ function App() {
       <AuthProvider>
         <ProfileProvider>
           <ToastProvider>
-            <Navbar
-              onOpenColors={() => setShowColorPicker(true)}
-              bgColor={bgClass}
-              textColor={textClass}
-            />
+            <Navbar bgColor={bgClass} textColor={textClass} />
             <main
               className={`flex justify-start items-center flex-col relative min-h-screen h-full pt-20 pb-5 md:pb-20 ${bgClass} ${textClass}`}
             >

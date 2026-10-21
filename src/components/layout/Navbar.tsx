@@ -4,7 +4,6 @@ import {
   LogIn,
   LogOut,
   Menu,
-  Palette,
   Settings,
   Users,
   X,
@@ -15,7 +14,6 @@ import { useAuth } from "../../hooks/useAuth";
 import { useToast } from "../../hooks/useToast";
 
 interface NavbarProps {
-  onOpenColors: () => void;
   bgColor: string;
   textColor: string;
 }
@@ -50,7 +48,7 @@ const links: NavItem[] = [
   },
 ];
 
-const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
+const Navbar = ({ bgColor, textColor }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { user, loading, signOut } = useAuth();
   const { showToast } = useToast();
@@ -95,13 +93,6 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
             {link.label}
           </NavLink>
         ))}
-        <button
-          onClick={onOpenColors}
-          className="nav-link flex gap-2 justify-center items-center"
-        >
-          <Palette size={20} className="iconBtn hover:text-pink-400" />
-          Zmiana koloru
-        </button>
 
         {user && (
           <button
@@ -137,16 +128,6 @@ const Navbar = ({ onOpenColors, bgColor, textColor }: NavbarProps) => {
               {link.label}
             </NavLink>
           ))}
-          <button
-            onClick={() => {
-              onOpenColors();
-              setIsOpen(false);
-            }}
-            className="nav-link flex gap-2 justify-center items-center"
-          >
-            <Palette size={20} className="iconBtn hover:text-pink-400" />
-            Zmiana koloru
-          </button>
 
           {user && (
             <button
