@@ -13,6 +13,7 @@ const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
   const [password, setPassword] = useState<string>("");
   const [repPassword, setRepPassword] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [sentTo, setSentTo] = useState<string | null>(null);
 
   if (loading) return null;
   if (user) return <Navigate to={"/"} replace />;
@@ -46,8 +47,11 @@ const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
         await signIn(email.trim(), password);
         showToast("Zalogowano się pomyślnie.", "success");
       } else {
-        await signUp(email.trim(), password);
-        showToast("Utworzono konto.", "success");
+        const session = await signUp(email.trim(), password);
+
+        // No session = the email still has to be confirmed.
+        if (session) showToast("Utworzono konto.", "success");
+        else setSentTo(email.trim());
       }
     } catch (error) {
       console.error("Auth error:", error);
@@ -59,6 +63,28 @@ const AuthPage = ({ mode }: { mode: "login" | "register" }) => {
       setSubmitting(false);
     }
   };
+
+  if (sentTo) {
+    return (
+      <section className="flex justify-center items-center w-full p-4">
+        <div className="px-8 lg:px-12 py-12 rounded-2xl shadow-xl shadow-gray-400 flex flex-col justify-center items-center gap-4 w-full lg:w-1/3 text-center">
+          <h3 className="font-bold text-xl md:text-2xl border-b-2 pb-2 w-full">
+            Sprawdź skrzynkę
+          </h3>
+          <p>
+            Wysłaliśmy link potwierdzający na <strong>{sentTo}</strong>. Kliknij
+            w niego, aby aktywować konto.
+          </p>
+          <p className="text-xs">
+            Nie widzisz wiadomości? Zajrzyj do folderu ze spamem.
+          </p>
+          <Link to="/login" className="underline font-bold text-blue-300">
+            Wróć do logowania
+          </Link>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="flex justify-center items-center w-full p-4">

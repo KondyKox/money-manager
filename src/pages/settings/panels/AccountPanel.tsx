@@ -168,6 +168,12 @@ const AccountPanel = () => {
             >
               {emailEdited ? "Zapisz email" : "Zmień adres email"}
             </button>
+
+            {user.new_email && (
+              <p className="text-sm opacity-80 mt-2">
+                Oczekuje na potwierdzenie: <strong>{user.new_email}</strong>
+              </p>
+            )}
           </div>
 
           <div className="input-group flex flex-col items-stretch">
