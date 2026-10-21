@@ -109,7 +109,7 @@ textarea {
 }
 
 .nav-link__current {
-  @apply font-semibold hover:text-blue-400 transition-all duration-150 border-b-2 text-red-400 pointer-events-none text-center flex gap-2 justify-center items-center;
+  @apply font-semibold hover:text-blue-400 transition-all duration-150 border-b-2 pb-0.5 text-red-400 pointer-events-none text-center flex gap-2 justify-center items-center;
 }
 
 .categories__container {
