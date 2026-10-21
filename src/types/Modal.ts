@@ -2,7 +2,6 @@ import type { Dispatch, ReactNode, SetStateAction } from "react";
 import type { Profile } from "./Profile";
 import type { Income } from "./Income";
 import type { Expense } from "./Expense";
-import type { Color } from "./Color";
 import type { CompletedShift } from "./Shift";
 import type { Saving } from "./Savings";
 
@@ -41,12 +40,6 @@ export interface ShiftDetailProps {
   onClose: () => void;
   onDelete: (id: string) => void | Promise<void>;
   onEdit: (shift: CompletedShift) => void | Promise<void>;
-}
-
-export interface ColorPickerProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onChangeColor: (newColor: Color) => void;
 }
 
 export interface ConfirmModalProps {
