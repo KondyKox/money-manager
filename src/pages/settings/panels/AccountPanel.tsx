@@ -9,6 +9,8 @@ import {
 } from "../../../services/auth/updateUser";
 import PasswordInput from "../../../components/ui/PasswordInput";
 import { MIN_PASSWORD_LENGHT } from "../../../constants/auth";
+import { sendPasswordReset } from "../../../services/auth/sendPasswordReset";
+import LoadingDots from "../../../components/ui/LoadingDots";
 
 const AccountPanel = () => {
   const [emailEdited, setEmailEdited] = useState<boolean>(false);
@@ -16,6 +18,7 @@ const AccountPanel = () => {
   const [newEmail, setNewEmail] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [repPassword, setRepPassword] = useState<string>("");
+  const [sendingReset, setSendingReset] = useState<boolean>(false);
   const [confirmAction, setConfirmAction] = useState<
     "email" | "password" | null
   >(null);
@@ -75,6 +78,24 @@ const AccountPanel = () => {
     }
 
     setConfirmAction("email");
+  };
+
+  const handleForgotPassword = async () => {
+    if (!user?.email || sendingReset) return;
+
+    setSendingReset(true);
+    try {
+      await sendPasswordReset(user.email);
+      showToast(`Wysłaliśmy link do zmiany hasła na ${user.email}.`, "success");
+    } catch (error) {
+      console.error("Error sending reset email:", error);
+      showToast(
+        error instanceof Error ? error.message : "Nie udało się wysłać linku.",
+        "error",
+      );
+    } finally {
+      setSendingReset(false);
+    }
   };
 
   const handleEmailConfirm = async (confirmPassword: string) => {
@@ -178,7 +199,13 @@ const AccountPanel = () => {
               >
                 {passwordEdited ? "Zapisz hasło" : "Zmień hasło"}
               </button>
-              <button className="btn-primary flex-1">Zapomniałem hasła</button>
+              <button
+                className="btn-primary flex-1"
+                onClick={handleForgotPassword}
+                disabled={sendingReset}
+              >
+                {sendingReset ? <LoadingDots /> : "Zapomniałem hasła"}
+              </button>
             </div>
           </div>
         </div>
