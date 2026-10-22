@@ -23,7 +23,7 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative overflow-y-auto bg-purple-600 py-8 px-10 rounded-2xl shadow-md shadow-orange-400 text-white/80 h-full md:h-auto md:w-2/3 lg:w-1/2 md:min-h-1/2"
+        className="relative overflow-y-auto bg-purple-600 py-8 px-10 rounded-2xl shadow-md shadow-orange-400 text-white/80 h-full md:h-auto w-full md:w-2/3 lg:w-1/2 md:min-h-1/2"
       >
         {children}
         <button
