@@ -1,5 +1,5 @@
 {
-  "name": "money-manager",
+  "name": "wydatkonator",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,6 +11,8 @@
     "types": "supabase gen types typescript --project-id kpetihnxktszrehsehjh > src/types/supabase.ts"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
     "@supabase/supabase-js": "^2.112.4",
     "@tailwindcss/vite": "^4.3.3",
     "@vercel/analytics": "^2.0.1",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
+    "@capacitor/cli": "^8.5.3",
     "@eslint/js": "^10.0.1",
     "@rolldown/plugin-babel": "^0.2.3",
     "@types/babel__core": "^7.20.5",
