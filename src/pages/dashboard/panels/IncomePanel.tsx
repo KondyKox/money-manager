@@ -43,8 +43,9 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
     0,
   );
 
-  const monthlySavings = editedProfile.savings
-    .filter((s) => s.date.startsWith(selectedMonth))
+  // Only deposits made in the selected month (withdrawals are ignored)
+  const monthlyDeposits = editedProfile.savings
+    .filter((s) => s.date.startsWith(selectedMonth) && s.amount > 0)
     .reduce((sum, saving) => sum + saving.amount, 0);
 
   // ---------------------------------------------------
@@ -147,17 +148,14 @@ const IncomePanel = ({ editedProfile, setEditedProfile }: DashboardElement) => {
           </div>
 
           <div className="flex flex-col text-center">
-            <span
-              title="Przychód bez oszczędności"
-              className="text-green-600 totalMoney"
-            >
-              +{(totalIncome - monthlySavings).toFixed(2)}zł
+            <span title="Przychód" className="text-green-600 totalMoney">
+              +{totalIncome.toFixed(2)}zł
             </span>
             <span
-              title="Miesięczne oszczędności"
+              title="Wpłaty na oszczędności w tym miesiącu"
               className="text-green-600 text-sm font-mono"
             >
-              (+{monthlySavings.toFixed(2)}zł)
+              (+{monthlyDeposits.toFixed(2)}zł)
             </span>
           </div>
         </div>
