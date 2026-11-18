@@ -126,14 +126,6 @@ supabase/schemas/ # SQL: tables, indexes, RLS policies, RPC
 android/          # Capacitor Android project
 ```
 
-## 🗺️ Roadmap
-
-- [ ] Auto-add an income entry from completed shifts at the end of the month
-- [ ] Local notifications (forgot to clock out, weekly and monthly summaries)
-- [ ] Custom categories (add, edit, delete)
-- [ ] Google sign-in
-- [ ] App icon, splash screen and a signed release build
-
 ## 👤 Author
 
 Built by [Kondy](https://github.com/KondyKox) as a learning project.
